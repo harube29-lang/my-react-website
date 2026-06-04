@@ -11,6 +11,10 @@ import Section09_Card from './components/sections/Section09_Card'
 import Section10_DragDrop from './components/sections/Section10_DragDrop'
 import Section11_Scroll from './components/sections/Section11_Scroll'
 import Section12_Animation from './components/sections/Section12_Animation'
+import Section13_Menu from './components/sections/Section13_Menu'
+import Section14_Sidebar from './components/sections/Section14_Sidebar'
+import Section15_Hover from './components/sections/Section15_Hover'
+import Section16_Swipe from './components/sections/Section16_Swipe'
 
 const App = () => {
   return (
@@ -36,7 +40,10 @@ const App = () => {
         <Section10_DragDrop />
         <Section11_Scroll />
         <Section12_Animation />
-        {/* 다음 섹션을 아래에 순서대로 추가 */}
+        <Section13_Menu />
+        <Section14_Sidebar />
+        <Section15_Hover />
+        <Section16_Swipe />
 
       </Container>
     </Box>
