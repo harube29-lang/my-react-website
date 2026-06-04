@@ -1,0 +1,21 @@
+my_ai_web/
+├── .claude/
+│   ├── settings.local.json
+│   └── skills/
+│       └── gh_cli/
+│           └── skill.md
+├── CLAUDE.md (기본 한국어 설정)
+└── lecture1/
+    ├── CLAUDE.md (로키 역할, @ 연결자)
+    ├── docs/
+    │   ├── design-system.md
+    │   ├── code-convention.md
+    │   └── new_project.md
+    └── _template_settings/ (완성된 템플릿)
+        ├── package.json (MUI 포함)
+        ├── vite.config.js
+        ├── src/
+        │   ├── theme.js
+        │   ├── main.jsx (ThemeProvider 적용)
+        │   └── App.jsx
+        └── node_modules/
