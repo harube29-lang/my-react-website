@@ -1,23 +1,33 @@
-# Node modules
+# MCP 설정
+.mcp.json
+
+# Claude 로컬 설정
+.claude/
+
+# Node.js
 node_modules/
 **/node_modules/
+package-lock.json
 
-# Build outputs
+# 캐시 및 빌드
+.cache/
+**/.cache/
+.vite/
 dist/
 build/
 **/dist/
 **/build/
 
-# Environment files
+# 환경 변수
 .env
 .env.local
 .env.*.local
 
-# Logs
-*.log
-npm-debug.log*
+# OS
+.DS_Store
+Thumbs.db
 
-# Editor
+# IDE
 .vscode/
 .idea/
 *.suo
@@ -25,10 +35,6 @@ npm-debug.log*
 *.njsproj
 *.sln
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Cache
-.cache/
-**/.cache/
+# 로그
+*.log
+npm-debug.log*
