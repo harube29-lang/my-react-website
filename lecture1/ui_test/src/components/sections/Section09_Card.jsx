@@ -16,7 +16,7 @@ const cards = [
     description: 'Meta가 만든 UI 구축을 위한 JavaScript 라이브러리. 컴포넌트 기반 아키텍처로 재사용성이 높습니다.',
     tag: '인기',
     tagColor: 'primary',
-    bg: '#e3f2fd',
+    bg: 'rgba(236, 181, 93, 0.18)',
     emoji: '⚛️',
   },
   {
@@ -26,7 +26,7 @@ const cards = [
     description: 'JavaScript의 슈퍼셋으로 정적 타입을 지원합니다. 대규모 프로젝트에서 버그를 사전에 방지합니다.',
     tag: '추천',
     tagColor: 'success',
-    bg: '#e8f5e9',
+    bg: 'rgba(234, 225, 80, 0.18)',
     emoji: '🔷',
   },
   {
@@ -36,7 +36,7 @@ const cards = [
     description: '차세대 프론트엔드 빌드 도구. 빠른 HMR과 최적화된 번들링으로 개발 경험을 크게 향상시킵니다.',
     tag: '빠름',
     tagColor: 'warning',
-    bg: '#fff8e1',
+    bg: 'rgba(135, 119, 112, 0.12)',
     emoji: '⚡',
   },
   {
@@ -46,7 +46,7 @@ const cards = [
     description: 'Google Material Design을 기반으로 한 React UI 라이브러리. 다양한 컴포넌트를 즉시 사용할 수 있습니다.',
     tag: '디자인',
     tagColor: 'secondary',
-    bg: '#fce4ec',
+    bg: 'rgba(46, 14, 7, 0.06)',
     emoji: '🎨',
   },
 ]
@@ -72,16 +72,22 @@ const Section09_Card = () => {
         {cards.map((card) => (
           <Grid size={{ xs: 12, sm: 6, md: 3 }} key={card.id}>
             <Card
-              elevation={hovered === card.id ? 8 : 1}
+              elevation={0}
               onMouseEnter={() => setHovered(card.id)}
               onMouseLeave={() => setHovered(null)}
               sx={{
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'elevation 0.2s, transform 0.2s',
-                transform: hovered === card.id ? 'translateY(-4px)' : 'none',
+                transition: 'transform 0.25s, box-shadow 0.25s',
+                transform: hovered === card.id ? 'translateY(-5px)' : 'none',
+                boxShadow: hovered === card.id
+                  ? '0 12px 32px rgba(46,14,7,0.15)'
+                  : '0 2px 8px rgba(46,14,7,0.06)',
                 cursor: 'pointer',
+                bgcolor: 'rgba(255,255,255,0.55)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(46,14,7,0.08)',
               }}
             >
               <CardMedia

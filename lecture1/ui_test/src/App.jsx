@@ -18,16 +18,72 @@ import Section16_Swipe from './components/sections/Section16_Swipe'
 
 const App = () => {
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 4 }}>
-      <Container maxWidth="lg">
-        <Typography variant="h2" sx={{ mb: 1, fontWeight: 700 }}>
-          UI 컴포넌트 테스트
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          16개 UI 요소를 순차적으로 추가하는 테스트 페이지입니다.
-        </Typography>
-        <Divider sx={{ mb: 4 }} />
+    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
 
+      {/* ── 히어로 헤더 ── */}
+      <Box
+        sx={{
+          bgcolor: '#2e0e07',
+          color: 'white',
+          py: { xs: 8, md: 12 },
+          px: 3,
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="caption"
+            sx={{
+              color: '#ecb55d',
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              display: 'block',
+              mb: 3,
+            }}
+          >
+            UI Component Library
+          </Typography>
+          <Typography
+            variant="h1"
+            sx={{
+              color: 'white',
+              fontWeight: 800,
+              fontSize: { xs: '2.5rem', md: '3.75rem' },
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              maxWidth: 640,
+              mb: 4,
+            }}
+          >
+            SHAPING THE<br />
+            FUTURE OF<br />
+            UI COMPONENTS
+          </Typography>
+          <Divider sx={{ borderColor: 'rgba(255,255,255,0.12)', mb: 4, maxWidth: 480 }} />
+          <Typography
+            variant="body1"
+            sx={{ color: 'rgba(255,255,255,0.55)', maxWidth: 480, lineHeight: 1.8 }}
+          >
+            16개의 핵심 UI 요소를 순차적으로 구현한 컴포넌트 쇼케이스입니다.
+            MUI 기반의 일관된 디자인 시스템으로 구성되어 있습니다.
+          </Typography>
+        </Container>
+      </Box>
+
+      {/* ── 섹션 인덱스 바 ── */}
+      <Box sx={{ bgcolor: '#eae150', borderBottom: '1px solid #e8dbd8', py: 2, px: 3 }}>
+        <Container maxWidth="lg">
+          <Typography variant="caption" sx={{ color: '#6b6b6b', letterSpacing: '0.1em' }}>
+            01 Button &nbsp;·&nbsp; 02 Input &nbsp;·&nbsp; 03 Navigation &nbsp;·&nbsp;
+            04 Dropdown &nbsp;·&nbsp; 05 Checkbox &nbsp;·&nbsp; 06 Radio &nbsp;·&nbsp;
+            07 Slider &nbsp;·&nbsp; 08 Modal &nbsp;·&nbsp; 09 Card &nbsp;·&nbsp;
+            10 Drag&amp;Drop &nbsp;·&nbsp; 11 Scroll &nbsp;·&nbsp; 12 Animation &nbsp;·&nbsp;
+            13 Menu &nbsp;·&nbsp; 14 Sidebar &nbsp;·&nbsp; 15 Hover &nbsp;·&nbsp; 16 Swipe
+          </Typography>
+        </Container>
+      </Box>
+
+      {/* ── 섹션 본문 ── */}
+      <Container maxWidth="lg" sx={{ py: 8 }}>
         <Section01_Button />
         <Section02_Input />
         <Section03_Navigation />
@@ -44,8 +100,22 @@ const App = () => {
         <Section14_Sidebar />
         <Section15_Hover />
         <Section16_Swipe />
-
       </Container>
+
+      {/* ── 푸터 ── */}
+      <Box sx={{ bgcolor: '#2e0e07', color: 'rgba(255,255,255,0.4)', py: 5, px: 3 }}>
+        <Container maxWidth="lg">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+            <Typography variant="caption" sx={{ letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+              UI Component Showcase
+            </Typography>
+            <Typography variant="caption">
+              © 2026 · Built with React + MUI
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+
     </Box>
   )
 }
