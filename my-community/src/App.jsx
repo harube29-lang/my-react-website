@@ -25,7 +25,7 @@ const App = () => {
   if (loading) return null
 
   return (
-    <BrowserRouter basename="/my-community">
+    <BrowserRouter basename="/my-react-website/my-community">
       <Routes>
         <Route path="/login" element={!session ? <LoginPage /> : <Navigate to="/" replace />} />
         <Route path="/register" element={!session ? <RegisterPage /> : <Navigate to="/" replace />} />
