@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
   Box, Card, CardContent, Typography, TextField,
-  Button, Alert, Stack, Divider, Chip
+  Button, Alert, Stack, Divider, Chip, IconButton
 } from '@mui/material'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import LocalCafeIcon from '@mui/icons-material/LocalCafe'
 import LocationOnIcon from '@mui/icons-material/LocationOn'
@@ -26,12 +27,12 @@ const LoginPage = () => {
     const { error: err } = await supabase.auth.signInWithPassword({ email, password })
     setLoading(false)
     if (err) setError('이메일 또는 비밀번호가 올바르지 않습니다.')
-    else navigate('/board')
+    else navigate('/')
   }
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex' }}>
-      {/* 왼쪽 브랜딩 영역 */}
+      {/* 왼쪽 브랜딩 */}
       <Box sx={{
         display: { xs: 'none', md: 'flex' },
         flex: 1,
@@ -44,16 +45,11 @@ const LoginPage = () => {
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* 배경 패턴 */}
-        <Box sx={{
-          position: 'absolute', inset: 0, opacity: 0.08,
-          backgroundImage: 'radial-gradient(circle, #fff 1.5px, transparent 1.5px)',
-          backgroundSize: '28px 28px'
-        }} />
+        <Box sx={{ position: 'absolute', inset: 0, opacity: 0.08, backgroundImage: 'radial-gradient(circle, #fff 1.5px, transparent 1.5px)', backgroundSize: '28px 28px' }} />
         <Box sx={{ position: 'relative', textAlign: 'center' }}>
           <Typography sx={{ fontSize: '4rem', mb: 1 }}>🍵</Typography>
           <Typography variant="h3" fontWeight={900} sx={{ letterSpacing: -1, mb: 0.5 }}>ULSAN</Typography>
-          <Typography variant="h4" fontWeight={700} sx={{ color: '#E9C46A', mb: 2 }}>TastePick</Typography>
+          <Typography variant="h4" fontWeight={700} sx={{ color: '#E9C46A', mb: 3 }}>TastePick</Typography>
           <Typography variant="body1" sx={{ opacity: 0.9, mb: 4, lineHeight: 1.8 }}>
             울산 맛집 & 카페<br />정보 공유 커뮤니티
           </Typography>
@@ -77,9 +73,9 @@ const LoginPage = () => {
         </Box>
       </Box>
 
-      {/* 오른쪽 로그인 폼 */}
+      {/* 오른쪽 폼 */}
       <Box sx={{
-        flex: { xs: 1, md: '0 0 420px' },
+        flex: { xs: 1, md: '0 0 440px' },
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -87,58 +83,40 @@ const LoginPage = () => {
         p: { xs: 3, md: 5 },
         bgcolor: '#FAF7F2',
       }}>
-        {/* 모바일용 로고 */}
-        <Box sx={{ display: { xs: 'block', md: 'none' }, textAlign: 'center', mb: 3 }}>
-          <Typography variant="h5" fontWeight={900} color="primary">🍵 ULSAN TastePick</Typography>
-          <Typography variant="caption" color="text.secondary">울산 맛집 & 카페 커뮤니티</Typography>
-        </Box>
-
         <Box sx={{ width: '100%', maxWidth: 360 }}>
+          {/* 뒤로가기 */}
+          <Stack direction="row" alignItems="center" mb={3}>
+            <IconButton size="small" onClick={() => navigate('/')} sx={{ mr: 1 }}>
+              <ArrowBackIcon fontSize="small" />
+            </IconButton>
+            <Typography variant="body2" color="text.secondary">게시판으로 돌아가기</Typography>
+          </Stack>
+
+          {/* 모바일 로고 */}
+          <Box sx={{ display: { xs: 'block', md: 'none' }, textAlign: 'center', mb: 3 }}>
+            <Typography variant="h5" fontWeight={900} color="primary">🍵 ULSAN TastePick</Typography>
+          </Box>
+
           <Typography variant="h5" fontWeight={800} mb={0.5}>로그인</Typography>
           <Typography variant="body2" color="text.secondary" mb={3}>
-            계정에 로그인하고 맛집 정보를 공유해요
+            로그인하고 맛집 정보를 공유해요
           </Typography>
 
           {signedUp && <Alert severity="success" sx={{ mb: 2, borderRadius: 2 }}>가입 완료! 이제 로그인하세요 🎉</Alert>}
           {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>{error}</Alert>}
 
           <Stack spacing={2}>
-            <TextField
-              label="아이디 (이메일)"
-              type="email"
-              fullWidth
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleLogin()}
-            />
-            <TextField
-              label="비밀번호"
-              type="password"
-              fullWidth
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleLogin()}
-            />
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              onClick={handleLogin}
-              disabled={loading}
-              sx={{ py: 1.5, borderRadius: 3, fontWeight: 700, fontSize: '1rem' }}
-            >
+            <TextField label="아이디 (이메일)" type="email" fullWidth value={email}
+              onChange={e => setEmail(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+            <TextField label="비밀번호" type="password" fullWidth value={password}
+              onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+            <Button variant="contained" fullWidth size="large" onClick={handleLogin} disabled={loading}
+              sx={{ py: 1.5, borderRadius: 3, fontWeight: 700, fontSize: '1rem' }}>
               {loading ? '로그인 중...' : '로그인'}
             </Button>
-
             <Divider sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>또는</Divider>
-
-            <Button
-              variant="outlined"
-              fullWidth
-              size="large"
-              onClick={() => navigate('/signup')}
-              sx={{ py: 1.5, borderRadius: 3, fontWeight: 600 }}
-            >
+            <Button variant="outlined" fullWidth size="large" onClick={() => navigate('/signup')}
+              sx={{ py: 1.5, borderRadius: 3, fontWeight: 600 }}>
               회원가입하러 가기
             </Button>
           </Stack>

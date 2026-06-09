@@ -9,10 +9,10 @@ const App = () => {
   return (
     <BrowserRouter basename="/my-react-website">
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<BoardPage />} />
+        <Route path="/board" element={<Navigate to="/" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/board" element={<BoardPage />} />
         <Route path="/create" element={<CreatePostPage />} />
         <Route path="/post/:id" element={<PostDetailPage />} />
       </Routes>
