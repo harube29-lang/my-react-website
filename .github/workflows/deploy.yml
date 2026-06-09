@@ -41,7 +41,7 @@ jobs:
       - name: Prepare deployment folder
         run: |
           mkdir -p _site
-          cp -r lecture1/my-community/dist _site/my-community
+          cp -r lecture1/my-community/dist/. _site/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

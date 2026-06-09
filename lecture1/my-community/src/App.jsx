@@ -7,7 +7,7 @@ import PostDetailPage from './pages/PostDetailPage'
 
 const App = () => {
   return (
-    <BrowserRouter basename="/my-community">
+    <BrowserRouter basename="/my-react-website">
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
