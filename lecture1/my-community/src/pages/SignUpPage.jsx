@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Card, CardContent, Typography, TextField, Button, Alert, Stack, List, ListItem, ListItemIcon, ListItemText } from '@mui/material'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined'
+import {
+  Box, Card, CardContent, Typography, TextField, Button,
+  Alert, Stack, List, ListItem, ListItemIcon, ListItemText
+} from '@mui/material'
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { supabase } from '../utils/supabase'
 
@@ -27,7 +30,7 @@ const SignUpPage = () => {
   const handleCheckUsername = async () => {
     if (!username.trim()) return
     setCheckingUsername(true)
-    const { data } = await supabase.from('profiles').select('id').eq('username', username).single()
+    const { data } = await supabase.from('profiles').select('id').eq('username', username).maybeSingle()
     setCheckingUsername(false)
     setUsernameStatus(data ? 'taken' : 'available')
   }
@@ -47,91 +50,137 @@ const SignUpPage = () => {
     }
     setLoading(true)
     setError('')
-    const { data, error: err } = await supabase.auth.signUp({ email, password })
+
+    const { data, error: err } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { username } }
+    })
+
     if (err) {
       setError(err.message)
       setLoading(false)
       return
     }
+
     if (data.user) {
-      await supabase.from('profiles').insert({ id: data.user.id, username, phone: phone || null })
+      await supabase.from('profiles').upsert({
+        id: data.user.id,
+        username,
+        phone: phone || null,
+      })
     }
+
     setLoading(false)
-    navigate('/login')
+    navigate('/login', { state: { signedUp: true } })
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
-      <Card sx={{ width: '100%', maxWidth: 440, p: 2 }}>
+    <Box sx={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #7C9A6D22 0%, #FAF7F2 50%, #A67C5222 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      p: 2
+    }}>
+      <Card sx={{ width: '100%', maxWidth: 460, p: 1 }}>
         <CardContent>
           <Stack spacing={2.5}>
-            <Typography variant="h5" fontWeight={700}>회원가입</Typography>
+            <Box textAlign="center" mb={1}>
+              <Typography variant="h5" fontWeight={800} color="primary">회원가입</Typography>
+              <Typography variant="body2" color="text.secondary">ULSAN TastePick에 오신 걸 환영해요!</Typography>
+            </Box>
 
-            {error && <Alert severity="error">{error}</Alert>}
+            {error && <Alert severity="error" sx={{ borderRadius: 2 }}>{error}</Alert>}
 
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} alignItems="flex-start">
               <TextField
                 label="닉네임"
                 fullWidth
+                size="small"
                 value={username}
                 onChange={(e) => { setUsername(e.target.value); setUsernameStatus(null) }}
                 color={usernameStatus === 'available' ? 'success' : usernameStatus === 'taken' ? 'error' : 'primary'}
-                helperText={usernameStatus === 'available' ? '사용 가능한 닉네임입니다.' : usernameStatus === 'taken' ? '이미 사용 중인 닉네임입니다.' : ''}
+                helperText={
+                  usernameStatus === 'available' ? '✅ 사용 가능' :
+                  usernameStatus === 'taken' ? '❌ 이미 사용 중' : ' '
+                }
               />
-              <Button variant="outlined" onClick={handleCheckUsername} disabled={checkingUsername || !username} sx={{ minWidth: 90, alignSelf: 'flex-start', mt: 0.5 }}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleCheckUsername}
+                disabled={checkingUsername || !username}
+                sx={{ mt: 0.5, minWidth: 80, height: 40 }}
+              >
                 중복확인
               </Button>
             </Stack>
 
             <TextField
-              label="아이디 (이메일)"
+              label="이메일"
               type="email"
               fullWidth
+              size="small"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            <TextField
-              label="비밀번호"
-              type="password"
-              fullWidth
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onFocus={() => setPwFocused(true)}
-            />
-
-            {(pwFocused || password) && (
-              <List dense disablePadding sx={{ bgcolor: '#f9f9f9', borderRadius: 2, p: 1 }}>
-                {pwRules.map((rule) => {
-                  const ok = rule.test(password)
-                  return (
-                    <ListItem key={rule.label} disableGutters sx={{ py: 0.3 }}>
-                      <ListItemIcon sx={{ minWidth: 28 }}>
-                        {ok
-                          ? <CheckCircleOutlineIcon fontSize="small" color="success" />
-                          : <RadioButtonUncheckedIcon fontSize="small" sx={{ color: '#ccc' }} />}
-                      </ListItemIcon>
-                      <ListItemText primary={rule.label} primaryTypographyProps={{ variant: 'body2', color: ok ? 'success.main' : 'text.secondary' }} />
-                    </ListItem>
-                  )
-                })}
-              </List>
-            )}
+            <Box>
+              <TextField
+                label="비밀번호"
+                type="password"
+                fullWidth
+                size="small"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onFocus={() => setPwFocused(true)}
+              />
+              {(pwFocused || password) && (
+                <List dense disablePadding sx={{ mt: 1, bgcolor: '#f5f5f5', borderRadius: 2, px: 1.5, py: 0.5 }}>
+                  {pwRules.map((rule) => {
+                    const ok = rule.test(password)
+                    return (
+                      <ListItem key={rule.label} disableGutters sx={{ py: 0.2 }}>
+                        <ListItemIcon sx={{ minWidth: 26 }}>
+                          {ok
+                            ? <CheckCircleOutlinedIcon sx={{ fontSize: 16, color: '#7C9A6D' }} />
+                            : <RadioButtonUncheckedIcon sx={{ fontSize: 16, color: '#ccc' }} />}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={rule.label}
+                          primaryTypographyProps={{ variant: 'caption', color: ok ? '#7C9A6D' : 'text.secondary' }}
+                        />
+                      </ListItem>
+                    )
+                  })}
+                </List>
+              )}
+            </Box>
 
             <TextField
               label="전화번호 (선택)"
               fullWidth
+              size="small"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="010-0000-0000"
             />
 
-            <Button variant="contained" fullWidth size="large" onClick={handleSignUp} disabled={loading}>
-              {loading ? '가입 중...' : '회원가입'}
+            <Button
+              variant="contained"
+              fullWidth
+              size="large"
+              onClick={handleSignUp}
+              disabled={loading}
+              sx={{ py: 1.5, fontSize: '1rem', borderRadius: 3 }}
+            >
+              {loading ? '가입 중...' : '🍵 회원가입'}
             </Button>
 
             <Button variant="text" color="secondary" onClick={() => navigate('/login')}>
-              이미 계정이 있으신가요? 로그인
+              이미 계정이 있으신가요? 로그인하기
             </Button>
           </Stack>
         </CardContent>
