@@ -3,6 +3,7 @@ import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignUpPage'
 import BoardPage from './pages/BoardPage'
 import CreatePostPage from './pages/CreatePostPage'
+import EditPostPage from './pages/EditPostPage'
 import PostDetailPage from './pages/PostDetailPage'
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/create" element={<CreatePostPage />} />
+        <Route path="/edit/:id" element={<EditPostPage />} />
         <Route path="/post/:id" element={<PostDetailPage />} />
       </Routes>
     </BrowserRouter>
