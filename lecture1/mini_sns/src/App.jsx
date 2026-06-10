@@ -54,7 +54,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter basename="/mini_sns">
+      <BrowserRouter basename="/my-0709">
         <AuthProvider>
           <AppRoutes />
         </AuthProvider>
