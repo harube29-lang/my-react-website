@@ -11,7 +11,6 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import { supabase } from '../utils/supabase'
 
 const DISTRICTS = ['동구', '중구', '남구', '울주군', '북구']
-const RANDOM_SEEDS = ['food', 'cafe', 'restaurant', 'coffee', 'dessert', 'meal', 'bakery']
 
 const CreatePostPage = () => {
   const navigate = useNavigate()
@@ -34,8 +33,8 @@ const CreatePostPage = () => {
   }, [navigate])
 
   const handleRandomImage = () => {
-    const seed = RANDOM_SEEDS[Math.floor(Math.random() * RANDOM_SEEDS.length)] + Math.floor(Math.random() * 999)
-    setImageUrl(`https://picsum.photos/seed/${seed}/800/500`)
+    const lock = Math.floor(Math.random() * 200) + 1
+    setImageUrl(`https://loremflickr.com/800/500/food,restaurant?lock=${lock}`)
   }
 
   const handleAddHashtag = () => {

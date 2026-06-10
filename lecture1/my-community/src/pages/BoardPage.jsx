@@ -16,12 +16,11 @@ import RestaurantIcon from '@mui/icons-material/Restaurant'
 import { supabase } from '../utils/supabase'
 
 const DISTRICTS = ['전체', '동구', '중구', '남구', '울주군', '북구']
-const FOOD_SEEDS = ['food', 'cafe', 'restaurant', 'coffee', 'dessert', 'meal', 'lunch', 'dinner', 'bakery', 'sushi']
 
 const getThumbnail = (post) => {
   if (post.image_url) return post.image_url
-  const seed = FOOD_SEEDS[parseInt(post.id?.slice(-4), 16) % FOOD_SEEDS.length] + post.id?.slice(0, 6)
-  return `https://picsum.photos/seed/${seed}/600/400`
+  const lock = parseInt(post.id?.replace(/-/g, '').slice(0, 8), 16) % 200 + 1
+  return `https://loremflickr.com/600/400/food,restaurant?lock=${lock}`
 }
 
 const timeAgo = (iso) => {
