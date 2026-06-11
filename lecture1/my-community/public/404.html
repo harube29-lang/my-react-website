@@ -7,8 +7,8 @@
       (function() {
         var l = window.location;
         var segments = l.pathname.split('/');
-        // /my-react-website/portfolio/... 경로는 2세그먼트 유지
-        var pathSegmentsToKeep = (segments[2] === 'portfolio') ? 2 : 1;
+        // /my-react-website/portfolio/ 와 /my-react-website/my-0709/ 경로는 2세그먼트 유지
+        var pathSegmentsToKeep = (segments[2] === 'portfolio' || segments[2] === 'my-0709') ? 2 : 1;
         l.replace(
           l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
           segments.slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
