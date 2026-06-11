@@ -43,12 +43,21 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         run: npm install && npm run build
 
+      - name: Build mini_sns
+        working-directory: lecture1/mini_sns
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: npm install && npm run build
+
       - name: Combine dist folders
         run: |
           mkdir -p combined-dist
           cp -r lecture1/my-community/dist/. combined-dist/
           mkdir -p combined-dist/portfolio
           cp -r lecture1/my-portfolio/dist/. combined-dist/portfolio/
+          mkdir -p combined-dist/my-0709
+          cp -r lecture1/mini_sns/dist/. combined-dist/my-0709/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
