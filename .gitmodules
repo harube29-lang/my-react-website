@@ -1,0 +1,3 @@
+[submodule "my-0709-temp"]
+	path = my-0709-temp
+	url = https://github.com/harube29-lang/my-0709.git
