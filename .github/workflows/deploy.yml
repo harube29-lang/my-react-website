@@ -29,16 +29,26 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        working-directory: lecture1/my-community
-        run: npm install
-
-      - name: Build
+      - name: Build community
         working-directory: lecture1/my-community
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        run: npm run build
+        run: npm install && npm run build
+
+      - name: Build portfolio
+        working-directory: lecture1/my-portfolio
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: npm install && npm run build
+
+      - name: Combine dist folders
+        run: |
+          mkdir -p combined-dist
+          cp -r lecture1/my-community/dist/. combined-dist/
+          mkdir -p combined-dist/portfolio
+          cp -r lecture1/my-portfolio/dist/. combined-dist/portfolio/
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -46,7 +56,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: lecture1/my-community/dist
+          path: combined-dist
 
       - name: Deploy to GitHub Pages
         id: deployment
