@@ -58,10 +58,10 @@
   </g>
 
   <!-- 앱 이름 -->
-  <text x="400" y="270" font-family="'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif" font-size="42" font-weight="800" fill="#FFFFFF" text-anchor="middle" letter-spacing="-1">느좋카페</text>
+  <text x="400" y="270" font-family="Georgia, 'Times New Roman', serif" font-size="46" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">Cafe Notes</text>
 
   <!-- 서브타이틀 -->
-  <text x="400" y="308" font-family="'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif" font-size="16" font-weight="400" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="1">좋은 카페, 함께 나눠요</text>
+  <text x="400" y="308" font-family="sans-serif" font-size="16" font-weight="400" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="1">Your cafe story, shared together</text>
 
   <!-- 태그 뱃지들 -->
   <rect x="300" y="328" width="72" height="26" rx="13" fill="rgba(255,255,255,0.15)"/>
