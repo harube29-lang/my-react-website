@@ -201,13 +201,13 @@ const ProjectsPage = () => {
       {/* 카드 그리드 */}
       <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
         {loading
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <Grid item xs={12} sm={6} md={4} key={i}>
                 <SkeletonCard />
               </Grid>
             ))
           : projects.map((project) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={project.id}>
+              <Grid item xs={12} sm={6} md={4} key={project.id}>
                 <ProjectCard project={project} />
               </Grid>
             ))
