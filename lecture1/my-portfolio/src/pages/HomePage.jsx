@@ -5,6 +5,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import { Link } from 'react-router-dom'
 import appleImg from '../assets/apple.jpg'
+import profileImg from '../assets/profile.jpg'
 import ContactSection from '../components/Contact/ContactSection'
 
 /* ── 섹션 래퍼 ── */
@@ -198,11 +199,28 @@ const HomePage = () => (
             더 알아보기
           </Button>
         </Box>
-        <Card sx={{ flex: 1, width: '100%', minHeight: { xs: 180, md: 260 }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CardContent sx={{ textAlign: 'center' }}>
-            <Typography color="text.disabled" variant="body2">프로필 이미지 / 소개 카드 영역</Typography>
-          </CardContent>
-        </Card>
+        <Box
+          sx={{
+            flex: 1,
+            width: '100%',
+            minHeight: { xs: 260, md: 340 },
+            borderRadius: 3,
+            overflow: 'hidden',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
+          }}
+        >
+          <Box
+            component="img"
+            src={profileImg}
+            alt="황혜경 프로필"
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </Box>
       </Box>
     </Section>
 

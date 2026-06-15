@@ -6,7 +6,7 @@ import {
 import SchoolIcon      from '@mui/icons-material/School'
 import WorkOutlineIcon from '@mui/icons-material/WorkOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
+import profileImg from '../assets/profile.jpg'
 
 /* ── 데이터 ── */
 const aboutMeData = {
@@ -16,7 +16,7 @@ const aboutMeData = {
     major:      '산업디자인전공',
     experience: '신입',
     role:       'UX/UI 디자이너',
-    photo:      '',
+    photo:      profileImg,
   },
   strengths: [
     {
@@ -73,14 +73,8 @@ const TabPanel = ({ children, value, index }) => (
 /* ── 메인 컴포넌트 ── */
 const AboutPage = () => {
   const [tab, setTab] = useState(0)
-  const [photo, setPhoto] = useState(aboutMeData.basicInfo.photo)
 
   const { basicInfo, strengths, sections } = aboutMeData
-
-  const handlePhotoChange = (e) => {
-    const file = e.target.files?.[0]
-    if (file) setPhoto(URL.createObjectURL(file))
-  }
 
   return (
     <Box sx={{ bgcolor: 'background.default', minHeight: '100vh' }}>
@@ -173,52 +167,17 @@ const AboutPage = () => {
 
           {/* 프로필 사진 */}
           <Box sx={{ flexShrink: 0 }}>
-            <Box
-              component="label"
-              htmlFor="profile-upload"
-              sx={{ cursor: 'pointer', display: 'block' }}
-            >
-              {photo ? (
-                <Avatar
-                  src={photo}
-                  sx={{
-                    width: { xs: 140, md: 180 },
-                    height: { xs: 140, md: 180 },
-                    border: '4px solid rgba(255,255,255,0.4)',
-                    boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
-                  }}
-                />
-              ) : (
-                <Box
-                  sx={{
-                    width: { xs: 140, md: 180 },
-                    height: { xs: 140, md: 180 },
-                    borderRadius: '50%',
-                    border: '3px dashed rgba(255,255,255,0.5)',
-                    bgcolor: 'rgba(255,255,255,0.12)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 1,
-                    transition: 'background 0.2s',
-                    '&:hover': { bgcolor: 'rgba(255,255,255,0.2)' },
-                  }}
-                >
-                  <AddPhotoAlternateIcon sx={{ color: 'rgba(255,255,255,0.8)', fontSize: 32 }} />
-                  <Typography sx={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.72rem', textAlign: 'center', px: 1 }}>
-                    사진 업로드
-                  </Typography>
-                </Box>
-              )}
-              <input
-                id="profile-upload"
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={handlePhotoChange}
-              />
-            </Box>
+            <Avatar
+              src={basicInfo.photo}
+              alt={basicInfo.name}
+              sx={{
+                width:  { xs: 140, md: 180 },
+                height: { xs: 140, md: 180 },
+                border: '4px solid rgba(255,255,255,0.4)',
+                boxShadow: '0 12px 40px rgba(0,0,0,0.25)',
+                objectFit: 'cover',
+              }}
+            />
           </Box>
         </Box>
       </Box>
