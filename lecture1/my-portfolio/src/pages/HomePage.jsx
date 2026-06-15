@@ -1,12 +1,165 @@
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import { Link } from 'react-router-dom'
+import { SiFigma, SiHtml5 } from 'react-icons/si'
 import appleImg from '../assets/apple.jpg'
 import profileImg from '../assets/profile.jpg'
 import ContactSection from '../components/Contact/ContactSection'
+
+/* ── 스킬 데이터 ── */
+const SKILLS = [
+  {
+    type:    'react-icon',
+    icon:    SiFigma,
+    name:    'Figma',
+    level:   '학습 중',
+    stars:   2,
+    color:   '#F24E1E',
+    bgColor: '#FFF1EE',
+  },
+  {
+    type:    'adobe',
+    letter:  'Ai',
+    name:    'Illustrator',
+    level:   '학습 중',
+    stars:   2,
+    color:   '#FF9A00',
+    bgColor: '#FFF8EE',
+    adobeBg: '#2C0A00',
+  },
+  {
+    type:    'adobe',
+    letter:  'Ps',
+    name:    'Photoshop',
+    level:   '학습 중',
+    stars:   2,
+    color:   '#31A8FF',
+    bgColor: '#EEF7FF',
+    adobeBg: '#001E36',
+  },
+  {
+    type:    'react-icon',
+    icon:    SiHtml5,
+    name:    'HTML5',
+    level:   '기초 가능',
+    stars:   3,
+    color:   '#E34F26',
+    bgColor: '#FFF1EE',
+  },
+]
+
+/* ── 별점 ── */
+const Stars = ({ count, color }) => (
+  <Box sx={{ display: 'flex', gap: 0.4 }}>
+    {[1, 2, 3, 4, 5].map((n) => (
+      <Box
+        key={n}
+        sx={{
+          width: 8, height: 8, borderRadius: '50%',
+          bgcolor: n <= count ? color : '#E5E7EB',
+          transition: 'background 0.2s',
+        }}
+      />
+    ))}
+  </Box>
+)
+
+/* ── 스킬 카드 ── */
+const SkillCard = ({ skill }) => {
+  const [hovered, setHovered] = useState(false)
+  const { type, icon: Icon, letter, name, level, stars, color, bgColor, adobeBg } = skill
+
+  return (
+    <Box
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      sx={{
+        display:        'flex',
+        flexDirection:  'column',
+        alignItems:     'center',
+        gap:            1.5,
+        p:              { xs: 3, md: 3.5 },
+        borderRadius:   3,
+        border:         '1.5px solid',
+        borderColor:    hovered ? color : '#E5E7EB',
+        bgcolor:        hovered ? bgColor : '#FFFFFF',
+        cursor:         'default',
+        transform:      hovered ? 'translateY(-6px)' : 'translateY(0)',
+        boxShadow:      hovered ? `0 12px 32px ${color}28` : '0 1px 4px rgba(0,0,0,0.06)',
+        transition:     'all 0.25s cubic-bezier(.34,1.56,.64,1)',
+      }}
+    >
+      {/* 아이콘 */}
+      {type === 'react-icon' ? (
+        <Icon size={52} color={hovered ? color : '#9CA3AF'} style={{ transition: 'color 0.25s' }} />
+      ) : (
+        <Box
+          sx={{
+            width: 52, height: 52,
+            borderRadius: 1.5,
+            bgcolor: hovered ? adobeBg : '#F3F4F6',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.25s',
+          }}
+        >
+          <Typography
+            sx={{
+              color:      hovered ? color : '#9CA3AF',
+              fontWeight: 700,
+              fontSize:   '1.1rem',
+              fontFamily: '"Arial", sans-serif',
+              letterSpacing: '-0.03em',
+              transition: 'color 0.25s',
+            }}
+          >
+            {letter}
+          </Typography>
+        </Box>
+      )}
+
+      {/* 이름 */}
+      <Typography
+        variant="body2"
+        sx={{
+          fontWeight: 600,
+          color:      hovered ? '#111827' : '#6B7280',
+          fontSize:   '0.875rem',
+          transition: 'color 0.2s',
+        }}
+      >
+        {name}
+      </Typography>
+
+      {/* 별점 */}
+      <Stars count={stars} color={color} />
+
+      {/* 레벨 배지 */}
+      <Box
+        sx={{
+          px: 1.2, py: 0.35,
+          borderRadius: 1,
+          bgcolor:    hovered ? color : '#F3F4F6',
+          transition: 'background 0.25s',
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize:   '0.68rem',
+            fontWeight: 600,
+            color:      hovered ? '#FFFFFF' : '#9CA3AF',
+            transition: 'color 0.25s',
+          }}
+        >
+          {level}
+        </Typography>
+      </Box>
+    </Box>
+  )
+}
 
 /* ── 섹션 래퍼 ── */
 const Section = ({ id, bg, children }) => (
@@ -217,30 +370,28 @@ const HomePage = () => (
       </Box>
     </Section>
 
-    {/* ── 3. Skill Tree ── */}
+    {/* ── 3. Skills ── */}
     <Section id="skills" bg="#F9FAFB">
       <Box sx={{ mb: { xs: 5, md: 7 } }}>
-        <Label>Skill Tree</Label>
+        <Label>Skills</Label>
         <Typography variant="h2" sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, wordBreak: 'keep-all' }}>
-          기술 스택
+          사용 도구
         </Typography>
         <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mt: 1.5 }} />
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+          아이콘에 마우스를 올려보세요
+        </Typography>
       </Box>
-      <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, overflowX: 'auto', pb: 1, '&::-webkit-scrollbar': { height: 4 }, '&::-webkit-scrollbar-thumb': { backgroundColor: '#D1D5DB', borderRadius: 2 } }}>
-        {['Frontend', 'Backend', 'Tools & ETC'].map((cat) => (
-          <Card key={cat} sx={{ flex: '1 0 220px', minWidth: 220, minHeight: { xs: 180, md: 220 } }}>
-            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography variant="h3" sx={{ mb: 2, color: 'primary.main', fontSize: { xs: '1rem', md: '1.1rem' } }}>
-                {cat}
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary', lineHeight: 1.7, mb: 3 }}>
-                기술 스택을 시각화할 예정입니다.
-              </Typography>
-              <Box sx={{ height: 6, borderRadius: 3, bgcolor: '#E5E7EB', overflow: 'hidden' }}>
-                <Box sx={{ height: '100%', width: '60%', background: 'linear-gradient(90deg, #FF7A00, #F04438)', borderRadius: 3 }} />
-              </Box>
-            </CardContent>
-          </Card>
+
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(4, 1fr)' },
+          gap: { xs: 2, md: 2.5 },
+        }}
+      >
+        {SKILLS.map((skill) => (
+          <SkillCard key={skill.name} skill={skill} />
         ))}
       </Box>
     </Section>
