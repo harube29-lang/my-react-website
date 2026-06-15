@@ -202,7 +202,7 @@ const HomePage = () => {
         sx={{
           position: 'relative',
           bgcolor: '#FFFFFF',
-          backgroundImage: "repeating-linear-gradient(rgba(255,122,0,0.06) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,122,0,0.06) 0 1px, transparent 1px 100%)",
+          backgroundImage: "repeating-linear-gradient(rgba(255,122,0,0.14) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,122,0,0.14) 0 1px, transparent 1px 100%)",
           backgroundSize: '36px 36px',
           minHeight: { xs: '88vh', md: '92vh' },
           display: 'flex',
@@ -215,28 +215,38 @@ const HomePage = () => {
       >
 
         {/* ── 배경 워터마크 "HYEKYOUNG" ── */}
+        {/* overflow:hidden 래퍼로 감싸서 document 수평 스크롤 완전 차단 */}
         <Box
           aria-hidden="true"
           sx={{
             position: 'absolute',
-            top: '50%', left: '50%',
-            transform: 'translate(-50%, -50%)',
-            fontFamily: '"Archivo Black", sans-serif',
-            /* 9글자가 뷰포트 가득 채우도록 조정 */
-            fontSize: { xs: '21vw', sm: '19vw', md: '17vw' },
-            fontWeight: 900,
-            color: '#111827',
-            opacity: 0.03,
-            whiteSpace: 'nowrap',
-            letterSpacing: '-0.01em',
-            lineHeight: 1,
-            userSelect: 'none',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
             pointerEvents: 'none',
+            userSelect: 'none',
             zIndex: 0,
-            animation: `${fadeIn} 1.2s ease both`,
           }}
         >
-          HYEKYOUNG
+          <Box
+            component="span"
+            sx={{
+              fontFamily: '"Archivo Black", sans-serif',
+              fontSize: { xs: '21vw', sm: '19vw', md: '17vw' },
+              fontWeight: 900,
+              color: '#111827',
+              opacity: 0.04,
+              whiteSpace: 'nowrap',
+              letterSpacing: '-0.02em',
+              lineHeight: 1,
+              flexShrink: 0,
+              animation: `${fadeIn} 1.2s ease both`,
+            }}
+          >
+            HYEKYOUNG
+          </Box>
         </Box>
 
         {/* ── 메인 콘텐츠 레이어 ── */}
@@ -257,7 +267,7 @@ const HomePage = () => {
               fontWeight: 700,
               color: '#111827',
               letterSpacing: '-0.01em',
-              mb: { xs: 0.8, md: 1 },
+              mb: { xs: 2.5, md: 3 },
               animation: `${fadeUp} 0.6s 0.1s ease both`,
               opacity: 0,
             }}
@@ -269,7 +279,7 @@ const HomePage = () => {
           <Box
             sx={{
               lineHeight: 0.9,
-              mb: { xs: 5, sm: 6, md: 8 },
+              mb: { xs: 10, sm: 12, md: 14 },
               animation: `${fadeUp} 0.7s 0.2s ease both`,
               opacity: 0,
               /* 두 폰트가 baseline을 공유하도록 */
