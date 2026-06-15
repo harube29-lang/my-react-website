@@ -1,14 +1,9 @@
-import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import ContactInfo from './ContactInfo'
-import GuestbookForm from './GuestbookForm'
-import GuestbookList from './GuestbookList'
 
 const ContactSection = () => {
-  const [refresh, setRefresh] = useState(0)
-
   return (
     <Box
       id="contact"
@@ -41,36 +36,10 @@ const ContactSection = () => {
         {/* 연락처 */}
         <Paper
           elevation={0}
-          sx={{ p: { xs: 3, md: 4 }, borderRadius: 3, bgcolor: 'transparent', mb: { xs: 5, md: 6 } }}
+          sx={{ p: { xs: 3, md: 4 }, borderRadius: 3, bgcolor: 'transparent' }}
         >
           <ContactInfo />
         </Paper>
-
-        {/* 방명록 그리드 */}
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '380px 1fr' },
-            gap: { xs: 4, md: 5 },
-            alignItems: 'start',
-          }}
-        >
-          {/* 폼 */}
-          <Box sx={{ position: { md: 'sticky' }, top: { md: 88 } }}>
-            <GuestbookForm onSuccess={() => setRefresh(r => r + 1)} />
-          </Box>
-
-          {/* 목록 */}
-          <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-              <Typography variant="h3" sx={{ fontWeight: 600, color: '#111827', fontSize: { xs: '1rem', md: '1.1rem' }, whiteSpace: 'nowrap' }}>
-                방명록
-              </Typography>
-              <Box sx={{ flex: 1, height: 1, bgcolor: '#E5E7EB', borderRadius: 1 }} />
-            </Box>
-            <GuestbookList refresh={refresh} />
-          </Box>
-        </Box>
 
       </Box>
     </Box>

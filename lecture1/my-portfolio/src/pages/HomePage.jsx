@@ -278,22 +278,19 @@ const HomePage = () => {
           {/* ── 거대 로고타입 "hye kyoung" ── */}
           <Box
             sx={{
-              lineHeight: 0.9,
               mb: { xs: 10, sm: 12, md: 14 },
               animation: `${fadeUp} 0.7s 0.2s ease both`,
               opacity: 0,
-              /* 두 폰트가 baseline을 공유하도록 */
               display: 'flex',
               alignItems: 'baseline',
               flexWrap: 'nowrap',
               gap: 0,
               width: '100%',
+              /* 디센더·어센더 클리핑 방지 */
+              overflow: 'visible',
+              pb: '0.12em',
             }}
           >
-            {/*
-              산세리프 파트 — Archivo Black
-              참고 이미지의 "nana"에 해당
-            */}
             <Box
               component="span"
               sx={{
@@ -305,18 +302,13 @@ const HomePage = () => {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
                 letterSpacing: { xs: '-0.03em', md: '-0.04em' },
-                lineHeight: 1,
-                display: 'inline',
+                lineHeight: 1.15,
+                display: 'inline-block',
               }}
             >
               hye&nbsp;
             </Box>
 
-            {/*
-              세리프 이탤릭 파트 — Cormorant Garamond
-              참고 이미지의 "like"에 해당
-              고대비 세리프의 우아한 곡선이 산세리프와 대비를 이룸
-            */}
             <Box
               component="span"
               sx={{
@@ -329,8 +321,8 @@ const HomePage = () => {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
                 letterSpacing: { xs: '-0.02em', md: '-0.025em' },
-                lineHeight: 1,
-                display: 'inline',
+                lineHeight: 1.15,
+                display: 'inline-block',
               }}
             >
               kyoung
