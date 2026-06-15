@@ -199,24 +199,17 @@ const HomePage = () => (
             더 알아보기
           </Button>
         </Box>
-        <Box
-          sx={{
-            flex: 1,
-            width: '100%',
-            minHeight: { xs: 260, md: 340 },
-            borderRadius: 3,
-            overflow: 'hidden',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.10)',
-          }}
-        >
+        <Box sx={{ flexShrink: 0, display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' } }}>
           <Box
             component="img"
             src={profileImg}
             alt="황혜경 프로필"
             sx={{
-              width: '100%',
-              height: '100%',
+              width:  { xs: 160, sm: 200, md: 240 },
+              height: { xs: 160, sm: 200, md: 240 },
+              borderRadius: 3,
               objectFit: 'cover',
+              boxShadow: '0 8px 28px rgba(0,0,0,0.12)',
               display: 'block',
             }}
           />
