@@ -202,6 +202,8 @@ const HomePage = () => {
         sx={{
           position: 'relative',
           bgcolor: '#FFFFFF',
+          backgroundImage: "repeating-linear-gradient(rgba(255,122,0,0.06) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,122,0,0.06) 0 1px, transparent 1px 100%)",
+          backgroundSize: '36px 36px',
           minHeight: { xs: '88vh', md: '92vh' },
           display: 'flex',
           flexDirection: 'column',
@@ -275,6 +277,7 @@ const HomePage = () => {
               alignItems: 'baseline',
               flexWrap: 'nowrap',
               gap: 0,
+              width: '100%',
             }}
           >
             {/*
@@ -285,7 +288,7 @@ const HomePage = () => {
               component="span"
               sx={{
                 fontFamily: '"Archivo Black", sans-serif',
-                fontSize: { xs: '17vw', sm: '15vw', md: '14.5vw' },
+                fontSize: { xs: '12vw', sm: '12vw', md: '11vw' },
                 fontWeight: 900,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
                 WebkitBackgroundClip: 'text',
@@ -308,7 +311,7 @@ const HomePage = () => {
               component="span"
               sx={{
                 fontFamily: '"Cormorant Garamond", serif',
-                fontSize: { xs: '17vw', sm: '15vw', md: '14.5vw' },
+                fontSize: { xs: '12vw', sm: '12vw', md: '11vw' },
                 fontStyle: 'italic',
                 fontWeight: 700,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
