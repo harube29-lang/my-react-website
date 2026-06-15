@@ -7,7 +7,6 @@ import Chip from '@mui/material/Chip'
 import Skeleton from '@mui/material/Skeleton'
 import { Link } from 'react-router-dom'
 import LaunchIcon from '@mui/icons-material/Launch'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { SiFigma, SiHtml5 } from 'react-icons/si'
 import profileImg from '../assets/profile.jpg'
 import ContactSection from '../components/Contact/ContactSection'
@@ -16,100 +15,23 @@ import { supabase } from '../lib/supabase'
 /* ════════════════════════════════════════
    애니메이션 키프레임
 ════════════════════════════════════════ */
-const float1 = keyframes`
-  0%, 100% { transform: rotate(-10deg) translateY(0px);   }
-  50%       { transform: rotate(-10deg) translateY(-22px); }
-`
-const float2 = keyframes`
-  0%, 100% { transform: rotate(8deg) translateY(-8px);  }
-  50%       { transform: rotate(8deg) translateY(-28px); }
-`
-const scrollBounce = keyframes`
-  0%, 100% { transform: translateX(-50%) translateY(0);    opacity: 0.75; }
-  50%       { transform: translateX(-50%) translateY(10px); opacity: 0.25; }
-`
 const fadeUp = keyframes`
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0);    }
 `
-const fadeRight = keyframes`
-  from { opacity: 0; transform: translateX(36px); }
-  to   { opacity: 1; transform: translateX(0);    }
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to   { opacity: 1; }
 `
-
-/* ════════════════════════════════════════
-   스킬 퀵 바 데이터
-════════════════════════════════════════ */
-const SKILLS_BAR = [
-  { name: 'Figma',          color: '#F24E1E' },
-  { name: 'Adobe XD',       color: '#FF61F6' },
-  { name: 'Photoshop',      color: '#31A8FF' },
-  { name: 'Illustrator',    color: '#FF9A00' },
-  { name: 'UI/UX Design',   color: '#FFFFFF' },
-  { name: 'Web Publishing', color: '#E34F26' },
-]
-
-/* ════════════════════════════════════════
-   폰 목업 스크린 Placeholder
-════════════════════════════════════════ */
-const PhoneScreen = ({ gradient }) => (
-  <Box
-    sx={{
-      position: 'absolute', inset: 4,
-      borderRadius: '18px',
-      background: gradient,
-      overflow: 'hidden',
-    }}
-  >
-    {/*
-      ↓ 실제 프로젝트 스크린샷으로 교체하세요.
-      Replace this placeholder with:
-        import mockupImg from '../assets/mockup1.png'
-        <Box component="img" src={mockupImg}
-             sx={{ width:'100%', height:'100%', objectFit:'cover', borderRadius:'inherit' }} />
-    */}
-    <Box sx={{ p: 1.5, pt: 2.8 }}>
-      {/* 상태바 */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5, px: 0.5 }}>
-        <Box sx={{ width: 28, height: 3, bgcolor: 'rgba(255,255,255,0.55)', borderRadius: 1 }} />
-        <Box sx={{ display: 'flex', gap: 0.5 }}>
-          {[14, 10, 12].map((w, i) => (
-            <Box key={i} sx={{ width: w, height: 3, bgcolor: 'rgba(255,255,255,0.55)', borderRadius: 1 }} />
-          ))}
-        </Box>
-      </Box>
-      {/* 타이틀 스켈레톤 */}
-      <Box sx={{ width: '55%', height: 7, bgcolor: 'rgba(255,255,255,0.65)', borderRadius: 1, mb: 0.8 }} />
-      <Box sx={{ width: '80%', height: 3.5, bgcolor: 'rgba(255,255,255,0.3)', borderRadius: 1, mb: 0.5 }} />
-      <Box sx={{ width: '65%', height: 3.5, bgcolor: 'rgba(255,255,255,0.3)', borderRadius: 1, mb: 2 }} />
-      {/* 이미지 영역 */}
-      <Box
-        sx={{ height: 58, bgcolor: 'rgba(255,255,255,0.14)', borderRadius: 2, mb: 1.5,
-              display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      >
-        <Box sx={{ width: 22, height: 22, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.28)' }} />
-      </Box>
-      {/* 카드 3열 */}
-      <Box sx={{ display: 'flex', gap: 0.5, mb: 1.5 }}>
-        {[1, 2, 3].map(i => (
-          <Box key={i} sx={{ flex: 1, height: 34, bgcolor: 'rgba(255,255,255,0.12)', borderRadius: 1.5 }} />
-        ))}
-      </Box>
-      {/* 텍스트 줄 */}
-      <Box sx={{ width: '88%', height: 3, bgcolor: 'rgba(255,255,255,0.22)', borderRadius: 1, mb: 0.5 }} />
-      <Box sx={{ width: '72%', height: 3, bgcolor: 'rgba(255,255,255,0.22)', borderRadius: 1 }} />
-    </Box>
-  </Box>
-)
 
 /* ════════════════════════════════════════
    Skills 섹션 데이터
 ════════════════════════════════════════ */
 const SKILLS = [
-  { type: 'react-icon', icon: SiFigma,  name: 'Figma',        level: '활용 가능', stars: 4, color: '#F24E1E', bgColor: '#FFF1EE' },
-  { type: 'adobe',  letter: 'Ai',       name: 'Illustrator',  level: '활용 가능', stars: 4, color: '#FF9A00', bgColor: '#FFF8EE', adobeBg: '#2C0A00' },
-  { type: 'adobe',  letter: 'Ps',       name: 'Photoshop',    level: '기초 가능', stars: 3, color: '#31A8FF', bgColor: '#EEF7FF', adobeBg: '#001E36' },
-  { type: 'react-icon', icon: SiHtml5,  name: 'HTML5',        level: '기초 가능', stars: 3, color: '#E34F26', bgColor: '#FFF1EE' },
+  { type: 'react-icon', icon: SiFigma, name: 'Figma',       level: '활용 가능', stars: 4, color: '#F24E1E', bgColor: '#FFF1EE' },
+  { type: 'adobe', letter: 'Ai',       name: 'Illustrator', level: '활용 가능', stars: 4, color: '#FF9A00', bgColor: '#FFF8EE', adobeBg: '#2C0A00' },
+  { type: 'adobe', letter: 'Ps',       name: 'Photoshop',   level: '기초 가능', stars: 3, color: '#31A8FF', bgColor: '#EEF7FF', adobeBg: '#001E36' },
+  { type: 'react-icon', icon: SiHtml5, name: 'HTML5',       level: '기초 가능', stars: 3, color: '#E34F26', bgColor: '#FFF1EE' },
 ]
 
 const Stars = ({ count, color }) => (
@@ -167,7 +89,7 @@ const SkillCard = ({ skill }) => {
 }
 
 /* ════════════════════════════════════════
-   Projects 카드 (홈 미리보기)
+   Projects 카드
 ════════════════════════════════════════ */
 const HomeProjectCard = ({ project }) => {
   const [imgError, setImgError] = useState(false)
@@ -273,232 +195,212 @@ const HomePage = () => {
     <Box>
 
       {/* ══════════════════════════════════════
-          1. HERO
+          1. HERO  —  타이포그래피 중심 미니멀
       ══════════════════════════════════════ */}
       <Box
         id="hero"
         component="section"
         sx={{
           position: 'relative',
-          background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
-          pt: { xs: 14, sm: 18, md: 22 },
-          pb: 0,
-          px: { xs: 3, sm: 5, md: 8 },
+          bgcolor: '#FFFFFF',
+          minHeight: { xs: '88vh', md: '92vh' },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
           overflow: 'hidden',
+          pt: { xs: 12, md: 16 },
+          pb: { xs: 10, md: 14 },
         }}
       >
-        {/* 배경 데코 원 */}
-        <Box sx={{ position: 'absolute', top: -140, right: -80, width: 420, height: 420,
-                   borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
-        <Box sx={{ position: 'absolute', bottom: 140, left: -100, width: 300, height: 300,
-                   borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
 
-        {/* ── 메인 콘텐츠 (텍스트 좌 + 목업 우) ── */}
+        {/* ── 배경 워터마크 "HYEKYOUNG" ── */}
         <Box
-          sx={{ maxWidth: 1200, mx: 'auto',
-                display: 'flex', flexDirection: { xs: 'column', md: 'row' },
-                alignItems: 'center', gap: { xs: 8, md: 4 } }}
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontFamily: '"Archivo Black", sans-serif',
+            /* 9글자가 뷰포트 가득 채우도록 조정 */
+            fontSize: { xs: '21vw', sm: '19vw', md: '17vw' },
+            fontWeight: 900,
+            color: '#111827',
+            opacity: 0.048,
+            whiteSpace: 'nowrap',
+            letterSpacing: '-0.01em',
+            lineHeight: 1,
+            userSelect: 'none',
+            pointerEvents: 'none',
+            zIndex: 0,
+            animation: `${fadeIn} 1.2s ease both`,
+          }}
         >
+          HYEKYOUNG
+        </Box>
 
-          {/* ── 좌: 텍스트 그룹 ── */}
-          <Box sx={{ flex: 1, animation: `${fadeUp} 0.7s ease both` }}>
+        {/* ── 메인 콘텐츠 레이어 ── */}
+        <Box
+          sx={{
+            position: 'relative', zIndex: 1,
+            maxWidth: 1280,
+            mx: 'auto',
+            px: { xs: 4, sm: 6, md: 10 },
+            width: '100%',
+          }}
+        >
+          {/* 좌측 상단 소캡션 */}
+          <Typography
+            sx={{
+              fontFamily: '"Pretendard", sans-serif',
+              fontSize: { xs: '0.82rem', sm: '0.9rem', md: '1.05rem' },
+              fontWeight: 700,
+              color: '#111827',
+              letterSpacing: '-0.01em',
+              mb: { xs: 0.8, md: 1 },
+              animation: `${fadeUp} 0.6s 0.1s ease both`,
+              opacity: 0,
+            }}
+          >
+            즐겁게, 누구나 찾을 수 있게
+          </Typography>
 
-            {/* 뱃지 */}
+          {/* ── 거대 로고타입 "hye kyoung" ── */}
+          <Box
+            sx={{
+              lineHeight: 0.9,
+              mb: { xs: 5, sm: 6, md: 8 },
+              animation: `${fadeUp} 0.7s 0.2s ease both`,
+              opacity: 0,
+              /* 두 폰트가 baseline을 공유하도록 */
+              display: 'flex',
+              alignItems: 'baseline',
+              flexWrap: 'nowrap',
+              gap: 0,
+            }}
+          >
+            {/*
+              산세리프 파트 — Archivo Black
+              참고 이미지의 "nana"에 해당
+            */}
             <Box
-              sx={{ display: 'inline-flex', alignItems: 'center', gap: 1,
-                    bgcolor: 'rgba(255,255,255,0.16)', backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    border: '1px solid rgba(255,255,255,0.28)',
-                    px: 2, py: 0.9, borderRadius: '100px', mb: 3.5,
-                    animation: `${fadeUp} 0.5s ease both` }}
+              component="span"
+              sx={{
+                fontFamily: '"Archivo Black", sans-serif',
+                fontSize: { xs: '17vw', sm: '15vw', md: '14.5vw' },
+                fontWeight: 900,
+                color: '#111827',
+                letterSpacing: { xs: '-0.03em', md: '-0.04em' },
+                lineHeight: 1,
+                display: 'inline',
+              }}
             >
-              <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#fff', opacity: 0.9 }} />
-              <Typography
-                sx={{ color: '#fff', fontSize: '0.7rem', fontWeight: 700,
-                      letterSpacing: '0.22em', textTransform: 'uppercase' }}
-              >
-                UX / UI Designer
-              </Typography>
+              hye&nbsp;
             </Box>
 
-            {/* 메인 헤드라인 — 대형 */}
-            <Typography
-              variant="h1"
-              sx={{ color: '#FFFFFF',
-                    fontSize: { xs: '2.9rem', sm: '3.8rem', md: '4.8rem' },
-                    fontWeight: 800, lineHeight: 1.0,
-                    mb: 3, wordBreak: 'keep-all', letterSpacing: '-0.03em',
-                    animation: `${fadeUp} 0.65s 0.1s ease both`,
-                    '& span': { display: 'block' } }}
+            {/*
+              세리프 이탤릭 파트 — Cormorant Garamond
+              참고 이미지의 "like"에 해당
+              고대비 세리프의 우아한 곡선이 산세리프와 대비를 이룸
+            */}
+            <Box
+              component="span"
+              sx={{
+                fontFamily: '"Cormorant Garamond", serif',
+                fontSize: { xs: '17vw', sm: '15vw', md: '14.5vw' },
+                fontStyle: 'italic',
+                fontWeight: 700,
+                color: '#111827',
+                letterSpacing: { xs: '-0.02em', md: '-0.025em' },
+                lineHeight: 1,
+                display: 'inline',
+              }}
             >
-              <span>사용자의</span>
-              <span>흐름을</span>
-              <span>설계합니다.</span>
-            </Typography>
+              kyoung
+            </Box>
+          </Box>
 
-            {/* 서브 카피 */}
-            <Typography
-              sx={{ color: 'rgba(255,255,255,0.76)', maxWidth: 420, lineHeight: 1.9,
-                    mb: 5, fontSize: { xs: '0.95rem', md: '1.05rem' }, wordBreak: 'keep-all',
-                    animation: `${fadeUp} 0.65s 0.22s ease both` }}
+          {/* 얇은 구분선 — 브랜드 포인트 컬러 */}
+          <Box
+            sx={{
+              width: 48, height: 2,
+              background: 'linear-gradient(90deg, #FF7A00, #F04438)',
+              borderRadius: 1,
+              mx: 'auto',
+              mb: { xs: 3.5, md: 4.5 },
+              animation: `${fadeIn} 0.5s 0.5s ease both`,
+              opacity: 0,
+            }}
+          />
+
+          {/* 하단 본문 카피 3줄 — 중앙 정렬 */}
+          <Box
+            sx={{
+              textAlign: 'center',
+              animation: `${fadeUp} 0.7s 0.42s ease both`,
+              opacity: 0,
+            }}
+          >
+            {[
+              '탄탄한 기획 위에 감각적인 인터페이스를 만드는 디자이너 황혜경입니다.',
+              '사용하기 쉽고, 대중의 기억에 강하게 남을 UX/UI 디자인을 합니다.',
+              '즐거운 마음으로 누구나 끊임없이 찾을 가치를 오늘도 만들어가고 있어요!',
+            ].map((line, i) => (
+              <Typography
+                key={i}
+                sx={{
+                  fontFamily: '"Pretendard", sans-serif',
+                  fontSize: { xs: '0.88rem', sm: '0.95rem', md: '1.05rem' },
+                  fontWeight: i === 0 ? 500 : 400,
+                  color: i === 0 ? '#111827' : '#374151',
+                  lineHeight: 2,
+                  letterSpacing: '-0.01em',
+                  wordBreak: 'keep-all',
+                }}
+              >
+                {line}
+              </Typography>
+            ))}
+
+            {/* 미니멀 CTA */}
+            <Box
+              sx={{
+                display: 'flex', justifyContent: 'center', gap: { xs: 3, md: 4 },
+                mt: { xs: 4.5, md: 6 },
+                animation: `${fadeUp} 0.6s 0.6s ease both`,
+                opacity: 0,
+              }}
             >
-              섬세함으로 불편함을 읽고,<br />심플함으로 해결합니다.
-            </Typography>
-
-            {/* CTA 버튼 */}
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap',
-                       animation: `${fadeUp} 0.65s 0.34s ease both` }}>
               <Button
-                variant="contained"
-                component={Link}
-                to="/projects"
-                size="large"
-                sx={{ bgcolor: '#FFFFFF', color: '#FF7A00', fontWeight: 700,
-                      px: 3.5, py: 1.5, background: '#FFFFFF',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.18)',
-                      transition: 'all 0.3s cubic-bezier(.34,1.56,.64,1)',
-                      '&:hover': { bgcolor: '#FFF5EE', background: '#FFF5EE',
-                                   boxShadow: '0 8px 30px rgba(0,0,0,0.22)',
-                                   transform: 'scale(1.06) translateY(-3px)' } }}
+                component={Link} to="/projects"
+                variant="contained" color="primary"
+                sx={{
+                  px: 3.5, py: 1.3,
+                  fontFamily: '"Pretendard", sans-serif',
+                  fontWeight: 700, fontSize: '0.9rem',
+                  boxShadow: '0 4px 18px rgba(255,122,0,0.28)',
+                  transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
+                  '&:hover': { transform: 'scale(1.05) translateY(-2px)',
+                               boxShadow: '0 8px 28px rgba(255,122,0,0.38)' },
+                }}
               >
                 작업물 보기
               </Button>
               <Button
-                variant="outlined"
-                component={Link}
-                to="/about"
-                size="large"
-                sx={{ borderColor: 'rgba(255,255,255,0.6)', color: '#FFFFFF',
-                      fontWeight: 600, px: 3.5, py: 1.5, borderWidth: '1.5px',
-                      backdropFilter: 'blur(4px)',
-                      transition: 'all 0.3s cubic-bezier(.34,1.56,.64,1)',
-                      '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.18)',
-                                   borderWidth: '1.5px',
-                                   transform: 'scale(1.06) translateY(-3px)' } }}
+                component={Link} to="/about"
+                variant="outlined" color="primary"
+                sx={{
+                  px: 3.5, py: 1.3,
+                  fontFamily: '"Pretendard", sans-serif',
+                  fontWeight: 600, fontSize: '0.9rem',
+                  borderWidth: '1.5px',
+                  transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
+                  '&:hover': { transform: 'scale(1.05) translateY(-2px)',
+                               borderWidth: '1.5px', bgcolor: 'rgba(255,122,0,0.05)' },
+                }}
               >
                 About Me
               </Button>
             </Box>
-          </Box>
-
-          {/* ── 우: 폰 목업 플로팅 영역 ── */}
-          <Box
-            sx={{ flexShrink: 0, position: 'relative',
-                  width: { sm: 300, md: 380 }, height: { sm: 360, md: 460 },
-                  display: { xs: 'none', sm: 'block' },
-                  animation: `${fadeRight} 0.8s 0.15s ease both` }}
-          >
-            {/* 배경 glow */}
-            <Box sx={{ position: 'absolute', top: '50%', left: '50%',
-                       transform: 'translate(-50%, -50%)',
-                       width: 260, height: 260, borderRadius: '50%',
-                       background: 'radial-gradient(circle, rgba(255,255,255,0.14) 0%, transparent 70%)',
-                       pointerEvents: 'none' }} />
-
-            {/* 스몰 데코 닷 */}
-            {[[14, 30], [240, 50], [30, 300], [260, 320]].map(([x, y], i) => (
-              <Box key={i} sx={{ position: 'absolute', left: x, top: y,
-                                 width: 6, height: 6, borderRadius: '50%',
-                                 bgcolor: 'rgba(255,255,255,0.3)' }} />
-            ))}
-
-            {/* ── Phone 1 — 왼쪽 뒤 (보라/파랑 테마) ── */}
-            <Box
-              sx={{ position: 'absolute',
-                    left: { sm: 8, md: 10 }, top: { sm: 70, md: 90 },
-                    width: { sm: 128, md: 148 }, height: { sm: 258, md: 298 },
-                    borderRadius: '22px',
-                    background: '#1A1A2E',
-                    border: '2.5px solid rgba(255,255,255,0.2)',
-                    boxShadow: '0 20px 60px rgba(0,0,0,0.45)',
-                    overflow: 'hidden', zIndex: 1,
-                    animation: `${float1} 4s ease-in-out infinite` }}
-            >
-              <Box sx={{ position: 'absolute', top: 7, left: '50%', transform: 'translateX(-50%)',
-                         width: 50, height: 10, bgcolor: '#1A1A2E', borderRadius: 5, zIndex: 2 }} />
-              <PhoneScreen gradient="linear-gradient(160deg, #6C63FF 0%, #3A86FF 100%)" />
-              <Box sx={{ position: 'absolute', bottom: 6, left: '50%', transform: 'translateX(-50%)',
-                         width: 36, height: 3.5, bgcolor: 'rgba(255,255,255,0.35)', borderRadius: 2 }} />
-            </Box>
-
-            {/* ── Phone 2 — 오른쪽 앞 (오렌지 테마) ── */}
-            <Box
-              sx={{ position: 'absolute',
-                    right: { sm: 8, md: 10 }, top: { sm: 8, md: 10 },
-                    width: { sm: 148, md: 172 }, height: { sm: 296, md: 344 },
-                    borderRadius: '26px',
-                    background: '#1A1A2E',
-                    border: '2.5px solid rgba(255,255,255,0.28)',
-                    boxShadow: '0 28px 72px rgba(0,0,0,0.55)',
-                    overflow: 'hidden', zIndex: 2,
-                    animation: `${float2} 4.8s 0.7s ease-in-out infinite` }}
-            >
-              <Box sx={{ position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)',
-                         width: 58, height: 12, bgcolor: '#1A1A2E', borderRadius: 6, zIndex: 2 }} />
-              <PhoneScreen gradient="linear-gradient(160deg, #FF7A00 0%, #F04438 100%)" />
-              <Box sx={{ position: 'absolute', bottom: 7, left: '50%', transform: 'translateX(-50%)',
-                         width: 44, height: 4, bgcolor: 'rgba(255,255,255,0.4)', borderRadius: 2 }} />
-            </Box>
-          </Box>
-        </Box>
-
-        {/* ── 스크롤 유도 화살표 ── */}
-        <Box
-          onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-          sx={{ position: 'absolute', bottom: { xs: 86, md: 102 }, left: '50%',
-                animation: `${scrollBounce} 2.3s ease-in-out infinite`,
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.3,
-                cursor: 'pointer', userSelect: 'none',
-                '&:hover': { opacity: 1 } }}
-        >
-          <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.58rem', fontWeight: 700,
-                             letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-            Scroll
-          </Typography>
-          <KeyboardArrowDownIcon sx={{ color: 'rgba(255,255,255,0.5)', fontSize: 17 }} />
-        </Box>
-
-        {/* ── 역량 퀵 바 (Glassmorphism) ── */}
-        <Box
-          sx={{ mt: { xs: 8, md: 14 },
-                mx: { xs: -3, sm: -5, md: -8 },
-                px: { xs: 3, sm: 5, md: 8 },
-                py: { xs: 2.2, md: 2.8 },
-                background: 'rgba(255,255,255,0.10)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                borderTop: '1px solid rgba(255,255,255,0.18)' }}
-        >
-          <Box
-            sx={{ maxWidth: 1200, mx: 'auto',
-                  display: 'flex', flexWrap: 'wrap',
-                  gap: { xs: 2, md: 0 }, alignItems: 'center',
-                  justifyContent: { xs: 'center', md: 'flex-start' } }}
-          >
-            {SKILLS_BAR.map((s, i) => (
-              <Box key={s.name}
-                sx={{ display: 'flex', alignItems: 'center',
-                      px: { xs: 0, md: i === 0 ? 0 : 3 },
-                      gap: 1, opacity: 0.82,
-                      transition: 'opacity 0.2s', '&:hover': { opacity: 1 } }}
-              >
-                <Box
-                  sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: s.color, flexShrink: 0,
-                        boxShadow: `0 0 7px ${s.color}` }}
-                />
-                <Typography
-                  sx={{ color: 'rgba(255,255,255,0.9)', fontSize: { xs: '0.75rem', md: '0.81rem' },
-                        fontWeight: 500, letterSpacing: '0.01em', whiteSpace: 'nowrap' }}
-                >
-                  {s.name}
-                </Typography>
-                {i < SKILLS_BAR.length - 1 && (
-                  <Box sx={{ display: { xs: 'none', md: 'block' },
-                             width: 1, height: 14, bgcolor: 'rgba(255,255,255,0.22)',
-                             ml: 3, flexShrink: 0 }} />
-                )}
-              </Box>
-            ))}
           </Box>
         </Box>
       </Box>
@@ -509,10 +411,8 @@ const HomePage = () => {
           2. About Me
       ══════════════════════════════════════ */}
       <Section id="about" bg="#FFFFFF">
-        <Box
-          sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' },
-                alignItems: 'center', gap: { xs: 5, md: 10 } }}
-        >
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' },
+                   alignItems: 'center', gap: { xs: 5, md: 10 } }}>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Label>About Me</Label>
             <Typography variant="h2"
@@ -584,20 +484,17 @@ const HomePage = () => {
             전체 보기 →
           </Button>
         </Box>
-        <Box
-          sx={{ display: 'flex', gap: { xs: 2, md: 3 }, overflowX: 'auto', pb: 1,
-                '&::-webkit-scrollbar': { height: 4 },
-                '&::-webkit-scrollbar-thumb': { backgroundColor: '#D1D5DB', borderRadius: 2 } }}
-        >
+        <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, overflowX: 'auto', pb: 1,
+                   '&::-webkit-scrollbar': { height: 4 },
+                   '&::-webkit-scrollbar-thumb': { backgroundColor: '#D1D5DB', borderRadius: 2 } }}>
           {loading
             ? [1, 2, 3].map(n => <ProjectSkeleton key={n} />)
             : projects.length > 0
               ? projects.map(p => <HomeProjectCard key={p.id} project={p} />)
               : [1, 2, 3].map(n => (
-                  <Box key={n}
-                    sx={{ flex: '1 0 280px', minWidth: 280, minHeight: 200,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          borderRadius: 3, border: '1px dashed #E5E7EB' }}>
+                  <Box key={n} sx={{ flex: '1 0 280px', minWidth: 280, minHeight: 200,
+                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                     borderRadius: 3, border: '1px dashed #E5E7EB' }}>
                     <Typography variant="body2" color="text.disabled">준비 중입니다</Typography>
                   </Box>
                 ))
