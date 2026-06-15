@@ -51,12 +51,11 @@ const SkillCard = ({ skill }) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5,
-            p: { xs: 3, md: 3.5 }, borderRadius: 3, border: '1.5px solid',
-            borderColor: hovered ? color : '#E5E7EB',
+            p: { xs: 3, md: 3.5 }, borderRadius: 3,
             bgcolor: hovered ? bgColor : '#FFFFFF', cursor: 'default',
             transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
-            boxShadow: hovered ? `0 12px 32px ${color}28` : '0 1px 4px rgba(0,0,0,0.06)',
-            transition: 'all 0.25s cubic-bezier(.34,1.56,.64,1)' }}
+            boxShadow: hovered ? '0 10px 30px rgba(0,0,0,0.08)' : '0 2px 8px rgba(0,0,0,0.04)',
+            transition: 'all 0.3s ease' }}
     >
       {type === 'react-icon'
         ? <Icon size={52} color={hovered ? color : '#9CA3AF'} style={{ transition: 'color 0.25s' }} />
@@ -225,7 +224,7 @@ const HomePage = () => {
             fontSize: { xs: '21vw', sm: '19vw', md: '17vw' },
             fontWeight: 900,
             color: '#111827',
-            opacity: 0.048,
+            opacity: 0.03,
             whiteSpace: 'nowrap',
             letterSpacing: '-0.01em',
             lineHeight: 1,

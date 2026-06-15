@@ -41,7 +41,7 @@ const ContactSection = () => {
         {/* 연락처 */}
         <Paper
           elevation={0}
-          sx={{ p: { xs: 3, md: 4 }, borderRadius: 3, border: '1px solid #E5E7EB', bgcolor: '#fff', mb: { xs: 5, md: 6 } }}
+          sx={{ p: { xs: 3, md: 4 }, borderRadius: 3, bgcolor: 'transparent', mb: { xs: 5, md: 6 } }}
         >
           <ContactInfo />
         </Paper>

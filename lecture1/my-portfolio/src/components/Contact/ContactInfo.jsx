@@ -15,26 +15,37 @@ const ContactInfo = () => (
         display: 'flex',
         alignItems: 'center',
         gap: 2,
-        background: 'linear-gradient(135deg, #FF7A00, #F04438)',
-        borderRadius: 3,
+        bgcolor: '#FFFFFF',
+        border: '1.5px solid #FFD9B3',
+        borderRadius: '16px',
         px: 3,
         py: 2.5,
-        color: '#fff',
+        color: '#111827',
         textDecoration: 'none',
-        boxShadow: '0 4px 20px #FF7A0040',
-        transition: 'transform 0.2s, box-shadow 0.2s',
+        transition: 'all 0.3s ease',
         '&:hover': {
           transform: 'translateY(-3px)',
-          boxShadow: '0 10px 28px #FF7A0055',
+          boxShadow: '0 8px 24px rgba(255,122,0,0.12)',
+          borderColor: '#FF7A00',
         },
       }}
     >
-      <Box sx={{ width: 44, height: 44, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <EmailRoundedIcon sx={{ fontSize: 22 }} />
+      <Box
+        sx={{
+          width: 44, height: 44, borderRadius: '12px',
+          bgcolor: '#FFF4EB',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}
+      >
+        <EmailRoundedIcon sx={{ fontSize: 22, color: '#FF7A00' }} />
       </Box>
       <Box>
-        <Typography sx={{ fontSize: '0.7rem', opacity: 0.75, letterSpacing: 1, textTransform: 'uppercase', fontWeight: 600 }}>이메일</Typography>
-        <Typography sx={{ fontWeight: 700, fontSize: '0.95rem' }}>harube29@naver.com</Typography>
+        <Typography sx={{ fontSize: '0.68rem', color: '#9CA3AF', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, mb: 0.3 }}>
+          이메일
+        </Typography>
+        <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: '#111827' }}>
+          harube29@naver.com
+        </Typography>
       </Box>
     </Box>
 
@@ -49,26 +60,37 @@ const ContactInfo = () => (
         display: 'flex',
         alignItems: 'center',
         gap: 2,
-        background: 'linear-gradient(135deg, #F58529 0%, #DD2A7B 55%, #8134AF 100%)',
-        borderRadius: 3,
+        bgcolor: '#FFFFFF',
+        border: '1.5px solid #E5E7EB',
+        borderRadius: '16px',
         px: 3,
         py: 2.5,
-        color: '#fff',
+        color: '#111827',
         textDecoration: 'none',
-        boxShadow: '0 4px 20px #DD2A7B40',
-        transition: 'transform 0.2s, box-shadow 0.2s',
+        transition: 'all 0.3s ease',
         '&:hover': {
-          transform: 'translateY(-3px) rotate(-2deg)',
-          boxShadow: '0 10px 28px #DD2A7B55',
+          transform: 'translateY(-3px)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+          borderColor: '#DD2A7B',
         },
       }}
     >
-      <Box sx={{ width: 44, height: 44, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <InstagramIcon sx={{ fontSize: 22 }} />
+      <Box
+        sx={{
+          width: 44, height: 44, borderRadius: '12px',
+          bgcolor: '#FDF2F8',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        <InstagramIcon sx={{ fontSize: 22, color: '#DD2A7B' }} />
       </Box>
       <Box>
-        <Typography sx={{ fontSize: '0.7rem', opacity: 0.75, letterSpacing: 1, textTransform: 'uppercase', fontWeight: 600 }}>SNS</Typography>
-        <Typography sx={{ fontWeight: 700, fontSize: '0.95rem' }}>Instagram</Typography>
+        <Typography sx={{ fontSize: '0.68rem', color: '#9CA3AF', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, mb: 0.3 }}>
+          SNS
+        </Typography>
+        <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: '#111827' }}>
+          Instagram
+        </Typography>
       </Box>
     </Box>
 

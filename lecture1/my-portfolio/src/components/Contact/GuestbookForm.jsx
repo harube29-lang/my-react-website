@@ -11,7 +11,28 @@ import Checkbox from '@mui/material/Checkbox'
 import Divider from '@mui/material/Divider'
 import { supabase } from '../../lib/supabase'
 
-const orangeTheme = createTheme({ palette: { primary: { main: '#FF7A00' } } })
+/* 인풋 border-radius 통일 (12px) + 오렌지 포커스 */
+const formTheme = createTheme({
+  palette: { primary: { main: '#FF7A00' } },
+  components: {
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+          backgroundColor: '#FAFAFA',
+          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#FFB366' },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#FF7A00', borderWidth: '1.5px' },
+        },
+        notchedOutline: { borderColor: '#E5E7EB' },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: { color: '#9CA3AF', '&.Mui-focused': { color: '#FF7A00' } },
+      },
+    },
+  },
+})
 
 const EMOJIS    = ['🚀', '⚡', '💡', '🎯', '✨', '🔥', '🛠️', '💬']
 const REGIONS   = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주']
@@ -23,7 +44,7 @@ const INIT = {
   region: '', age_group: '', how_found: '', keyword: '', rating: 0,
 }
 
-/* 별점 컴포넌트 */
+/* 별점 */
 const StarRating = ({ value, onChange }) => (
   <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
     {[1, 2, 3, 4, 5].map(n => (
@@ -31,12 +52,9 @@ const StarRating = ({ value, onChange }) => (
         key={n}
         onClick={() => onChange(value === n ? 0 : n)}
         sx={{
-          fontSize: '1.6rem',
-          cursor: 'pointer',
+          fontSize: '1.5rem', cursor: 'pointer', lineHeight: 1, userSelect: 'none',
           color: n <= value ? '#FF7A00' : '#E5E7EB',
-          transition: 'color 0.15s, transform 0.15s',
-          lineHeight: 1,
-          userSelect: 'none',
+          transition: 'color 0.2s, transform 0.2s',
           '&:hover': { color: '#FF7A00', transform: 'scale(1.15)' },
         }}
       >
@@ -49,9 +67,8 @@ const StarRating = ({ value, onChange }) => (
   </Box>
 )
 
-/* 섹션 레이블 */
 const FieldLabel = ({ children }) => (
-  <Typography variant="caption" sx={{ color: '#6B7280', fontWeight: 400, letterSpacing: 0.4, display: 'block', mb: 1 }}>
+  <Typography variant="caption" sx={{ color: '#9CA3AF', fontWeight: 500, letterSpacing: 0.2, display: 'block', mb: 1 }}>
     {children}
   </Typography>
 )
@@ -92,21 +109,30 @@ const GuestbookForm = ({ onSuccess }) => {
   }
 
   return (
-    <Box sx={{ borderRadius: 3, overflow: 'hidden', boxShadow: '0 4px 24px rgba(255,122,0,0.14)' }}>
-
-      {/* 헤더 */}
-      <Box sx={{ background: 'linear-gradient(135deg, #FF7A00, #F04438)', px: 3, py: 2.5 }}>
-        <Typography sx={{ color: '#fff', fontWeight: 600, fontSize: '1.05rem', mb: 0.3 }}>
+    <Box
+      sx={{
+        borderRadius: '16px',
+        overflow: 'hidden',
+        border: '1px solid #F0F0F0',
+        boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
+        bgcolor: '#FFFFFF',
+      }}
+    >
+      {/* 헤더 — 미니멀 */}
+      <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid #F5F5F5' }}>
+        <Typography sx={{ color: '#111827', fontWeight: 700, fontSize: '1rem', mb: 0.3 }}>
           방명록 남기기 ✍️
         </Typography>
-        <Typography sx={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.82rem' }}>
+        <Typography sx={{ color: '#9CA3AF', fontSize: '0.8rem' }}>
           익명으로도 남길 수 있어요!
         </Typography>
       </Box>
 
-      <ThemeProvider theme={orangeTheme}>
-        <Box component="form" onSubmit={handleSubmit}
-          sx={{ bgcolor: '#fff', px: 3, py: 3, display: 'flex', flexDirection: 'column', gap: 2.5 }}
+      <ThemeProvider theme={formTheme}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ px: 3, py: 3, display: 'flex', flexDirection: 'column', gap: 2.5 }}
         >
           {/* 기본 정보 */}
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
@@ -119,15 +145,18 @@ const GuestbookForm = ({ onSuccess }) => {
             <FieldLabel>이모지 선택</FieldLabel>
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
               {EMOJIS.map(em => (
-                <Box key={em} onClick={() => setForm(p => ({ ...p, emoji: em }))}
+                <Box
+                  key={em}
+                  onClick={() => setForm(p => ({ ...p, emoji: em }))}
                   sx={{
-                    width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '1.3rem', borderRadius: 2, cursor: 'pointer',
-                    border: form.emoji === em ? '2.5px solid #FF7A00' : '2px solid #E2E8F0',
-                    bgcolor: form.emoji === em ? '#FFF4EB' : '#F8FAFC',
-                    transform: form.emoji === em ? 'scale(1.2)' : 'scale(1)',
-                    transition: 'all 0.18s cubic-bezier(.34,1.56,.64,1)',
-                    '&:hover': { transform: 'scale(1.15)', bgcolor: '#FFF4EB' },
+                    width: 40, height: 40,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '1.25rem', borderRadius: '10px', cursor: 'pointer',
+                    border: form.emoji === em ? '2px solid #FF7A00' : '2px solid #E5E7EB',
+                    bgcolor: form.emoji === em ? '#FFF4EB' : '#F9FAFB',
+                    transform: form.emoji === em ? 'scale(1.18)' : 'scale(1)',
+                    transition: 'all 0.2s ease',
+                    '&:hover': { transform: 'scale(1.12)', bgcolor: '#FFF4EB', borderColor: '#FFB366' },
                   }}
                 >{em}</Box>
               ))}
@@ -135,9 +164,16 @@ const GuestbookForm = ({ onSuccess }) => {
           </Box>
 
           {/* 메시지 */}
-          <TextField label="메시지" value={form.message} onChange={set('message')} multiline rows={3} required placeholder="방문 인사를 남겨주세요!" />
+          <TextField
+            label="메시지"
+            value={form.message}
+            onChange={set('message')}
+            multiline rows={3}
+            required
+            placeholder="방문 인사를 남겨주세요!"
+          />
 
-          <Divider sx={{ borderStyle: 'dashed' }} />
+          <Divider sx={{ borderColor: '#F3F4F6' }} />
 
           {/* 추가 정보 */}
           <Box>
@@ -164,7 +200,7 @@ const GuestbookForm = ({ onSuccess }) => {
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'flex-end' }}>
               <TextField label="한마디 키워드" value={form.keyword} onChange={set('keyword')} size="small" placeholder="예: 감사해요, 멋져요…" sx={{ flex: 1, minWidth: 150 }} />
               <Box sx={{ pb: 0.5 }}>
-                <Typography variant="caption" sx={{ color: '#6B7280', fontWeight: 400, display: 'block', mb: 0.8 }}>별점</Typography>
+                <Typography variant="caption" sx={{ color: '#9CA3AF', display: 'block', mb: 0.8 }}>별점</Typography>
                 <StarRating value={form.rating} onChange={(v) => setForm(p => ({ ...p, rating: v }))} />
               </Box>
             </Box>
@@ -176,24 +212,35 @@ const GuestbookForm = ({ onSuccess }) => {
             {form.email && (
               <FormControlLabel
                 control={<Checkbox checked={form.is_public_email} onChange={set('is_public_email')} size="small" />}
-                label={<Typography variant="caption" sx={{ color: '#6B7280' }}>이메일 공개</Typography>}
+                label={<Typography variant="caption" sx={{ color: '#9CA3AF' }}>이메일 공개</Typography>}
               />
             )}
           </Box>
 
-          {error && <Alert severity="error" sx={{ py: 0.5 }}>{error}</Alert>}
-          {done && <Alert severity="success" sx={{ py: 0.5 }}>방명록이 등록되었습니다! 감사합니다 ✨</Alert>}
+          {error && <Alert severity="error" sx={{ py: 0.5, borderRadius: '12px' }}>{error}</Alert>}
+          {done  && <Alert severity="success" sx={{ py: 0.5, borderRadius: '12px' }}>방명록이 등록되었습니다! 감사합니다 ✨</Alert>}
 
-          <Button type="submit" disabled={loading} fullWidth sx={{
-            py: 1.5,
-            background: loading ? '#E2E8F0' : 'linear-gradient(135deg, #FF7A00, #F04438)',
-            color: loading ? '#94A3B8' : '#fff',
-            fontWeight: 600, fontSize: '0.95rem', borderRadius: 2,
-            boxShadow: loading ? 'none' : '0 4px 18px #F0443840',
-            '&:hover': { background: 'linear-gradient(135deg, #E66E00, #D92D20)', transform: 'translateY(-2px)', boxShadow: '0 8px 24px #F0443850' },
-            '&:disabled': { background: '#E2E8F0', boxShadow: 'none', transform: 'none' },
-            transition: 'all 0.22s ease',
-          }}>
+          <Button
+            type="submit"
+            disabled={loading}
+            fullWidth
+            sx={{
+              py: 1.5,
+              bgcolor: loading ? '#F3F4F6' : '#FF7A00',
+              color: loading ? '#9CA3AF' : '#fff',
+              fontWeight: 700,
+              fontSize: '0.92rem',
+              borderRadius: '12px',
+              boxShadow: loading ? 'none' : '0 2px 12px rgba(255,122,0,0.22)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                bgcolor: '#E66E00',
+                transform: 'translateY(-1px)',
+                boxShadow: '0 6px 20px rgba(255,122,0,0.30)',
+              },
+              '&:disabled': { bgcolor: '#F3F4F6', boxShadow: 'none', transform: 'none' },
+            }}
+          >
             {loading ? '저장 중...' : '방명록 남기기 →'}
           </Button>
         </Box>
