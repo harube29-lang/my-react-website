@@ -31,7 +31,7 @@ const ProjectCard = ({ project }) => {
     >
       {/* 썸네일 — 16:9 비율 고정 */}
       <Box sx={{ position: 'relative', width: '100%', paddingTop: '56.25%', overflow: 'hidden', flexShrink: 0 }}>
-        {imgError ? (
+        {imgError || !project.thumbnail_url ? (
           <Box
             sx={{
               position: 'absolute', inset: 0,
