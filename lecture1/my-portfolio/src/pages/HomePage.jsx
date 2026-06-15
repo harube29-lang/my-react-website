@@ -421,27 +421,21 @@ const HomePage = () => {
           2. About Me
       ══════════════════════════════════════ */}
       <Section id="about" bg="#FFFFFF">
+
+        {/* 헤더 + 프로필 */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' },
-                   alignItems: 'center', gap: { xs: 5, md: 10 } }}>
+                   alignItems: 'center', gap: { xs: 5, md: 10 }, mb: { xs: 7, md: 9 } }}>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Label>About Me</Label>
             <Typography variant="h2"
               sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, mb: 1.5, wordBreak: 'keep-all' }}>
               안녕하세요,<br />황혜경입니다.
             </Typography>
-            <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mb: 3 }} />
+            <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mb: 2.5 }} />
             <Typography variant="body1"
-              sx={{ color: 'text.secondary', lineHeight: 1.9, mb: 4, wordBreak: 'keep-all' }}>
-              동명대학교 산업디자인전공을 졸업하고, UX/UI 디자이너로 전향한 신입입니다.<br />
-              전직을 고민하던 중 실제 UX 개선 과정을 접하며 데이터와 사용자 관점 기반의
-              문제 해결 디자인의 중요성을 이해했습니다.<br /><br />
-              보기 좋은 디자인이 아닌, 사용자 문제를 해결하는 설계 중심의 UX/UI 디자이너를
-              목표로 성장 중입니다.
+              sx={{ color: 'text.secondary', lineHeight: 1.9, wordBreak: 'keep-all' }}>
+              동명대학교 산업디자인전공을 졸업하고, UX/UI 디자이너로 전향한 신입입니다.
             </Typography>
-            <Button variant="contained" color="primary" component={Link} to="/about"
-              size="large" sx={{ px: 3.5, py: 1.4 }}>
-              더 알아보기
-            </Button>
           </Box>
           <Box sx={{ flexShrink: 0, display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' } }}>
             <Box component="img" src={profileImg} alt="황혜경 프로필"
@@ -450,6 +444,73 @@ const HomePage = () => {
                     boxShadow: '0 8px 28px rgba(0,0,0,0.12)', display: 'block' }} />
           </Box>
         </Box>
+
+        {/* 콘텐츠 블록 */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 5, md: 6 }, mb: { xs: 6, md: 8 } }}>
+
+          {/* 나의 개발 스토리 */}
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <Typography variant="h3"
+                sx={{ fontSize: { xs: '1.05rem', md: '1.15rem' }, color: '#111827' }}>
+                나의 개발 스토리
+              </Typography>
+              <Box component="span"
+                sx={{ fontSize: '0.62rem', fontWeight: 700, color: 'primary.main',
+                      bgcolor: 'rgba(255,122,0,0.08)', px: 1, py: 0.25, borderRadius: 0.75 }}>
+                홈 표시
+              </Box>
+            </Box>
+            <Box sx={{ width: 28, height: 2, bgcolor: 'primary.main', borderRadius: 1, mb: 2.5, opacity: 0.35 }} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {[
+                '전직을 고민하던 중 UX/UI 디자인의 실제 수정 과정과 피드백을 다룬 콘텐츠를 접하게 되었습니다. 해당 영상에서는 사용자 흐름에서 발생하는 불필요한 요소를 제거하고, 정보 구조를 재정리하여 사용자의 피로도를 줄이는 과정을 중심으로 개선이 이루어졌습니다.',
+                '이 과정을 보며 단순히 시각적으로 완성된 결과물이 아니라, 데이터와 사용자 관점에 기반해 문제를 해결하는 디자인의 중요성을 명확히 이해하게 되었습니다. 특히 사용자 경험을 개선하기 위한 구조적 사고와 반복적인 개선 과정에 깊이 공감하며 UX/UI 디자인 직무에 대한 확신을 갖게 되었습니다.',
+                '이후 해당 분야로의 전향을 결정하고, 사용자 중심의 디자인 사고를 기반으로 툴 학습 및 사이드 프로젝트를 진행하며 실무 역량을 쌓고 있습니다. 현재는 "보기 좋은 디자인"이 아닌 사용자 문제를 해결하는 설계 중심의 UX/UI 디자이너를 목표로 지속적으로 성장하고 있습니다.',
+              ].map((para, i) => (
+                <Typography key={i} variant="body1"
+                  sx={{ color: '#374151', lineHeight: 2, fontSize: { xs: '0.9rem', md: '0.975rem' }, wordBreak: 'keep-all' }}>
+                  {para}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+
+          <Box sx={{ height: '1px', bgcolor: '#F3F4F6' }} />
+
+          {/* 개발 철학 */}
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <Typography variant="h3"
+                sx={{ fontSize: { xs: '1.05rem', md: '1.15rem' }, color: '#111827' }}>
+                개발 철학
+              </Typography>
+              <Box component="span"
+                sx={{ fontSize: '0.62rem', fontWeight: 700, color: 'primary.main',
+                      bgcolor: 'rgba(255,122,0,0.08)', px: 1, py: 0.25, borderRadius: 0.75 }}>
+                홈 표시
+              </Box>
+            </Box>
+            <Box sx={{ width: 28, height: 2, bgcolor: 'primary.main', borderRadius: 1, mb: 2.5, opacity: 0.35 }} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {[
+                '미적 완성도를 중요하게 여기지만, 디자인 과정에서는 항상 유니버설 디자인 관점을 우선적으로 검토해 왔습니다. 특정한 시각적 표현보다 다양한 사용자가 직관적으로 이해하고 접근할 수 있는 경험 설계를 더 중요하게 생각합니다.',
+                '결국 좋은 디자인은 심미성과 사용성의 균형 위에서, 누구에게나 일관된 경험을 제공하는 것이라고 믿습니다.',
+              ].map((para, i) => (
+                <Typography key={i} variant="body1"
+                  sx={{ color: '#374151', lineHeight: 2, fontSize: { xs: '0.9rem', md: '0.975rem' }, wordBreak: 'keep-all' }}>
+                  {para}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+
+        </Box>
+
+        <Button variant="contained" color="primary" component={Link} to="/about"
+          size="large" sx={{ px: 3.5, py: 1.4 }}>
+          더 알아보기
+        </Button>
       </Section>
 
 
