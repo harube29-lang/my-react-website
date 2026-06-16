@@ -227,12 +227,12 @@ const HomePage = () => {
             component="span"
             sx={{
               fontFamily: '"Archivo Black", sans-serif',
-              fontSize: { xs: '13.5vw', sm: '13.5vw', md: '13vw' },
+              fontSize: { xs: '15vw', sm: '15vw', md: '14.5vw' },
               fontWeight: 900,
               color: '#111827',
               opacity: 0.06,
               whiteSpace: 'nowrap',
-              letterSpacing: '-0.03em',
+              letterSpacing: '-0.02em',
               lineHeight: 1,
               flexShrink: 0,
               animation: `${fadeIn} 1.2s ease both`,
@@ -276,6 +276,7 @@ const HomePage = () => {
               opacity: 0,
               display: 'flex',
               alignItems: 'baseline',
+              justifyContent: 'center',
               flexWrap: 'nowrap',
               gap: 0,
               width: '100%',
@@ -328,7 +329,7 @@ const HomePage = () => {
               background: 'linear-gradient(90deg, #FF7A00, #F04438)',
               borderRadius: 1,
               mx: 'auto',
-              mb: { xs: 3.5, md: 4.5 },
+              mb: { xs: 7, md: 9 },
               animation: `${fadeIn} 0.5s 0.5s ease both`,
               opacity: 0,
             }}
@@ -367,7 +368,7 @@ const HomePage = () => {
             <Box
               sx={{
                 display: 'flex', justifyContent: 'center', gap: { xs: 3, md: 4 },
-                mt: { xs: 4.5, md: 6 },
+                mt: { xs: 7, md: 9 },
                 animation: `${fadeUp} 0.6s 0.6s ease both`,
                 opacity: 0,
               }}
