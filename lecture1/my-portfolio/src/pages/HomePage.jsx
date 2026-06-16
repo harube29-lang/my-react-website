@@ -3,11 +3,15 @@ import { keyframes } from '@emotion/react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import Chip from '@mui/material/Chip'
 import Skeleton from '@mui/material/Skeleton'
 import { Link } from 'react-router-dom'
 import { alpha } from '@mui/material/styles'
 import LaunchIcon from '@mui/icons-material/Launch'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import profileImg from '../assets/profile.jpg'
 import ContactSection from '../components/Contact/ContactSection'
 import { supabase } from '../lib/supabase'
@@ -23,6 +27,10 @@ const fadeUp = keyframes`
 const fadeIn = keyframes`
   from { opacity: 0; }
   to   { opacity: 1; }
+`
+const bounceY = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(8px); }
 `
 
 
@@ -365,46 +373,100 @@ const HomePage = () => {
             ))}
 
             {/* CTA */}
-            <Box
-              sx={{
-                display: 'flex', justifyContent: 'center', gap: { xs: 3, md: 4 },
-                mt: { xs: 7, md: 9 },
-                animation: `${fadeUp} 0.6s 0.6s ease both`,
-                opacity: 0,
-              }}
-            >
-              <Button
-                component={Link} to="/projects"
-                variant="contained" color="primary"
-                sx={{
-                  px: 3.5, py: 1.3,
-                  fontFamily: '"Pretendard", sans-serif',
-                  fontWeight: 700, fontSize: '0.9rem',
-                  boxShadow: '0 4px 18px rgba(255,122,0,0.28)',
-                  transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
-                  '&:hover': { transform: 'scale(1.05) translateY(-2px)',
-                               boxShadow: '0 8px 28px rgba(255,122,0,0.38)' },
-                }}
-              >
-                작업물 보기
-              </Button>
-              <Button
-                component={Link} to="/about"
-                variant="outlined" color="primary"
-                sx={{
-                  px: 3.5, py: 1.3,
-                  fontFamily: '"Pretendard", sans-serif',
-                  fontWeight: 600, fontSize: '0.9rem',
-                  borderWidth: '1.5px',
-                  transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
-                  '&:hover': { transform: 'scale(1.05) translateY(-2px)',
-                               borderWidth: '1.5px', bgcolor: 'rgba(255,122,0,0.05)' },
-                }}
-              >
-                About Me
-              </Button>
+            <Box sx={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+              mt: { xs: 7, md: 9 },
+              animation: `${fadeUp} 0.6s 0.6s ease both`,
+              opacity: 0,
+            }}>
+
+              {/* 주요 + 보조 버튼 */}
+              <Box sx={{ display: 'flex', justifyContent: 'center', gap: { xs: 2, md: 2.5 }, flexWrap: 'wrap' }}>
+                <Button
+                  component={Link} to="/projects"
+                  variant="contained" color="primary"
+                  sx={{
+                    px: { xs: 3.5, md: 4.5 }, py: 1.35,
+                    fontFamily: '"Pretendard", sans-serif',
+                    fontWeight: 700, fontSize: '0.92rem',
+                    boxShadow: '0 4px 18px rgba(255,122,0,0.3)',
+                    transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
+                    '&:hover': { transform: 'scale(1.05) translateY(-2px)', boxShadow: '0 8px 30px rgba(255,122,0,0.44)' },
+                  }}
+                >
+                  포트폴리오 보기
+                </Button>
+                <Button
+                  onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+                  variant="outlined" color="primary"
+                  sx={{
+                    px: { xs: 3.5, md: 4.5 }, py: 1.35,
+                    fontFamily: '"Pretendard", sans-serif',
+                    fontWeight: 600, fontSize: '0.92rem',
+                    borderWidth: '1.5px',
+                    transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
+                    '&:hover': { transform: 'scale(1.05) translateY(-2px)', borderWidth: '1.5px', bgcolor: 'rgba(255,122,0,0.05)' },
+                  }}
+                >
+                  연락하기
+                </Button>
+              </Box>
+
+              {/* 소셜 아이콘 */}
+              <Box sx={{ display: 'flex', gap: 1.2 }}>
+                <IconButton
+                  href="https://github.com/harube29-lang"
+                  target="_blank" rel="noopener noreferrer"
+                  size="small"
+                  sx={{
+                    color: '#6B7280',
+                    border: '1px solid #E5E7EB',
+                    width: 40, height: 40,
+                    transition: 'all 0.22s ease',
+                    '&:hover': { color: '#111827', borderColor: '#111827', bgcolor: '#F3F4F6', transform: 'translateY(-3px)' },
+                  }}
+                >
+                  <GitHubIcon sx={{ fontSize: '1.15rem' }} />
+                </IconButton>
+                <IconButton
+                  href="https://www.linkedin.com"
+                  target="_blank" rel="noopener noreferrer"
+                  size="small"
+                  sx={{
+                    color: '#6B7280',
+                    border: '1px solid #E5E7EB',
+                    width: 40, height: 40,
+                    transition: 'all 0.22s ease',
+                    '&:hover': { color: '#0A66C2', borderColor: '#0A66C2', bgcolor: 'rgba(10,102,194,0.06)', transform: 'translateY(-3px)' },
+                  }}
+                >
+                  <LinkedInIcon sx={{ fontSize: '1.15rem' }} />
+                </IconButton>
+              </Box>
             </Box>
           </Box>
+        </Box>
+
+        {/* ── 스크롤 인디케이터 ── */}
+        <Box
+          onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+          sx={{
+            position: 'absolute', bottom: { xs: 22, md: 30 }, left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5,
+            cursor: 'pointer', userSelect: 'none',
+            animation: `${fadeIn} 0.8s 1s ease both`, opacity: 0,
+            transition: 'opacity 0.2s',
+            '&:hover': { opacity: 0.6 },
+          }}
+        >
+          <Typography sx={{ fontSize: '0.6rem', fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.18em' }}>
+            SCROLL
+          </Typography>
+          <KeyboardArrowDownIcon sx={{
+            color: '#D1D5DB', fontSize: '1.2rem',
+            animation: `${bounceY} 1.5s ease-in-out infinite`,
+          }} />
         </Box>
       </Box>
       {/* ── Hero 끝 ── */}
