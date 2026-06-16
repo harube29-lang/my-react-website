@@ -62,9 +62,17 @@ const HomeSkillCard = memo(({ skill }) => {
             bgcolor: hovered ? alpha(color, 0.06) : '#FFFFFF', cursor: 'default',
             transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
             boxShadow: hovered ? `0 10px 30px ${alpha(color, 0.16)}` : '0 2px 8px rgba(0,0,0,0.04)',
-            transition: 'all 0.3s ease' }}
+            transition: 'all 0.3s ease',
+            willChange: 'transform' }}
     >
-      <Icon size={52} color={hovered ? color : '#9CA3AF'} style={{ transition: 'color 0.25s' }} />
+      <Box sx={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'transform 0.35s cubic-bezier(.34,1.56,.64,1), filter 0.3s ease',
+        transform: hovered ? 'rotate(-8deg) scale(1.18)' : 'rotate(0) scale(1)',
+        filter: hovered ? `drop-shadow(0 0 10px ${color}99)` : 'none',
+      }}>
+        <Icon size={52} color={hovered ? color : '#9CA3AF'} style={{ transition: 'color 0.25s' }} />
+      </Box>
       <Typography variant="body2"
         sx={{ fontWeight: 600, color: hovered ? '#111827' : '#6B7280', fontSize: '0.875rem', transition: 'color 0.2s' }}>
         {skill.name}
@@ -88,8 +96,14 @@ const HomeProjectCard = memo(({ project }) => {
     <Box sx={{ flex: '1 0 280px', minWidth: 280, borderRadius: 3, border: '1px solid #E5E7EB',
                bgcolor: '#fff', overflow: 'hidden',
                transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
-               '&:hover': { transform: 'translateY(-5px)',
-                            boxShadow: '0 12px 36px rgba(255,122,0,0.14)', borderColor: '#FF7A00' } }}>
+               willChange: 'transform',
+               '&:hover': {
+                 transform: 'translateY(-5px)',
+                 boxShadow: '0 12px 36px rgba(255,122,0,0.14)', borderColor: '#FF7A00',
+                 '& .thumb-img': { transform: 'scale(1.1)', filter: 'brightness(0.68)' },
+                 '& .thumb-overlay': { bgcolor: 'rgba(0,0,0,0.40)' },
+                 '& .thumb-label': { opacity: 1, transform: 'translateY(0)' },
+               } }}>
       <Box sx={{ position: 'relative', width: '100%', paddingTop: '56.25%', overflow: 'hidden' }}>
         {imgError || !project.thumbnail_url ? (
           <Box sx={{ position: 'absolute', inset: 0,
@@ -101,11 +115,29 @@ const HomeProjectCard = memo(({ project }) => {
           </Box>
         ) : (
           <Box component="img" src={project.thumbnail_url} alt={project.title}
+               className="thumb-img"
                loading="lazy"
                onError={() => setImgError(true)}
                sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
-                     transition: 'transform 0.3s ease', '&:hover': { transform: 'scale(1.04)' } }} />
+                     transition: 'transform 0.4s ease, filter 0.4s ease' }} />
         )}
+        {/* 호버 오버레이 */}
+        <Box className="thumb-overlay" sx={{
+          position: 'absolute', inset: 0, zIndex: 1,
+          bgcolor: 'rgba(0,0,0,0)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'background-color 0.35s ease',
+          pointerEvents: 'none',
+        }}>
+          <Typography className="thumb-label" sx={{
+            color: '#fff', fontWeight: 700, fontSize: '0.85rem',
+            opacity: 0, transform: 'translateY(6px)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease',
+            letterSpacing: '0.06em',
+          }}>
+            자세히 보기 →
+          </Typography>
+        </Box>
       </Box>
       <Box sx={{ p: 2.5 }}>
         <Typography sx={{ fontWeight: 700, fontSize: '1rem', mb: 1, color: '#111827', lineHeight: 1.4 }}>
@@ -400,7 +432,11 @@ const HomePage = () => {
                     fontWeight: 700, fontSize: { xs: '0.9rem', md: '0.92rem' },
                     boxShadow: '0 4px 18px rgba(255,122,0,0.3)',
                     transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
-                    '&:hover': { transform: 'scale(1.05) translateY(-2px)', boxShadow: '0 8px 30px rgba(255,122,0,0.44)' },
+                    willChange: 'transform',
+                    '&:hover': {
+                      transform: 'perspective(600px) translateY(-3px) rotateX(6deg)',
+                      boxShadow: '0 14px 38px rgba(255,122,0,0.48)',
+                    },
                   }}
                 >
                   포트폴리오 보기
@@ -417,7 +453,12 @@ const HomePage = () => {
                     fontWeight: 600, fontSize: { xs: '0.9rem', md: '0.92rem' },
                     borderWidth: '1.5px',
                     transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
-                    '&:hover': { transform: 'scale(1.05) translateY(-2px)', borderWidth: '1.5px', bgcolor: 'rgba(255,122,0,0.05)' },
+                    willChange: 'transform',
+                    '&:hover': {
+                      transform: 'perspective(600px) translateY(-3px) rotateX(6deg)',
+                      borderWidth: '1.5px', bgcolor: 'rgba(255,122,0,0.05)',
+                      boxShadow: '0 8px 24px rgba(255,122,0,0.2)',
+                    },
                   }}
                 >
                   연락하기

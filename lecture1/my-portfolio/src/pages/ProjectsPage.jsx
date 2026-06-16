@@ -120,10 +120,14 @@ const ProjectCard = ({ project, onDetail }) => {
         borderRadius: 3, border: '1px solid', borderColor: 'grey.300',
         bgcolor: 'background.paper', overflow: 'hidden',
         transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
+        willChange: 'transform',
         '&:hover': {
           transform: 'translateY(-6px)',
           boxShadow: '0 12px 36px rgba(255,122,0,0.14)',
           borderColor: 'primary.main',
+          '& .thumb-img': { transform: 'scale(1.1)', filter: 'brightness(0.65)' },
+          '& .thumb-overlay': { bgcolor: 'rgba(0,0,0,0.42)' },
+          '& .thumb-label': { opacity: 1, transform: 'translateY(0)' },
         },
       }}
     >
@@ -146,15 +150,32 @@ const ProjectCard = ({ project, onDetail }) => {
             component="img"
             src={project.thumbnail_url}
             alt={project.title}
+            className="thumb-img"
             onError={() => setImgError(true)}
             sx={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%', objectFit: 'cover',
-              transition: 'transform 0.3s ease',
-              '&:hover': { transform: 'scale(1.04)' },
+              transition: 'transform 0.4s ease, filter 0.4s ease',
             }}
           />
         )}
+        {/* 호버 오버레이 */}
+        <Box className="thumb-overlay" sx={{
+          position: 'absolute', inset: 0, zIndex: 1,
+          bgcolor: 'rgba(0,0,0,0)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'background-color 0.35s ease',
+          pointerEvents: 'none',
+        }}>
+          <Typography className="thumb-label" sx={{
+            color: '#fff', fontWeight: 700, fontSize: '0.88rem',
+            opacity: 0, transform: 'translateY(6px)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease',
+            letterSpacing: '0.06em',
+          }}>
+            자세히 보기 →
+          </Typography>
+        </Box>
       </Box>
 
       {/* 카드 내용 */}
