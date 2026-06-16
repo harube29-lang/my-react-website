@@ -6,11 +6,12 @@ import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Skeleton from '@mui/material/Skeleton'
 import { Link } from 'react-router-dom'
+import { alpha } from '@mui/material/styles'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { SiFigma, SiHtml5 } from 'react-icons/si'
 import profileImg from '../assets/profile.jpg'
 import ContactSection from '../components/Contact/ContactSection'
 import { supabase } from '../lib/supabase'
+import { usePortfolio, CATEGORY_COLORS, BASIC_INFO } from '../context/PortfolioContext'
 
 /* ════════════════════════════════════════
    애니메이션 키프레임
@@ -25,15 +26,8 @@ const fadeIn = keyframes`
 `
 
 /* ════════════════════════════════════════
-   Skills 섹션 데이터
+   홈 스킬 카드 (context topSkills 연동)
 ════════════════════════════════════════ */
-const SKILLS = [
-  { type: 'react-icon', icon: SiFigma, name: 'Figma',       level: '활용 가능', stars: 4, color: '#F24E1E', bgColor: '#FFF1EE' },
-  { type: 'adobe', letter: 'Ai',       name: 'Illustrator', level: '활용 가능', stars: 4, color: '#FF9A00', bgColor: '#FFF8EE', adobeBg: '#2C0A00' },
-  { type: 'adobe', letter: 'Ps',       name: 'Photoshop',   level: '기초 가능', stars: 3, color: '#31A8FF', bgColor: '#EEF7FF', adobeBg: '#001E36' },
-  { type: 'react-icon', icon: SiHtml5, name: 'HTML5',       level: '기초 가능', stars: 3, color: '#E34F26', bgColor: '#FFF1EE' },
-]
-
 const Stars = ({ count, color }) => (
   <Box sx={{ display: 'flex', gap: 0.4 }}>
     {[1, 2, 3, 4, 5].map(n => (
@@ -43,44 +37,33 @@ const Stars = ({ count, color }) => (
   </Box>
 )
 
-const SkillCard = ({ skill }) => {
+const toStars    = (lvl) => lvl >= 75 ? 4 : lvl >= 55 ? 3 : lvl >= 35 ? 2 : 1
+const toLevelTxt = (lvl) => lvl >= 70 ? '활용 가능' : lvl >= 40 ? '기초 가능' : '학습 중'
+
+const HomeSkillCard = ({ skill }) => {
   const [hovered, setHovered] = useState(false)
-  const { type, icon: Icon, letter, name, level, stars, color, bgColor, adobeBg } = skill
+  const Icon  = skill.Icon
+  const color = CATEGORY_COLORS[skill.category] ?? '#6B7280'
   return (
     <Box
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5,
             p: { xs: 3, md: 3.5 }, borderRadius: 3,
-            bgcolor: hovered ? bgColor : '#FFFFFF', cursor: 'default',
+            bgcolor: hovered ? alpha(color, 0.06) : '#FFFFFF', cursor: 'default',
             transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
-            boxShadow: hovered ? '0 10px 30px rgba(0,0,0,0.08)' : '0 2px 8px rgba(0,0,0,0.04)',
+            boxShadow: hovered ? `0 10px 30px ${alpha(color, 0.16)}` : '0 2px 8px rgba(0,0,0,0.04)',
             transition: 'all 0.3s ease' }}
     >
-      {type === 'react-icon'
-        ? <Icon size={52} color={hovered ? color : '#9CA3AF'} style={{ transition: 'color 0.25s' }} />
-        : <Box sx={{ width: 52, height: 52, borderRadius: 1.5,
-                     bgcolor: hovered ? adobeBg : '#F3F4F6',
-                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                     transition: 'background 0.25s' }}>
-            <Typography sx={{ color: hovered ? color : '#9CA3AF', fontWeight: 700,
-                               fontSize: '1.1rem', fontFamily: '"Arial", sans-serif',
-                               letterSpacing: '-0.03em', transition: 'color 0.25s' }}>
-              {letter}
-            </Typography>
-          </Box>
-      }
+      <Icon size={52} color={hovered ? color : '#9CA3AF'} style={{ transition: 'color 0.25s' }} />
       <Typography variant="body2"
-        sx={{ fontWeight: 600, color: hovered ? '#111827' : '#6B7280',
-              fontSize: '0.875rem', transition: 'color 0.2s' }}>
-        {name}
+        sx={{ fontWeight: 600, color: hovered ? '#111827' : '#6B7280', fontSize: '0.875rem', transition: 'color 0.2s' }}>
+        {skill.name}
       </Typography>
-      <Stars count={stars} color={color} />
-      <Box sx={{ px: 1.2, py: 0.35, borderRadius: 1,
-                 bgcolor: hovered ? color : '#F3F4F6', transition: 'background 0.25s' }}>
-        <Typography sx={{ fontSize: '0.68rem', fontWeight: 600,
-                           color: hovered ? '#FFFFFF' : '#9CA3AF', transition: 'color 0.25s' }}>
-          {level}
+      <Stars count={toStars(skill.level)} color={color} />
+      <Box sx={{ px: 1.2, py: 0.35, borderRadius: 1, bgcolor: hovered ? color : '#F3F4F6', transition: 'background 0.25s' }}>
+        <Typography sx={{ fontSize: '0.68rem', fontWeight: 600, color: hovered ? '#FFFFFF' : '#9CA3AF', transition: 'color 0.25s' }}>
+          {toLevelTxt(skill.level)}
         </Typography>
       </Box>
     </Box>
@@ -179,9 +162,17 @@ const Label = ({ children }) => (
 /* ════════════════════════════════════════
    HomePage
 ════════════════════════════════════════ */
+const stripMarkers = (text) => text.replace(/\*\*(.*?)\*\*/g, '$1')
+
 const HomePage = () => {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
+  const { topSkills, sections } = usePortfolio()
+
+  const storySummary = (() => {
+    const s = sections.find(s => s.id === 'dev-story')
+    return s ? stripMarkers(s.content[0]) : ''
+  })()
 
   useEffect(() => {
     supabase
@@ -422,89 +413,62 @@ const HomePage = () => {
       ══════════════════════════════════════ */}
       <Section id="about" bg="#FFFFFF">
 
-        {/* 헤더 + 프로필 */}
+        {/* 헤더 + 프로필 카드 */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' },
-                   alignItems: 'center', gap: { xs: 5, md: 10 }, mb: { xs: 7, md: 9 } }}>
+                   alignItems: { xs: 'flex-start', md: 'center' }, gap: { xs: 5, md: 10 }, mb: { xs: 7, md: 9 } }}>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Label>About Me</Label>
             <Typography variant="h2"
               sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, mb: 1.5, wordBreak: 'keep-all' }}>
-              안녕하세요,<br />황혜경입니다.
+              안녕하세요,<br />{BASIC_INFO.name}입니다.
             </Typography>
             <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mb: 2.5 }} />
+
+            {/* 스토리 요약 (context 연동) */}
             <Typography variant="body1"
-              sx={{ color: 'text.secondary', lineHeight: 1.9, wordBreak: 'keep-all' }}>
-              동명대학교 산업디자인전공을 졸업하고, UX/UI 디자이너로 전향한 신입입니다.
+              sx={{ color: 'text.secondary', lineHeight: 1.9, wordBreak: 'keep-all', mb: 3.5 }}>
+              {storySummary}
             </Typography>
+
+            {/* 주요 스킬 미니 아이콘 (context topSkills 연동) */}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: { xs: 4, md: 5 } }}>
+              {topSkills.map(skill => {
+                const Icon = skill.Icon
+                const color = CATEGORY_COLORS[skill.category]
+                return (
+                  <Box key={skill.id}
+                    sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.8,
+                          px: 1.5, py: 0.65, borderRadius: 1.5,
+                          bgcolor: alpha(color, 0.07), border: `1px solid ${alpha(color, 0.18)}` }}>
+                    <Icon size={13} color={color} />
+                    <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#374151', letterSpacing: '-0.01em' }}>
+                      {skill.name}
+                    </Typography>
+                  </Box>
+                )
+              })}
+            </Box>
           </Box>
+
+          {/* 프로필 카드 */}
           <Box sx={{ flexShrink: 0, display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' } }}>
-            <Box component="img" src={profileImg} alt="황혜경 프로필"
-              sx={{ width: { xs: 160, sm: 200, md: 240 }, height: { xs: 160, sm: 200, md: 240 },
-                    borderRadius: 3, objectFit: 'cover',
-                    boxShadow: '0 8px 28px rgba(0,0,0,0.12)', display: 'block' }} />
-          </Box>
-        </Box>
-
-        {/* 콘텐츠 블록 */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 5, md: 6 }, mb: { xs: 6, md: 8 } }}>
-
-          {/* 나의 개발 스토리 */}
-          <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <Typography variant="h3"
-                sx={{ fontSize: { xs: '1.05rem', md: '1.15rem' }, color: '#111827' }}>
-                나의 개발 스토리
-              </Typography>
-              <Box component="span"
-                sx={{ fontSize: '0.62rem', fontWeight: 700, color: 'primary.main',
-                      bgcolor: 'rgba(255,122,0,0.08)', px: 1, py: 0.25, borderRadius: 0.75 }}>
-                홈 표시
+            <Box sx={{ border: '1px solid #F3F4F6', borderRadius: 3, overflow: 'hidden', width: { xs: 180, md: 220 }, boxShadow: '0 4px 20px rgba(0,0,0,0.07)' }}>
+              <Box component="img" src={profileImg} alt={`${BASIC_INFO.name} 프로필`}
+                sx={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block' }} />
+              <Box sx={{ p: 2, bgcolor: '#FAFAFA' }}>
+                <Typography sx={{ fontWeight: 700, fontSize: '0.9rem', color: '#111827' }}>
+                  {BASIC_INFO.name}
+                </Typography>
+                <Typography sx={{ color: '#6B7280', fontSize: '0.78rem', mt: 0.3 }}>
+                  {BASIC_INFO.role}
+                </Typography>
+                <Box sx={{ width: 24, height: '1px', bgcolor: '#E5E7EB', my: 1.2 }} />
+                <Typography sx={{ fontSize: '0.72rem', color: '#9CA3AF' }}>
+                  {BASIC_INFO.education}
+                </Typography>
               </Box>
             </Box>
-            <Box sx={{ width: 28, height: 2, bgcolor: 'primary.main', borderRadius: 1, mb: 2.5, opacity: 0.35 }} />
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {[
-                '전직을 고민하던 중 UX/UI 디자인의 실제 수정 과정과 피드백을 다룬 콘텐츠를 접하게 되었습니다. 해당 영상에서는 사용자 흐름에서 발생하는 불필요한 요소를 제거하고, 정보 구조를 재정리하여 사용자의 피로도를 줄이는 과정을 중심으로 개선이 이루어졌습니다.',
-                '이 과정을 보며 단순히 시각적으로 완성된 결과물이 아니라, 데이터와 사용자 관점에 기반해 문제를 해결하는 디자인의 중요성을 명확히 이해하게 되었습니다. 특히 사용자 경험을 개선하기 위한 구조적 사고와 반복적인 개선 과정에 깊이 공감하며 UX/UI 디자인 직무에 대한 확신을 갖게 되었습니다.',
-                '이후 해당 분야로의 전향을 결정하고, 사용자 중심의 디자인 사고를 기반으로 툴 학습 및 사이드 프로젝트를 진행하며 실무 역량을 쌓고 있습니다. 현재는 "보기 좋은 디자인"이 아닌 사용자 문제를 해결하는 설계 중심의 UX/UI 디자이너를 목표로 지속적으로 성장하고 있습니다.',
-              ].map((para, i) => (
-                <Typography key={i} variant="body1"
-                  sx={{ color: '#374151', lineHeight: 2, fontSize: { xs: '0.9rem', md: '0.975rem' }, wordBreak: 'keep-all' }}>
-                  {para}
-                </Typography>
-              ))}
-            </Box>
           </Box>
-
-          <Box sx={{ height: '1px', bgcolor: '#F3F4F6' }} />
-
-          {/* 개발 철학 */}
-          <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-              <Typography variant="h3"
-                sx={{ fontSize: { xs: '1.05rem', md: '1.15rem' }, color: '#111827' }}>
-                개발 철학
-              </Typography>
-              <Box component="span"
-                sx={{ fontSize: '0.62rem', fontWeight: 700, color: 'primary.main',
-                      bgcolor: 'rgba(255,122,0,0.08)', px: 1, py: 0.25, borderRadius: 0.75 }}>
-                홈 표시
-              </Box>
-            </Box>
-            <Box sx={{ width: 28, height: 2, bgcolor: 'primary.main', borderRadius: 1, mb: 2.5, opacity: 0.35 }} />
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {[
-                '미적 완성도를 중요하게 여기지만, 디자인 과정에서는 항상 유니버설 디자인 관점을 우선적으로 검토해 왔습니다. 특정한 시각적 표현보다 다양한 사용자가 직관적으로 이해하고 접근할 수 있는 경험 설계를 더 중요하게 생각합니다.',
-                '결국 좋은 디자인은 심미성과 사용성의 균형 위에서, 누구에게나 일관된 경험을 제공하는 것이라고 믿습니다.',
-              ].map((para, i) => (
-                <Typography key={i} variant="body1"
-                  sx={{ color: '#374151', lineHeight: 2, fontSize: { xs: '0.9rem', md: '0.975rem' }, wordBreak: 'keep-all' }}>
-                  {para}
-                </Typography>
-              ))}
-            </Box>
-          </Box>
-
         </Box>
 
         <Button variant="contained" color="primary" component={Link} to="/about"
@@ -515,24 +479,30 @@ const HomePage = () => {
 
 
       {/* ══════════════════════════════════════
-          3. Skills
+          3. Skills (context topSkills 연동)
       ══════════════════════════════════════ */}
       <Section id="skills" bg="#F9FAFB">
-        <Box sx={{ mb: { xs: 5, md: 7 } }}>
-          <Label>Skills</Label>
-          <Typography variant="h2"
-            sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, wordBreak: 'keep-all' }}>
-            사용 도구
-          </Typography>
-          <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mt: 1.5 }} />
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-            아이콘에 마우스를 올려보세요
-          </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+                   mb: { xs: 5, md: 7 }, flexWrap: 'wrap', gap: 3 }}>
+          <Box>
+            <Label>Skills</Label>
+            <Typography variant="h2"
+              sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, wordBreak: 'keep-all' }}>
+              주요 기술
+            </Typography>
+            <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mt: 1.5 }} />
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
+              숙련도 상위 4개 · 아이콘에 마우스를 올려보세요
+            </Typography>
+          </Box>
+          <Button variant="outlined" color="primary" component={Link} to="/about" sx={{ px: 2.5, py: 1 }}>
+            전체 스킬 보기 →
+          </Button>
         </Box>
         <Box sx={{ display: 'grid',
                    gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(4, 1fr)' },
                    gap: { xs: 2, md: 2.5 } }}>
-          {SKILLS.map(skill => <SkillCard key={skill.name} skill={skill} />)}
+          {topSkills.map(skill => <HomeSkillCard key={skill.id} skill={skill} />)}
         </Box>
       </Section>
 

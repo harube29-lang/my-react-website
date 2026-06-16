@@ -1,70 +1,36 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Avatar from '@mui/material/Avatar'
+import Tooltip from '@mui/material/Tooltip'
+import Button from '@mui/material/Button'
+import Collapse from '@mui/material/Collapse'
 import SchoolIcon      from '@mui/icons-material/School'
 import WorkOutlineIcon from '@mui/icons-material/WorkOutlined'
-import { LuSearch, LuCompass, LuTrendingUp } from 'react-icons/lu'
-import profileImg from '../assets/profile.jpg'
+import { LuSearch, LuCompass, LuTrendingUp, LuPlus, LuMinus } from 'react-icons/lu'
+import { alpha } from '@mui/material/styles'
+import {
+  usePortfolio,
+  CATEGORY_COLORS,
+  EXTRA_SKILLS,
+  BASIC_INFO,
+} from '../context/PortfolioContext'
 
 /* ════════════════════════════════════════
-   데이터
+   로컬 데이터 (홈 연동 불필요한 정보)
 ════════════════════════════════════════ */
-const aboutMeData = {
-  basicInfo: {
-    name:      '황혜경',
-    education: '동명대학교',
-    major:     '산업디자인전공',
-    experience:'신입',
-    role:      'UX/UI 디자이너',
-    photo:     profileImg,
-  },
-  strengths: [
-    {
-      icon:  LuSearch,
-      title: '섬세한 관찰력',
-      desc:  '사용자가 어디서 막히는지 먼저 읽고, 불필요한 마찰 요소를 제거합니다.',
-    },
-    {
-      icon:  LuCompass,
-      title: '사용자 중심 설계',
-      desc:  '흐름이 끊기지 않는, 누구나 쉽고 빠르게 이용할 수 있는 경험을 설계합니다.',
-    },
-    {
-      icon:  LuTrendingUp,
-      title: '끊임없는 성장',
-      desc:  '역량에 한계를 두지 않는 자세로 사용자 문제 해결 능력을 계속 확장합니다.',
-    },
-  ],
-  sections: [
-    {
-      id:    'dev-story',
-      title: '나의 개발 스토리',
-      content: [
-        '전직을 고민하던 중 UX/UI 디자인의 실제 수정 과정과 피드백을 다룬 콘텐츠를 접하게 되었습니다. 해당 영상에서는 사용자 흐름에서 발생하는 불필요한 요소를 제거하고, 정보 구조를 재정리하여 사용자의 피로도를 줄이는 과정을 중심으로 개선이 이루어졌습니다.',
-        '이 과정을 보며 **단순히 시각적으로 완성된 결과물이 아니라, 데이터와 사용자 관점에 기반해 문제를 해결하는 디자인의 중요성**을 명확히 이해하게 되었습니다. 특히 사용자 경험을 개선하기 위한 구조적 사고와 반복적인 개선 과정에 깊이 공감하며 UX/UI 디자인 직무에 대한 확신을 갖게 되었습니다.',
-        '이후 해당 분야로의 전향을 결정하고, 사용자 중심의 디자인 사고를 기반으로 툴 학습 및 사이드 프로젝트를 진행하며 실무 역량을 쌓고 있습니다. 현재는 **"보기 좋은 디자인"이 아닌 사용자 문제를 해결하는 설계 중심의 UX/UI 디자이너**를 목표로 지속적으로 성장하고 있습니다.',
-      ],
-    },
-    {
-      id:    'philosophy',
-      title: '개발 철학',
-      content: [
-        '미적 완성도를 중요하게 여기지만, 디자인 과정에서는 항상 유니버설 디자인 관점을 우선적으로 검토해 왔습니다. 특정한 시각적 표현보다 **다양한 사용자가 직관적으로 이해하고 접근할 수 있는 경험 설계**를 더 중요하게 생각합니다.',
-        '결국 **좋은 디자인은 심미성과 사용성의 균형** 위에서, 누구에게나 일관된 경험을 제공하는 것이라고 믿습니다.',
-      ],
-    },
-    {
-      id:    'personal',
-      title: '개인적인 이야기',
-      content: [
-        '특별한 취미를 두기보다는, 비교적 섬세하게 사용 경험을 관찰하는 편입니다. 앱을 사용하면서 **불편한 요소나 비효율적인 흐름이 있으면 자연스럽게 인지**하고, 필요할 경우 개선 방향을 고민하거나 의견을 전달하기도 합니다.',
-      ],
-    },
-  ],
-}
+const strengths = [
+  { icon: LuSearch,    title: '섬세한 관찰력',     desc: '사용자가 어디서 막히는지 먼저 읽고, 불필요한 마찰 요소를 제거합니다.' },
+  { icon: LuCompass,   title: '사용자 중심 설계',   desc: '흐름이 끊기지 않는, 누구나 쉽고 빠르게 이용할 수 있는 경험을 설계합니다.' },
+  { icon: LuTrendingUp,title: '끊임없는 성장',      desc: '역량에 한계를 두지 않는 자세로 사용자 문제 해결 능력을 계속 확장합니다.' },
+]
+
+/* ════════════════════════════════════════
+   카테고리 표시 순서
+════════════════════════════════════════ */
+const CATEGORY_ORDER = ['Frontend', 'Framework', 'Design', 'Backend', 'Tool']
 
 /* ════════════════════════════════════════
    **bold** 마커 → 오렌지 강조 렌더러
@@ -96,19 +62,14 @@ const TabPanel = ({ children, value, index }) => (
 )
 
 /* ════════════════════════════════════════
-   정보 태그 (미니멀 보더)
+   정보 태그
 ════════════════════════════════════════ */
 const InfoTag = ({ icon: Icon, label }) => (
   <Box
     sx={{
       display: 'inline-flex', alignItems: 'center', gap: 1,
-      border: '1px solid #E5E7EB',
-      borderRadius: '6px',
-      px: 1.8, py: 0.75,
-      color: '#374151',
-      fontSize: '0.8rem',
-      fontWeight: 500,
-      letterSpacing: '-0.01em',
+      border: '1px solid #E5E7EB', borderRadius: '6px',
+      px: 1.8, py: 0.75, color: '#374151', fontSize: '0.8rem', fontWeight: 500,
     }}
   >
     <Icon sx={{ fontSize: 13, color: '#9CA3AF' }} />
@@ -128,18 +89,85 @@ const StrengthItem = ({ icon: Icon, title, desc }) => (
       {title}
     </Typography>
     <Box sx={{ width: 20, height: '1.5px', bgcolor: '#E5E7EB', borderRadius: 1, mb: 1.5 }} />
-    <Typography sx={{ color: '#6B7280', fontSize: '0.875rem', lineHeight: 1.85, letterSpacing: '-0.005em' }}>
+    <Typography sx={{ color: '#6B7280', fontSize: '0.875rem', lineHeight: 1.85 }}>
       {desc}
     </Typography>
   </Box>
 )
 
 /* ════════════════════════════════════════
+   스킬 바 (애니메이션 + 툴팁)
+════════════════════════════════════════ */
+const SkillBar = ({ skill, animated, delay }) => {
+  const color = CATEGORY_COLORS[skill.category] ?? '#6B7280'
+  const Icon = skill.Icon
+  return (
+    <Tooltip title={skill.desc} placement="top" arrow
+      componentsProps={{ tooltip: { sx: { fontSize: '0.78rem', bgcolor: '#111827', py: 0.8, px: 1.4 } } }}>
+      <Box sx={{ cursor: 'default' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.9 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Icon size={15} color={color} />
+            <Typography sx={{ fontSize: '0.85rem', fontWeight: 600, color: '#111827', letterSpacing: '-0.01em' }}>
+              {skill.name}
+            </Typography>
+          </Box>
+          <Typography sx={{ fontSize: '0.75rem', color: '#9CA3AF', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>
+            {skill.level}%
+          </Typography>
+        </Box>
+        <Box sx={{ height: 5, bgcolor: '#F3F4F6', borderRadius: 3, overflow: 'hidden' }}>
+          <Box
+            sx={{
+              height: '100%',
+              width: animated ? `${skill.level}%` : '0%',
+              bgcolor: color,
+              borderRadius: 3,
+              transition: 'width 1.1s cubic-bezier(0.4, 0, 0.2, 1)',
+              transitionDelay: `${delay}s`,
+            }}
+          />
+        </Box>
+      </Box>
+    </Tooltip>
+  )
+}
+
+/* ════════════════════════════════════════
    About Page
 ════════════════════════════════════════ */
 const AboutPage = () => {
-  const [tab, setTab] = useState(0)
-  const { basicInfo, strengths, sections } = aboutMeData
+  const [tab, setTab]           = useState(0)
+  const [animated, setAnimated] = useState(false)
+  const [showExtra, setShowExtra] = useState(false)
+  const skillsRef = useRef(null)
+
+  const { skills, sections, addSkill, removeSkill } = usePortfolio()
+
+  /* 스킬 섹션 스크롤 진입 시 애니메이션 트리거 */
+  useEffect(() => {
+    const el = skillsRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setAnimated(true) },
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  /* 카테고리별 스킬 그룹핑 */
+  const groupedSkills = CATEGORY_ORDER.reduce((acc, cat) => {
+    const items = skills.filter(s => s.category === cat)
+    if (items.length) acc.push({ category: cat, items })
+    return acc
+  }, [])
+
+  /* 추가 가능한 스킬 (아직 추가 안 된 것만) */
+  const addableSkills = EXTRA_SKILLS.filter(e => !skills.some(s => s.id === e.id))
+
+  /* 스킬별 애니메이션 딜레이 (flat index 기반) */
+  let skillIndex = 0
 
   return (
     <Box sx={{ bgcolor: '#FFFFFF', minHeight: '100vh' }}>
@@ -166,160 +194,227 @@ const AboutPage = () => {
             gap: { xs: 7, md: 14 },
           }}
         >
-          {/* 텍스트 */}
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography
-              variant="caption"
-              sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 2.5 }}
-            >
+            <Typography variant="caption"
+              sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 2.5 }}>
               About Me
             </Typography>
-
-            {/* 이름 — 큰 타이포그래피 */}
-            <Typography
-              variant="h1"
-              sx={{
-                color: '#111827',
-                fontSize: { xs: '3rem', sm: '3.8rem', md: '5rem' },
-                fontWeight: 800,
-                lineHeight: 1,
-                letterSpacing: '-0.04em',
-                mb: 1.5,
-              }}
-            >
-              {basicInfo.name}
+            <Typography variant="h1"
+              sx={{ color: '#111827', fontSize: { xs: '3rem', sm: '3.8rem', md: '5rem' }, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.04em', mb: 1.5 }}>
+              {BASIC_INFO.name}
             </Typography>
-
-            {/* 직함 — 얇은 보조 텍스트 */}
-            <Typography
-              sx={{
-                color: '#6B7280',
-                fontSize: { xs: '0.95rem', md: '1.05rem' },
-                fontWeight: 400,
-                letterSpacing: '-0.01em',
-                mb: 4,
-              }}
-            >
-              {basicInfo.role}
+            <Typography sx={{ color: '#6B7280', fontSize: { xs: '0.95rem', md: '1.05rem' }, mb: 4, letterSpacing: '-0.01em' }}>
+              {BASIC_INFO.role}
             </Typography>
-
             <Box sx={{ width: 36, height: '2px', bgcolor: '#FF7A00', borderRadius: 1, mb: 4 }} />
-
-            {/* 미니멀 정보 태그 */}
             <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-              <InfoTag icon={SchoolIcon} label={`${basicInfo.education} · ${basicInfo.major}`} />
-              <InfoTag icon={WorkOutlineIcon} label={basicInfo.experience} />
+              <InfoTag icon={SchoolIcon} label={`${BASIC_INFO.education} · ${BASIC_INFO.major}`} />
+              <InfoTag icon={WorkOutlineIcon} label={BASIC_INFO.experience} />
             </Box>
           </Box>
-
-          {/* 프로필 사진 */}
           <Box sx={{ flexShrink: 0 }}>
-            <Avatar
-              src={basicInfo.photo}
-              alt={basicInfo.name}
-              sx={{
-                width:  { xs: 120, md: 160 },
-                height: { xs: 120, md: 160 },
-                border: '2px solid rgba(255,122,0,0.15)',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
-              }}
-            />
+            <Avatar src={BASIC_INFO.photo} alt={BASIC_INFO.name}
+              sx={{ width: { xs: 120, md: 160 }, height: { xs: 120, md: 160 },
+                    border: '2px solid rgba(255,122,0,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }} />
           </Box>
         </Box>
       </Box>
 
-      {/* ── 2. 핵심 강점 — 카드 없는 미니멀 그리드 ── */}
+      {/* ── 2. 핵심 강점 ── */}
       <Box sx={{ bgcolor: '#FAFAFA', py: { xs: 9, md: 13 }, px: { xs: 4, sm: 6, md: 10 } }}>
         <Box sx={{ maxWidth: 1100, mx: 'auto' }}>
-          <Typography variant="caption"
-            sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 1.5 }}>
+          <Typography variant="caption" sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 1.5 }}>
             Core Strengths
           </Typography>
-          <Typography variant="h2"
-            sx={{ fontSize: { xs: '1.35rem', md: '1.65rem' }, color: '#111827', fontWeight: 700, letterSpacing: '-0.03em', mb: 1 }}>
+          <Typography variant="h2" sx={{ fontSize: { xs: '1.35rem', md: '1.65rem' }, color: '#111827', fontWeight: 700, letterSpacing: '-0.03em', mb: 1 }}>
             나의 핵심 강점
           </Typography>
           <Box sx={{ width: 32, height: '2px', bgcolor: '#FF7A00', borderRadius: 1, mb: { xs: 7, md: 9 } }} />
-
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
-              gap: { xs: 7, md: 10 },
-            }}
-          >
-            {strengths.map((s, i) => (
-              <StrengthItem key={i} icon={s.icon} title={s.title} desc={s.desc} />
-            ))}
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: { xs: 7, md: 10 } }}>
+            {strengths.map((s, i) => <StrengthItem key={i} icon={s.icon} title={s.title} desc={s.desc} />)}
           </Box>
         </Box>
       </Box>
 
-      {/* ── 3. 이야기 탭 섹션 ── */}
-      <Box sx={{ bgcolor: '#FFFFFF', py: { xs: 9, md: 13 }, px: { xs: 4, sm: 6, md: 10 } }}>
+      {/* ── 3. 기술 스킬 섹션 ── */}
+      <Box ref={skillsRef} sx={{ bgcolor: '#FFFFFF', py: { xs: 9, md: 13 }, px: { xs: 4, sm: 6, md: 10 } }}>
         <Box sx={{ maxWidth: 1100, mx: 'auto' }}>
-          <Typography variant="caption"
-            sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 1.5 }}>
+          <Typography variant="caption" sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 1.5 }}>
+            Skills
+          </Typography>
+          <Typography variant="h2" sx={{ fontSize: { xs: '1.35rem', md: '1.65rem' }, color: '#111827', fontWeight: 700, letterSpacing: '-0.03em', mb: 1 }}>
+            기술 스택
+          </Typography>
+          <Box sx={{ width: 32, height: '2px', bgcolor: '#FF7A00', borderRadius: 1, mb: { xs: 7, md: 9 } }} />
+
+          {/* 카테고리별 그룹 */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 6, md: 7 } }}>
+            {groupedSkills.map(({ category, items }) => {
+              const color = CATEGORY_COLORS[category]
+              return (
+                <Box key={category}>
+                  {/* 카테고리 레이블 */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 3 }}>
+                    <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: color }} />
+                    <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                      {category}
+                    </Typography>
+                  </Box>
+
+                  {/* 스킬 그리드 — 1/2/3열 */}
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: { xs: 3, md: 3.5 } }}>
+                    {items.map((skill) => {
+                      const delay = (skillIndex++ * 0.08).toFixed(2)
+                      return (
+                        <SkillBar key={skill.id} skill={skill} animated={animated} delay={Number(delay)} />
+                      )
+                    })}
+                  </Box>
+                </Box>
+              )
+            })}
+          </Box>
+
+          {/* 스킬 추가 패널 */}
+          <Box sx={{ mt: { xs: 6, md: 8 } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: showExtra ? 3 : 0 }}>
+              <Button
+                onClick={() => setShowExtra(!showExtra)}
+                variant="outlined"
+                size="small"
+                startIcon={showExtra ? <LuMinus size={14} /> : <LuPlus size={14} />}
+                sx={{
+                  borderColor: '#E5E7EB', color: '#374151', fontWeight: 600, fontSize: '0.8rem',
+                  textTransform: 'none', borderRadius: '8px', py: 0.9, px: 2,
+                  '&:hover': { borderColor: '#FF7A00', color: '#FF7A00', bgcolor: 'rgba(255,122,0,0.04)' },
+                }}
+              >
+                {showExtra ? '스킬 목록 닫기' : `스킬 추가 (+${addableSkills.length})`}
+              </Button>
+            </Box>
+
+            <Collapse in={showExtra}>
+              <Box
+                sx={{
+                  border: '1px solid #F3F4F6', borderRadius: 2,
+                  p: { xs: 2.5, md: 3 },
+                }}
+              >
+                {addableSkills.length === 0 ? (
+                  <Typography sx={{ color: '#9CA3AF', fontSize: '0.875rem', textAlign: 'center', py: 1 }}>
+                    모든 스킬이 추가되었습니다 ✓
+                  </Typography>
+                ) : (
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 1.5 }}>
+                    {addableSkills.map(skill => {
+                      const Icon = skill.Icon
+                      const color = CATEGORY_COLORS[skill.category]
+                      return (
+                        <Box key={skill.id}
+                          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                px: 2, py: 1.5, borderRadius: 1.5,
+                                bgcolor: '#FAFAFA', border: '1px solid #F3F4F6' }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Icon size={18} color={color} />
+                            <Box>
+                              <Typography sx={{ fontSize: '0.83rem', fontWeight: 600, color: '#111827', lineHeight: 1.3 }}>
+                                {skill.name}
+                              </Typography>
+                              <Typography sx={{ fontSize: '0.7rem', color: '#9CA3AF' }}>
+                                {skill.category} · {skill.level}%
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Box
+                            component="button"
+                            onClick={() => addSkill(skill)}
+                            sx={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              width: 28, height: 28, borderRadius: '50%',
+                              border: '1px solid #E5E7EB', bgcolor: 'transparent', cursor: 'pointer',
+                              color: '#9CA3AF', transition: 'all 0.2s',
+                              '&:hover': { borderColor: color, color, bgcolor: alpha(color, 0.06) },
+                            }}
+                          >
+                            <LuPlus size={13} />
+                          </Box>
+                        </Box>
+                      )
+                    })}
+                  </Box>
+                )}
+
+                {/* 추가된 스킬 제거 */}
+                {skills.length > 5 && (
+                  <Box sx={{ mt: 2, pt: 2, borderTop: '1px solid #F3F4F6' }}>
+                    <Typography sx={{ fontSize: '0.72rem', color: '#9CA3AF', mb: 1.5, fontWeight: 500 }}>
+                      추가된 스킬
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                      {skills.filter(s => s.id > 10).map(skill => {
+                        const Icon = skill.Icon
+                        const color = CATEGORY_COLORS[skill.category]
+                        return (
+                          <Box key={skill.id}
+                            sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.8,
+                                  px: 1.5, py: 0.6, borderRadius: 1,
+                                  bgcolor: alpha(color, 0.08), border: `1px solid ${alpha(color, 0.2)}` }}>
+                            <Icon size={13} color={color} />
+                            <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color }}>
+                              {skill.name}
+                            </Typography>
+                            <Box component="button" onClick={() => removeSkill(skill.id)}
+                              sx={{ display: 'flex', alignItems: 'center', ml: 0.5,
+                                    border: 'none', bgcolor: 'transparent', cursor: 'pointer',
+                                    color: alpha(color, 0.5), p: 0, fontSize: '0.8rem',
+                                    '&:hover': { color } }}>
+                              ×
+                            </Box>
+                          </Box>
+                        )
+                      })}
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            </Collapse>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* ── 4. 이야기 탭 섹션 ── */}
+      <Box sx={{ bgcolor: '#FAFAFA', py: { xs: 9, md: 13 }, px: { xs: 4, sm: 6, md: 10 } }}>
+        <Box sx={{ maxWidth: 1100, mx: 'auto' }}>
+          <Typography variant="caption" sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 1.5 }}>
             My Story
           </Typography>
-          <Typography variant="h2"
-            sx={{ fontSize: { xs: '1.35rem', md: '1.65rem' }, color: '#111827', fontWeight: 700, letterSpacing: '-0.03em', mb: 1 }}>
+          <Typography variant="h2" sx={{ fontSize: { xs: '1.35rem', md: '1.65rem' }, color: '#111827', fontWeight: 700, letterSpacing: '-0.03em', mb: 1 }}>
             이야기
           </Typography>
           <Box sx={{ width: 32, height: '2px', bgcolor: '#FF7A00', borderRadius: 1, mb: { xs: 6, md: 8 } }} />
 
-          {/* 탭 — 플랫 + 오렌지 언더라인만 */}
-          <Box sx={{ borderBottom: '1px solid #F3F4F6' }}>
-            <Tabs
-              value={tab}
-              onChange={(_, v) => setTab(v)}
-              textColor="inherit"
+          <Box sx={{ borderBottom: '1px solid #E5E7EB' }}>
+            <Tabs value={tab} onChange={(_, v) => setTab(v)} textColor="inherit"
               sx={{
                 minHeight: 'auto',
-                '& .MuiTabs-indicator': {
-                  backgroundColor: '#FF7A00',
-                  height: '2px',
-                  borderRadius: '2px 2px 0 0',
-                },
+                '& .MuiTabs-indicator': { backgroundColor: '#FF7A00', height: '2px', borderRadius: '2px 2px 0 0' },
                 '& .MuiTab-root': {
-                  minHeight: 'auto',
-                  py: 2,
-                  px: { xs: 1.5, md: 2.5 },
-                  fontSize: { xs: '0.82rem', md: '0.875rem' },
-                  fontWeight: 500,
-                  color: '#9CA3AF',
-                  letterSpacing: '-0.01em',
-                  textTransform: 'none',
-                  minWidth: 'auto',
+                  minHeight: 'auto', py: 2, px: { xs: 1.5, md: 2.5 },
+                  fontSize: { xs: '0.82rem', md: '0.875rem' }, fontWeight: 500,
+                  color: '#9CA3AF', letterSpacing: '-0.01em', textTransform: 'none', minWidth: 'auto',
                   transition: 'color 0.2s ease',
-                  '&.Mui-selected': {
-                    fontWeight: 700,
-                    color: '#111827',
-                  },
+                  '&.Mui-selected': { fontWeight: 700, color: '#111827' },
                 },
-              }}
-            >
-              {sections.map((s) => (
-                <Tab key={s.id} label={s.title} disableRipple />
-              ))}
+              }}>
+              {sections.map((s) => <Tab key={s.id} label={s.title} disableRipple />)}
             </Tabs>
           </Box>
 
-          {/* 탭 본문 */}
           {sections.map((s, i) => (
             <TabPanel key={s.id} value={tab} index={i}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 720 }}>
                 {s.content.map((para, pi) => (
-                  <Typography
-                    key={pi}
-                    sx={{
-                      color: '#374151',
-                      lineHeight: 1.9,
-                      fontSize: { xs: '0.9rem', md: '0.975rem' },
-                      letterSpacing: '-0.005em',
-                      wordBreak: 'keep-all',
-                    }}
-                  >
+                  <Typography key={pi} sx={{ color: '#374151', lineHeight: 1.9, fontSize: { xs: '0.9rem', md: '0.975rem' }, letterSpacing: '-0.005em', wordBreak: 'keep-all' }}>
                     <Highlight text={para} />
                   </Typography>
                 ))}
@@ -329,37 +424,18 @@ const AboutPage = () => {
         </Box>
       </Box>
 
-      {/* ── 4. 하단 인용구 ── */}
-      <Box
-        sx={{
-          bgcolor: '#111827',
-          py: { xs: 8, md: 12 },
-          px: { xs: 4, sm: 6, md: 10 },
-          textAlign: 'center',
-        }}
-      >
+      {/* ── 5. 하단 인용구 ── */}
+      <Box sx={{ bgcolor: '#111827', py: { xs: 8, md: 12 }, px: { xs: 4, sm: 6, md: 10 }, textAlign: 'center' }}>
         <Box sx={{ maxWidth: 680, mx: 'auto' }}>
-          <Typography
-            sx={{ color: 'rgba(255,255,255,0.15)', fontSize: '3rem', lineHeight: 1, mb: 2, fontFamily: 'Georgia, serif' }}
-          >
+          <Typography sx={{ color: 'rgba(255,255,255,0.15)', fontSize: '3rem', lineHeight: 1, mb: 2, fontFamily: 'Georgia, serif' }}>
             "
           </Typography>
-          <Typography
-            sx={{
-              color: 'rgba(255,255,255,0.9)',
-              fontSize: { xs: '1.05rem', md: '1.25rem' },
-              fontWeight: 500,
-              lineHeight: 1.85,
-              letterSpacing: '-0.01em',
-              wordBreak: 'keep-all',
-              mb: 3.5,
-            }}
-          >
+          <Typography sx={{ color: 'rgba(255,255,255,0.9)', fontSize: { xs: '1.05rem', md: '1.25rem' }, fontWeight: 500, lineHeight: 1.85, letterSpacing: '-0.01em', wordBreak: 'keep-all', mb: 3.5 }}>
             보기 좋은 디자인이 아닌,<br />
             사용자 문제를 해결하는 설계 중심의 UX/UI 디자이너
           </Typography>
           <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            — {basicInfo.name}
+            — {BASIC_INFO.name}
           </Typography>
         </Box>
       </Box>
