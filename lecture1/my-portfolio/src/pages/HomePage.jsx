@@ -206,13 +206,13 @@ const HomePage = () => {
           bgcolor: '#FFFFFF',
           backgroundImage: "repeating-linear-gradient(rgba(255,122,0,0.14) 0 1px, transparent 1px 100%), repeating-linear-gradient(90deg, rgba(255,122,0,0.14) 0 1px, transparent 1px 100%)",
           backgroundSize: '36px 36px',
-          minHeight: { xs: '88vh', md: '92vh' },
+          minHeight: { xs: '100svh', sm: '100vh', md: '100vh' },
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           overflow: 'hidden',
-          pt: { xs: 12, md: 16 },
-          pb: { xs: 10, md: 14 },
+          pt: { xs: 10, sm: 12, md: 16 },
+          pb: { xs: 8,  sm: 10, md: 14 },
         }}
       >
 
@@ -256,7 +256,7 @@ const HomePage = () => {
             position: 'relative', zIndex: 1,
             maxWidth: 1280,
             mx: 'auto',
-            px: { xs: 4, sm: 6, md: 10 },
+            px: { xs: 3, sm: 5, md: 8, lg: 10 },
             width: '100%',
           }}
         >
@@ -279,7 +279,7 @@ const HomePage = () => {
           {/* ── 거대 로고타입 "hye kyoung" ── */}
           <Box
             sx={{
-              mb: { xs: 10, sm: 12, md: 14 },
+              mb: { xs: 7, sm: 9, md: 12, lg: 14 },
               animation: `${fadeUp} 0.7s 0.2s ease both`,
               opacity: 0,
               display: 'flex',
@@ -296,13 +296,13 @@ const HomePage = () => {
               component="span"
               sx={{
                 fontFamily: '"Archivo Black", sans-serif',
-                fontSize: { xs: '9vw', sm: '8vw', md: '7vw' },
+                fontSize: { xs: '11vw', sm: '9vw', md: '8vw', lg: '7vw' },
                 fontWeight: 900,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                letterSpacing: { xs: '-0.03em', md: '-0.04em' },
+                letterSpacing: { xs: '-0.02em', sm: '-0.03em', md: '-0.04em' },
                 lineHeight: 1.15,
                 display: 'inline-block',
               }}
@@ -314,7 +314,7 @@ const HomePage = () => {
               component="span"
               sx={{
                 fontFamily: '"Cormorant Garamond", serif',
-                fontSize: { xs: '9vw', sm: '8vw', md: '7vw' },
+                fontSize: { xs: '11vw', sm: '9vw', md: '8vw', lg: '7vw' },
                 fontStyle: 'italic',
                 fontWeight: 700,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
@@ -337,7 +337,7 @@ const HomePage = () => {
               background: 'linear-gradient(90deg, #FF7A00, #F04438)',
               borderRadius: 1,
               mx: 'auto',
-              mb: { xs: 14, md: 18 },
+              mb: { xs: 8, sm: 11, md: 15, lg: 18 },
               animation: `${fadeIn} 0.5s 0.5s ease both`,
               opacity: 0,
             }}
@@ -360,10 +360,10 @@ const HomePage = () => {
                 key={i}
                 sx={{
                   fontFamily: '"Pretendard", sans-serif',
-                  fontSize: { xs: '0.88rem', sm: '0.95rem', md: '1.05rem' },
+                  fontSize: { xs: '0.84rem', sm: '0.93rem', md: '1.02rem', lg: '1.08rem' },
                   fontWeight: i === 0 ? 500 : 400,
                   color: i === 0 ? '#111827' : '#374151',
-                  lineHeight: 2,
+                  lineHeight: { xs: 1.85, md: 2 },
                   letterSpacing: '-0.01em',
                   wordBreak: 'keep-all',
                 }}
@@ -374,21 +374,30 @@ const HomePage = () => {
 
             {/* CTA */}
             <Box sx={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
-              mt: { xs: 7, md: 9 },
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: { xs: 2.5, md: 3 },
+              mt: { xs: 5, sm: 6, md: 8, lg: 9 },
               animation: `${fadeUp} 0.6s 0.6s ease both`,
               opacity: 0,
             }}>
 
               {/* 주요 + 보조 버튼 */}
-              <Box sx={{ display: 'flex', justifyContent: 'center', gap: { xs: 2, md: 2.5 }, flexWrap: 'wrap' }}>
+              <Box sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                justifyContent: 'center',
+                gap: { xs: 1.5, sm: 2, md: 2.5 },
+                width: { xs: '100%', sm: 'auto' },
+              }}>
                 <Button
                   component={Link} to="/projects"
                   variant="contained" color="primary"
                   sx={{
-                    px: { xs: 3.5, md: 4.5 }, py: 1.35,
+                    width: { xs: '100%', sm: 'auto' },
+                    px: { xs: 3, sm: 3.5, md: 4.5 },
+                    py: { xs: 1.6, md: 1.35 },
+                    minHeight: 44,
                     fontFamily: '"Pretendard", sans-serif',
-                    fontWeight: 700, fontSize: '0.92rem',
+                    fontWeight: 700, fontSize: { xs: '0.9rem', md: '0.92rem' },
                     boxShadow: '0 4px 18px rgba(255,122,0,0.3)',
                     transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
                     '&:hover': { transform: 'scale(1.05) translateY(-2px)', boxShadow: '0 8px 30px rgba(255,122,0,0.44)' },
@@ -400,9 +409,12 @@ const HomePage = () => {
                   onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
                   variant="outlined" color="primary"
                   sx={{
-                    px: { xs: 3.5, md: 4.5 }, py: 1.35,
+                    width: { xs: '100%', sm: 'auto' },
+                    px: { xs: 3, sm: 3.5, md: 4.5 },
+                    py: { xs: 1.6, md: 1.35 },
+                    minHeight: 44,
                     fontFamily: '"Pretendard", sans-serif',
-                    fontWeight: 600, fontSize: '0.92rem',
+                    fontWeight: 600, fontSize: { xs: '0.9rem', md: '0.92rem' },
                     borderWidth: '1.5px',
                     transition: 'all 0.28s cubic-bezier(.34,1.56,.64,1)',
                     '&:hover': { transform: 'scale(1.05) translateY(-2px)', borderWidth: '1.5px', bgcolor: 'rgba(255,122,0,0.05)' },
@@ -413,34 +425,32 @@ const HomePage = () => {
               </Box>
 
               {/* 소셜 아이콘 */}
-              <Box sx={{ display: 'flex', gap: 1.2 }}>
+              <Box sx={{ display: 'flex', gap: { xs: 1.5, md: 1.2 } }}>
                 <IconButton
                   href="https://github.com/harube29-lang"
                   target="_blank" rel="noopener noreferrer"
-                  size="small"
                   sx={{
                     color: '#6B7280',
                     border: '1px solid #E5E7EB',
-                    width: 40, height: 40,
+                    width: 44, height: 44,
                     transition: 'all 0.22s ease',
                     '&:hover': { color: '#111827', borderColor: '#111827', bgcolor: '#F3F4F6', transform: 'translateY(-3px)' },
                   }}
                 >
-                  <GitHubIcon sx={{ fontSize: '1.15rem' }} />
+                  <GitHubIcon sx={{ fontSize: '1.2rem' }} />
                 </IconButton>
                 <IconButton
                   href="https://www.linkedin.com"
                   target="_blank" rel="noopener noreferrer"
-                  size="small"
                   sx={{
                     color: '#6B7280',
                     border: '1px solid #E5E7EB',
-                    width: 40, height: 40,
+                    width: 44, height: 44,
                     transition: 'all 0.22s ease',
                     '&:hover': { color: '#0A66C2', borderColor: '#0A66C2', bgcolor: 'rgba(10,102,194,0.06)', transform: 'translateY(-3px)' },
                   }}
                 >
-                  <LinkedInIcon sx={{ fontSize: '1.15rem' }} />
+                  <LinkedInIcon sx={{ fontSize: '1.2rem' }} />
                 </IconButton>
               </Box>
             </Box>
