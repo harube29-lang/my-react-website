@@ -329,7 +329,7 @@ const HomePage = () => {
               background: 'linear-gradient(90deg, #FF7A00, #F04438)',
               borderRadius: 1,
               mx: 'auto',
-              mb: { xs: 7, md: 9 },
+              mb: { xs: 14, md: 18 },
               animation: `${fadeIn} 0.5s 0.5s ease both`,
               opacity: 0,
             }}
