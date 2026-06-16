@@ -227,18 +227,18 @@ const HomePage = () => {
             component="span"
             sx={{
               fontFamily: '"Archivo Black", sans-serif',
-              fontSize: { xs: '13vw', sm: '13vw', md: '12vw' },
+              fontSize: { xs: '13.5vw', sm: '13.5vw', md: '13vw' },
               fontWeight: 900,
-              color: '#1E3A8A',
-              opacity: 0.08,
+              color: '#111827',
+              opacity: 0.06,
               whiteSpace: 'nowrap',
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.03em',
               lineHeight: 1,
               flexShrink: 0,
               animation: `${fadeIn} 1.2s ease both`,
             }}
           >
-            hye kyoung
+            HYE KYOUNG
           </Box>
         </Box>
 
