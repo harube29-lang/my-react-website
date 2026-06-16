@@ -98,13 +98,17 @@ export const PortfolioProvider = ({ children }) => {
   const [skills,   setSkills]   = useState(DEFAULT_SKILLS)
   const [sections, setSections] = useState(DEFAULT_SECTIONS)
 
-  /* 스킬 추가 / 제거 */
+  /* 스킬 추가 / 제거 / 레벨 변경 */
   const addSkill = useCallback((skill) => {
     setSkills(prev => prev.some(s => s.id === skill.id) ? prev : [...prev, skill])
   }, [])
 
   const removeSkill = useCallback((id) => {
     setSkills(prev => prev.filter(s => s.id !== id))
+  }, [])
+
+  const updateSkillLevel = useCallback((id, level) => {
+    setSkills(prev => prev.map(s => s.id === id ? { ...s, level: Math.min(100, Math.max(5, level)) } : s))
   }, [])
 
   /* 섹션 부분 업데이트 (showInHome 토글 등) */
@@ -139,8 +143,8 @@ export const PortfolioProvider = ({ children }) => {
   }, [sections, topSkills])
 
   const value = useMemo(
-    () => ({ skills, sections, addSkill, removeSkill, updateSection, topSkills, homeData }),
-    [skills, sections, addSkill, removeSkill, updateSection, topSkills, homeData]
+    () => ({ skills, sections, addSkill, removeSkill, updateSkillLevel, updateSection, topSkills, homeData }),
+    [skills, sections, addSkill, removeSkill, updateSkillLevel, updateSection, topSkills, homeData]
   )
 
   return (

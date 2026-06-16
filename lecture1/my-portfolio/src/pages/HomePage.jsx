@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { keyframes } from '@emotion/react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -40,7 +40,7 @@ const Stars = ({ count, color }) => (
 const toStars    = (lvl) => lvl >= 75 ? 4 : lvl >= 55 ? 3 : lvl >= 35 ? 2 : 1
 const toLevelTxt = (lvl) => lvl >= 70 ? '활용 가능' : lvl >= 40 ? '기초 가능' : '학습 중'
 
-const HomeSkillCard = ({ skill }) => {
+const HomeSkillCard = memo(({ skill }) => {
   const [hovered, setHovered] = useState(false)
   const Icon  = skill.Icon
   const color = CATEGORY_COLORS[skill.category] ?? '#6B7280'
@@ -68,12 +68,12 @@ const HomeSkillCard = ({ skill }) => {
       </Box>
     </Box>
   )
-}
+})
 
 /* ════════════════════════════════════════
    Projects 카드
 ════════════════════════════════════════ */
-const HomeProjectCard = ({ project }) => {
+const HomeProjectCard = memo(({ project }) => {
   const [imgError, setImgError] = useState(false)
   return (
     <Box sx={{ flex: '1 0 280px', minWidth: 280, borderRadius: 3, border: '1px solid #E5E7EB',
@@ -92,6 +92,7 @@ const HomeProjectCard = ({ project }) => {
           </Box>
         ) : (
           <Box component="img" src={project.thumbnail_url} alt={project.title}
+               loading="lazy"
                onError={() => setImgError(true)}
                sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
                      transition: 'transform 0.3s ease', '&:hover': { transform: 'scale(1.04)' } }} />
@@ -123,7 +124,7 @@ const HomeProjectCard = ({ project }) => {
       </Box>
     </Box>
   )
-}
+})
 
 const ProjectSkeleton = () => (
   <Box sx={{ flex: '1 0 280px', minWidth: 280, borderRadius: 3, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
@@ -164,7 +165,8 @@ const Label = ({ children }) => (
 ════════════════════════════════════════ */
 const HomePage = () => {
   const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading,  setLoading]  = useState(true)
+  const [projError, setProjError] = useState(false)
   const { homeData } = usePortfolio()
   const { homeContent, topSkills, basicInfo } = homeData
 
@@ -174,7 +176,11 @@ const HomePage = () => {
     supabase
       .from('projects').select('*').eq('is_published', true)
       .order('sort_order', { ascending: true }).limit(3)
-      .then(({ data }) => { if (data) setProjects(data); setLoading(false) })
+      .then(({ data, error }) => {
+        if (error) { setProjError(true) }
+        else if (data) { setProjects(data) }
+        setLoading(false)
+      })
   }, [])
 
   return (
@@ -531,22 +537,31 @@ const HomePage = () => {
             전체 보기 →
           </Button>
         </Box>
-        <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, overflowX: 'auto', pb: 1,
-                   '&::-webkit-scrollbar': { height: 4 },
-                   '&::-webkit-scrollbar-thumb': { backgroundColor: '#D1D5DB', borderRadius: 2 } }}>
-          {loading
-            ? [1, 2, 3].map(n => <ProjectSkeleton key={n} />)
-            : projects.length > 0
-              ? projects.map(p => <HomeProjectCard key={p.id} project={p} />)
-              : [1, 2, 3].map(n => (
-                  <Box key={n} sx={{ flex: '1 0 280px', minWidth: 280, minHeight: 200,
-                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                     borderRadius: 3, border: '1px dashed #E5E7EB' }}>
-                    <Typography variant="body2" color="text.disabled">준비 중입니다</Typography>
-                  </Box>
-                ))
-          }
-        </Box>
+        {projError ? (
+          <Box sx={{ py: 8, textAlign: 'center', border: '1px dashed #E5E7EB', borderRadius: 3 }} role="alert">
+            <Typography color="text.disabled" sx={{ mb: 1 }}>프로젝트를 불러오지 못했습니다.</Typography>
+            <Button size="small" variant="outlined" onClick={() => { setProjError(false); setLoading(true) }}>
+              다시 시도
+            </Button>
+          </Box>
+        ) : (
+          <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, overflowX: 'auto', pb: 1,
+                     '&::-webkit-scrollbar': { height: 4 },
+                     '&::-webkit-scrollbar-thumb': { backgroundColor: '#D1D5DB', borderRadius: 2 } }}>
+            {loading
+              ? [1, 2, 3].map(n => <ProjectSkeleton key={n} />)
+              : projects.length > 0
+                ? projects.map(p => <HomeProjectCard key={p.id} project={p} />)
+                : [1, 2, 3].map(n => (
+                    <Box key={n} sx={{ flex: '1 0 280px', minWidth: 280, minHeight: 200,
+                                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                       borderRadius: 3, border: '1px dashed #E5E7EB' }}>
+                      <Typography variant="body2" color="text.disabled">준비 중입니다</Typography>
+                    </Box>
+                  ))
+            }
+          </Box>
+        )}
       </Section>
 
 
