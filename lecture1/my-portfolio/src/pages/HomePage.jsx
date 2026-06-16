@@ -11,7 +11,7 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import profileImg from '../assets/profile.jpg'
 import ContactSection from '../components/Contact/ContactSection'
 import { supabase } from '../lib/supabase'
-import { usePortfolio, CATEGORY_COLORS, BASIC_INFO } from '../context/PortfolioContext'
+import { usePortfolio, CATEGORY_COLORS } from '../context/PortfolioContext'
 
 /* ════════════════════════════════════════
    애니메이션 키프레임
@@ -162,17 +162,13 @@ const Label = ({ children }) => (
 /* ════════════════════════════════════════
    HomePage
 ════════════════════════════════════════ */
-const stripMarkers = (text) => text.replace(/\*\*(.*?)\*\*/g, '$1')
-
 const HomePage = () => {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
-  const { topSkills, sections } = usePortfolio()
+  const { homeData } = usePortfolio()
+  const { homeContent, topSkills, basicInfo } = homeData
 
-  const storySummary = (() => {
-    const s = sections.find(s => s.id === 'dev-story')
-    return s ? stripMarkers(s.content[0]) : ''
-  })()
+  const storySummary = homeContent.find(s => s.id === 'dev-story')?.summary ?? ''
 
   useEffect(() => {
     supabase
@@ -420,15 +416,25 @@ const HomePage = () => {
             <Label>About Me</Label>
             <Typography variant="h2"
               sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, mb: 1.5, wordBreak: 'keep-all' }}>
-              안녕하세요,<br />{BASIC_INFO.name}입니다.
+              안녕하세요,<br />{basicInfo.name}입니다.
             </Typography>
             <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mb: 2.5 }} />
 
-            {/* 스토리 요약 (context 연동) */}
-            <Typography variant="body1"
-              sx={{ color: 'text.secondary', lineHeight: 1.9, wordBreak: 'keep-all', mb: 3.5 }}>
-              {storySummary}
-            </Typography>
+            {/* homeData.homeContent — showInHome 섹션 요약 (context 실시간 연동) */}
+            {homeContent.map((sec, i) => (
+              <Box key={sec.id} sx={{ mb: i < homeContent.length - 1 ? 2.5 : 3.5 }}>
+                {homeContent.length > 1 && (
+                  <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, color: 'primary.main',
+                                    letterSpacing: '0.1em', textTransform: 'uppercase', mb: 0.6 }}>
+                    {sec.title}
+                  </Typography>
+                )}
+                <Typography variant="body1"
+                  sx={{ color: 'text.secondary', lineHeight: 1.9, wordBreak: 'keep-all' }}>
+                  {sec.summary}
+                </Typography>
+              </Box>
+            ))}
 
             {/* 주요 스킬 미니 아이콘 (context topSkills 연동) */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: { xs: 4, md: 5 } }}>
@@ -453,18 +459,18 @@ const HomePage = () => {
           {/* 프로필 카드 */}
           <Box sx={{ flexShrink: 0, display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' } }}>
             <Box sx={{ border: '1px solid #F3F4F6', borderRadius: 3, overflow: 'hidden', width: { xs: 180, md: 220 }, boxShadow: '0 4px 20px rgba(0,0,0,0.07)' }}>
-              <Box component="img" src={profileImg} alt={`${BASIC_INFO.name} 프로필`}
+              <Box component="img" src={profileImg} alt={`${basicInfo.name} 프로필`}
                 sx={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block' }} />
               <Box sx={{ p: 2, bgcolor: '#FAFAFA' }}>
                 <Typography sx={{ fontWeight: 700, fontSize: '0.9rem', color: '#111827' }}>
-                  {BASIC_INFO.name}
+                  {basicInfo.name}
                 </Typography>
                 <Typography sx={{ color: '#6B7280', fontSize: '0.78rem', mt: 0.3 }}>
-                  {BASIC_INFO.role}
+                  {basicInfo.role}
                 </Typography>
                 <Box sx={{ width: 24, height: '1px', bgcolor: '#E5E7EB', my: 1.2 }} />
                 <Typography sx={{ fontSize: '0.72rem', color: '#9CA3AF' }}>
-                  {BASIC_INFO.education}
+                  {basicInfo.education}
                 </Typography>
               </Box>
             </Box>

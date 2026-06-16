@@ -54,7 +54,7 @@ export const BASIC_INFO = {
 }
 
 /* ════════════════════════════════════════
-   About 섹션 텍스트 (showInHome 플래그 포함)
+   About 섹션 (showInHome 플래그 포함)
 ════════════════════════════════════════ */
 export const DEFAULT_SECTIONS = [
   {
@@ -86,14 +86,19 @@ export const DEFAULT_SECTIONS = [
   },
 ]
 
+/* **bold** 마커 제거 (순수 텍스트) */
+const stripMarkers = (text) => text.replace(/\*\*(.*?)\*\*/g, '$1')
+
 /* ════════════════════════════════════════
    Context
 ════════════════════════════════════════ */
 const PortfolioContext = createContext(null)
 
 export const PortfolioProvider = ({ children }) => {
-  const [skills, setSkills] = useState(DEFAULT_SKILLS)
+  const [skills,   setSkills]   = useState(DEFAULT_SKILLS)
+  const [sections, setSections] = useState(DEFAULT_SECTIONS)
 
+  /* 스킬 추가 / 제거 */
   const addSkill = useCallback((skill) => {
     setSkills(prev => prev.some(s => s.id === skill.id) ? prev : [...prev, skill])
   }, [])
@@ -102,15 +107,40 @@ export const PortfolioProvider = ({ children }) => {
     setSkills(prev => prev.filter(s => s.id !== id))
   }, [])
 
-  /* 숙련도 내림차순 상위 4개 — 홈 탭 연동용 */
+  /* 섹션 부분 업데이트 (showInHome 토글 등) */
+  const updateSection = useCallback((id, patch) => {
+    setSections(prev => prev.map(s => s.id === id ? { ...s, ...patch } : s))
+  }, [])
+
+  /* 숙련도 내림차순 상위 4개 — 홈 스킬 섹션 연동용 */
   const topSkills = useMemo(
     () => [...skills].sort((a, b) => b.level - a.level).slice(0, 4),
     [skills]
   )
 
+  /* 홈 탭용 통합 데이터
+     - homeContent : showInHome 섹션의 첫 단락을 160자 요약
+     - topSkills   : 숙련도 상위 4개
+     - basicInfo   : 기본 프로필 정보
+  */
+  const homeData = useMemo(() => {
+    const homeContent = sections
+      .filter(s => s.showInHome)
+      .map(s => {
+        const raw = Array.isArray(s.content) ? s.content[0] : s.content
+        const plain = stripMarkers(raw)
+        return {
+          id:      s.id,
+          title:   s.title,
+          summary: plain.length > 160 ? plain.slice(0, 160) + '…' : plain,
+        }
+      })
+    return { homeContent, topSkills, basicInfo: BASIC_INFO }
+  }, [sections, topSkills])
+
   const value = useMemo(
-    () => ({ skills, sections: DEFAULT_SECTIONS, addSkill, removeSkill, topSkills }),
-    [skills, addSkill, removeSkill, topSkills]
+    () => ({ skills, sections, addSkill, removeSkill, updateSection, topSkills, homeData }),
+    [skills, sections, addSkill, removeSkill, updateSection, topSkills, homeData]
   )
 
   return (
