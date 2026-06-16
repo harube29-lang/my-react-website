@@ -224,7 +224,7 @@ const HomePage = () => {
           <Box component="span" sx={{
             fontFamily: '"Archivo Black", sans-serif',
             fontSize: { xs: '22vw', md: '18vw' },
-            fontWeight: 900, color: '#111827', opacity: 0.03,
+            fontWeight: 900, color: '#111827', opacity: 0.055,
             whiteSpace: 'nowrap', letterSpacing: '-0.02em', lineHeight: 1, flexShrink: 0,
             animation: `${fadeIn} 1.4s ease both`,
           }}>
@@ -267,33 +267,33 @@ const HomePage = () => {
               </Typography>
             </Box>
 
-            {/* 이름 — 세로 스택 */}
+            {/* 이름 — 한 줄 (Sans + Serif 혼합) */}
             <Box sx={{
-              mb: { xs: 4, md: 5 },
+              mb: { xs: 3.5, md: 4.5 },
               animation: `${fadeUp} 0.7s 0.15s ease both`, opacity: 0,
+              display: 'flex', alignItems: 'baseline',
+              gap: { xs: '0.22em', md: '0.18em' },
               overflow: 'visible', pb: '0.08em',
             }}>
               <Box component="span" sx={{
-                display: 'block',
                 fontFamily: '"Archivo Black", sans-serif',
-                fontSize: { xs: '16vw', sm: '11vw', md: '9.5vw' },
+                fontSize: { xs: '11vw', sm: '8vw', md: '6.2vw' },
                 fontWeight: 900,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                letterSpacing: { xs: '-0.03em', md: '-0.04em' },
-                lineHeight: 1.08,
+                letterSpacing: '-0.03em',
+                lineHeight: 1.1,
               }}>
                 hye
               </Box>
               <Box component="span" sx={{
-                display: 'block',
                 fontFamily: '"Cormorant Garamond", serif',
-                fontSize: { xs: '16vw', sm: '11vw', md: '9.5vw' },
+                fontSize: { xs: '11vw', sm: '8vw', md: '6.2vw' },
                 fontStyle: 'italic', fontWeight: 700,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                letterSpacing: { xs: '-0.02em', md: '-0.025em' },
-                lineHeight: 1.08,
+                letterSpacing: '-0.01em',
+                lineHeight: 1.1,
               }}>
                 kyoung
               </Box>
