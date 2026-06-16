@@ -227,10 +227,10 @@ const HomePage = () => {
             component="span"
             sx={{
               fontFamily: '"Archivo Black", sans-serif',
-              fontSize: { xs: '21vw', sm: '19vw', md: '17vw' },
+              fontSize: { xs: '13vw', sm: '13vw', md: '12vw' },
               fontWeight: 900,
-              color: '#111827',
-              opacity: 0.04,
+              color: '#1E3A8A',
+              opacity: 0.08,
               whiteSpace: 'nowrap',
               letterSpacing: '-0.02em',
               lineHeight: 1,
@@ -238,7 +238,7 @@ const HomePage = () => {
               animation: `${fadeIn} 1.2s ease both`,
             }}
           >
-            HYEKYOUNG
+            hye kyoung
           </Box>
         </Box>
 
@@ -287,7 +287,7 @@ const HomePage = () => {
               component="span"
               sx={{
                 fontFamily: '"Archivo Black", sans-serif',
-                fontSize: { xs: '12vw', sm: '12vw', md: '11vw' },
+                fontSize: { xs: '9vw', sm: '8vw', md: '7vw' },
                 fontWeight: 900,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
                 WebkitBackgroundClip: 'text',
@@ -305,7 +305,7 @@ const HomePage = () => {
               component="span"
               sx={{
                 fontFamily: '"Cormorant Garamond", serif',
-                fontSize: { xs: '12vw', sm: '12vw', md: '11vw' },
+                fontSize: { xs: '9vw', sm: '8vw', md: '7vw' },
                 fontStyle: 'italic',
                 fontWeight: 700,
                 background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
