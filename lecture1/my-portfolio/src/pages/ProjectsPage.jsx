@@ -1,26 +1,124 @@
 import { useState, useEffect } from 'react'
 import {
-  Box, Typography, Divider, Chip, Button, Stack, Skeleton
+  Box, Typography, Divider, Chip, Button, Stack, Skeleton,
+  Dialog, DialogContent, IconButton,
 } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
 import GitHubIcon from '@mui/icons-material/GitHub'
+import CloseIcon from '@mui/icons-material/Close'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { supabase } from '../lib/supabase'
 
+/* ── 상세 모달 ── */
+const DetailModal = ({ project, onClose }) => {
+  if (!project) return null
+  return (
+    <Dialog
+      open={!!project}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{
+        sx: { borderRadius: 3, p: 0, overflow: 'hidden' },
+      }}
+    >
+      {/* 썸네일 헤더 */}
+      <Box sx={{ position: 'relative', width: '100%', paddingTop: '45%', flexShrink: 0 }}>
+        {project.thumbnail_url ? (
+          <Box
+            component="img"
+            src={project.thumbnail_url}
+            alt={project.title}
+            sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        ) : (
+          <Box
+            sx={{
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1.1rem' }}>
+              {project.title}
+            </Typography>
+          </Box>
+        )}
+        <IconButton
+          onClick={onClose}
+          size="small"
+          sx={{
+            position: 'absolute', top: 10, right: 10,
+            bgcolor: 'rgba(0,0,0,0.45)', color: '#fff',
+            '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
+          }}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent sx={{ p: 3.5 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700, mb: 1.5 }}>
+          {project.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.75, mb: 2.5 }}>
+          {project.description}
+        </Typography>
+
+        <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.disabled', textTransform: 'uppercase', letterSpacing: 1 }}>
+          기술 스택
+        </Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.6, mt: 0.8, mb: 3 }}>
+          {project.tech_stack?.map((tech) => (
+            <Chip
+              key={tech}
+              label={tech}
+              size="small"
+              sx={{
+                bgcolor: 'rgba(255,122,0,0.08)', color: 'primary.main',
+                fontWeight: 600, fontSize: '0.7rem', height: 24, borderRadius: 1,
+              }}
+            />
+          ))}
+        </Box>
+
+        <Stack direction="row" spacing={1}>
+          {project.detail_url && (
+            <Button
+              variant="contained" size="small" fullWidth
+              startIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
+              href={project.detail_url} target="_blank" rel="noopener noreferrer"
+              sx={{ py: 1, fontSize: '0.8rem', boxShadow: 'none' }}
+            >
+              Live Demo
+            </Button>
+          )}
+          {project.github_url && (
+            <Button
+              variant="outlined" size="small" fullWidth
+              startIcon={<GitHubIcon sx={{ fontSize: 14 }} />}
+              href={project.github_url} target="_blank" rel="noopener noreferrer"
+              sx={{ py: 1, fontSize: '0.8rem' }}
+            >
+              GitHub
+            </Button>
+          )}
+        </Stack>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 /* ── 프로젝트 카드 ── */
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, onDetail }) => {
   const [imgError, setImgError] = useState(false)
 
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        borderRadius: 3,
-        border: '1px solid',
-        borderColor: 'grey.300',
-        bgcolor: 'background.paper',
-        overflow: 'hidden',
+        display: 'flex', flexDirection: 'column', height: '100%',
+        borderRadius: 3, border: '1px solid', borderColor: 'grey.300',
+        bgcolor: 'background.paper', overflow: 'hidden',
         transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
         '&:hover': {
           transform: 'translateY(-6px)',
@@ -29,7 +127,7 @@ const ProjectCard = ({ project }) => {
         },
       }}
     >
-      {/* 썸네일 — 16:9 비율 고정 */}
+      {/* 썸네일 — 16:9 */}
       <Box sx={{ position: 'relative', width: '100%', paddingTop: '56.25%', overflow: 'hidden', flexShrink: 0 }}>
         {imgError || !project.thumbnail_url ? (
           <Box
@@ -51,8 +149,7 @@ const ProjectCard = ({ project }) => {
             onError={() => setImgError(true)}
             sx={{
               position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover',
+              width: '100%', height: '100%', objectFit: 'cover',
               transition: 'transform 0.3s ease',
               '&:hover': { transform: 'scale(1.04)' },
             }}
@@ -60,10 +157,8 @@ const ProjectCard = ({ project }) => {
         )}
       </Box>
 
-      {/* 카드 내용 — flex:1 로 남은 공간 채움 */}
+      {/* 카드 내용 */}
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, p: 2.5 }}>
-
-        {/* 제목 */}
         <Typography
           variant="subtitle1"
           sx={{ fontWeight: 700, fontSize: '1rem', mb: 1, color: 'text.primary', lineHeight: 1.4 }}
@@ -71,18 +166,13 @@ const ProjectCard = ({ project }) => {
           {project.title}
         </Typography>
 
-        {/* 설명 — 3줄 고정 */}
+        {/* 설명 — 3줄 클램프 */}
         <Typography
-          variant="body2"
-          color="text.secondary"
+          variant="body2" color="text.secondary"
           sx={{
-            mb: 2,
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            lineHeight: 1.65,
-            flex: 1,
+            mb: 2, flex: 1,
+            display: '-webkit-box', WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.65,
           }}
         >
           {project.description}
@@ -92,16 +182,10 @@ const ProjectCard = ({ project }) => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
           {project.tech_stack?.map((tech) => (
             <Chip
-              key={tech}
-              label={tech}
-              size="small"
+              key={tech} label={tech} size="small"
               sx={{
-                bgcolor: 'rgba(255,122,0,0.08)',
-                color: 'primary.main',
-                fontWeight: 600,
-                fontSize: '0.68rem',
-                height: 22,
-                borderRadius: 1,
+                bgcolor: 'rgba(255,122,0,0.08)', color: 'primary.main',
+                fontWeight: 600, fontSize: '0.68rem', height: 22, borderRadius: 1,
               }}
             />
           ))}
@@ -114,41 +198,41 @@ const ProjectCard = ({ project }) => {
           </Typography>
         )}
 
-        {/* 버튼 — 항상 카드 하단에 고정 */}
+        {/* 버튼 */}
         <Stack direction="row" spacing={1} sx={{ mt: 'auto' }}>
           {project.detail_url && (
             <Button
-              variant="contained"
-              size="small"
+              variant="contained" size="small"
               startIcon={<LaunchIcon sx={{ fontSize: 13 }} />}
-              href={project.detail_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                flex: 1, py: 0.9, fontSize: '0.78rem',
-                boxShadow: 'none',
-                '&:active': { transform: 'scale(0.97)' },
-              }}
+              href={project.detail_url} target="_blank" rel="noopener noreferrer"
+              sx={{ flex: 1, py: 0.9, fontSize: '0.78rem', boxShadow: 'none', '&:active': { transform: 'scale(0.97)' } }}
             >
               Live Demo
             </Button>
           )}
           {project.github_url && (
             <Button
-              variant="outlined"
-              size="small"
+              variant="outlined" size="small"
               startIcon={<GitHubIcon sx={{ fontSize: 13 }} />}
-              href={project.github_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                flex: 1, py: 0.9, fontSize: '0.78rem',
-                '&:active': { transform: 'scale(0.97)' },
-              }}
+              href={project.github_url} target="_blank" rel="noopener noreferrer"
+              sx={{ flex: 1, py: 0.9, fontSize: '0.78rem', '&:active': { transform: 'scale(0.97)' } }}
             >
               GitHub
             </Button>
           )}
+          <Button
+            variant="outlined" size="small"
+            startIcon={<InfoOutlinedIcon sx={{ fontSize: 13 }} />}
+            onClick={() => onDetail(project)}
+            sx={{
+              flex: 1, py: 0.9, fontSize: '0.78rem',
+              borderColor: 'grey.300', color: 'text.secondary',
+              '&:hover': { borderColor: 'primary.main', color: 'primary.main', bgcolor: 'rgba(255,122,0,0.04)' },
+              '&:active': { transform: 'scale(0.97)' },
+            }}
+          >
+            Details
+          </Button>
         </Stack>
       </Box>
     </Box>
@@ -172,6 +256,7 @@ const SkeletonCard = () => (
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Skeleton variant="rounded" sx={{ flex: 1, height: 32 }} />
         <Skeleton variant="rounded" sx={{ flex: 1, height: 32 }} />
+        <Skeleton variant="rounded" sx={{ flex: 1, height: 32 }} />
       </Box>
     </Box>
   </Box>
@@ -180,7 +265,8 @@ const SkeletonCard = () => (
 /* ── 메인 페이지 ── */
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading]   = useState(true)
+  const [selected, setSelected] = useState(null)
 
   useEffect(() => {
     supabase
@@ -194,10 +280,10 @@ const ProjectsPage = () => {
       })
   }, [])
 
-  const items = loading ? Array.from({ length: 3 }) : projects
+  const items = loading ? Array.from({ length: 4 }) : projects
 
   return (
-    <Box sx={{ maxWidth: 1100, mx: 'auto', px: { xs: 2, sm: 4, md: 6 }, py: { xs: 6, sm: 8, md: 12 } }}>
+    <Box sx={{ maxWidth: 1200, mx: 'auto', px: { xs: 2, sm: 4, md: 6 }, py: { xs: 6, sm: 8, md: 12 } }}>
 
       {/* 헤더 */}
       <Typography
@@ -214,14 +300,14 @@ const ProjectsPage = () => {
         직접 기획·개발한 프로젝트들을 소개합니다.
       </Typography>
 
-      {/* CSS Grid 레이아웃 */}
+      {/* 4열 그리드 */}
       <Box
         sx={{
           display: 'grid',
           gridTemplateColumns: {
             xs: '1fr',
             sm: 'repeat(2, 1fr)',
-            md: 'repeat(3, 1fr)',
+            lg: 'repeat(4, 1fr)',
           },
           gap: '24px',
           alignItems: 'stretch',
@@ -230,10 +316,12 @@ const ProjectsPage = () => {
         {items.map((project, i) =>
           loading
             ? <SkeletonCard key={i} />
-            : <ProjectCard key={project.id} project={project} />
+            : <ProjectCard key={project.id} project={project} onDetail={setSelected} />
         )}
       </Box>
 
+      {/* 상세 모달 */}
+      <DetailModal project={selected} onClose={() => setSelected(null)} />
     </Box>
   )
 }
