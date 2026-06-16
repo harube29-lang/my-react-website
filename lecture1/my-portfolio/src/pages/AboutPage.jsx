@@ -3,7 +3,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
-import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
 import Collapse from '@mui/material/Collapse'
@@ -259,7 +258,7 @@ const AboutPage = () => {
             'repeating-linear-gradient(90deg, rgba(255,122,0,0.12) 0 1px, transparent 1px 100%)',
           ].join(', '),
           backgroundSize: '36px 36px',
-          py: { xs: 13, md: 18 },
+          py: { xs: 11, md: 15 },
           px: { xs: 4, sm: 6, md: 10 },
         }}
       >
@@ -269,34 +268,120 @@ const AboutPage = () => {
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
             alignItems: { xs: 'flex-start', md: 'center' },
-            gap: { xs: 7, md: 14 },
+            gap: { xs: 8, md: 8 },
           }}
         >
-          <Box sx={{ flex: 1, minWidth: 0 }}>
+          {/* ── 좌측 60% ── */}
+          <Box sx={{ flex: 3, minWidth: 0 }}>
             <Typography variant="caption"
               sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 2.5 }}>
               About Me
             </Typography>
             <Typography variant="h1"
-              sx={{ color: '#111827', fontSize: { xs: '3rem', sm: '3.8rem', md: '5rem' }, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.04em', mb: 1.5 }}>
+              sx={{ color: '#111827', fontSize: { xs: '2.8rem', sm: '3.5rem', md: '4.2rem' }, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.04em', mb: 1.5 }}>
               {BASIC_INFO.name}
             </Typography>
-            <Typography sx={{ color: '#6B7280', fontSize: { xs: '0.95rem', md: '1.05rem' }, mb: 4, letterSpacing: '-0.01em' }}>
+            <Typography sx={{ color: '#FF7A00', fontSize: { xs: '0.92rem', md: '1rem' }, fontWeight: 600, mb: 3.5, letterSpacing: '-0.01em' }}>
               {BASIC_INFO.role}
             </Typography>
             <Box sx={{ width: 36, height: '2px', bgcolor: '#FF7A00', borderRadius: 1, mb: 4 }} aria-hidden="true" />
+
+            {/* 자기소개 */}
+            <Typography sx={{ color: '#374151', fontSize: { xs: '0.88rem', md: '0.975rem' }, lineHeight: 1.9, mb: 4, wordBreak: 'keep-all', letterSpacing: '-0.005em' }}>
+              사용하기 쉽고 기억에 오래 남을 UX/UI를 만듭니다.<br />
+              사용자가 불편을 느끼는 지점을 먼저 파악하고,<br />
+              데이터와 공감을 바탕으로 문제를 해결하는 설계를 지향합니다.
+            </Typography>
+
+            {/* 역량 뱃지 */}
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 4.5 }}>
+              {['UX Research', 'UI Design', 'Prototyping', 'Wireframing'].map(tag => (
+                <Box key={tag}
+                  sx={{
+                    px: 1.8, py: 0.7,
+                    borderRadius: '6px',
+                    border: '1px solid rgba(255,122,0,0.4)',
+                    color: '#FF7A00',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    letterSpacing: '0.02em',
+                    bgcolor: 'rgba(255,122,0,0.04)',
+                  }}>
+                  {tag}
+                </Box>
+              ))}
+            </Box>
+
+            {/* 정보 태그 */}
             <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
               <InfoTag icon={SchoolIcon} label={`${BASIC_INFO.education} · ${BASIC_INFO.major}`} />
               <InfoTag icon={WorkOutlineIcon} label={BASIC_INFO.experience} />
             </Box>
           </Box>
-          <Box sx={{ flexShrink: 0 }}>
-            <Avatar
-              src={BASIC_INFO.photo}
-              alt={`${BASIC_INFO.name} 프로필 사진`}
-              sx={{ width: { xs: 120, md: 160 }, height: { xs: 120, md: 160 },
-                    border: '2px solid rgba(255,122,0,0.15)', boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}
-            />
+
+          {/* ── 우측 40% — 비주얼 영역 ── */}
+          <Box
+            sx={{
+              flex: 2,
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignSelf: { xs: 'center', md: 'stretch' },
+              minHeight: { xs: 300, md: 400 },
+            }}
+          >
+            {/* 배경 대형 타이포그래피 */}
+            <Box
+              aria-hidden="true"
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                fontFamily: '"Archivo Black", sans-serif',
+                fontSize: { xs: '4.8rem', md: '6.5rem' },
+                fontWeight: 900,
+                color: '#FF7A00',
+                opacity: 0.07,
+                letterSpacing: '-0.04em',
+                lineHeight: 0.9,
+                userSelect: 'none',
+                pointerEvents: 'none',
+                zIndex: 0,
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              HYE<br />KYOUNG
+            </Box>
+
+            {/* 프로필 이미지 */}
+            <Box
+              sx={{
+                position: 'relative',
+                zIndex: 1,
+                width: { xs: 260, sm: 320, md: 380 },
+                height: { xs: 320, sm: 400, md: 480 },
+                borderRadius: '16px',
+                overflow: 'hidden',
+                border: '2px solid rgba(255,122,0,0.18)',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06)',
+              }}
+            >
+              <Box
+                component="img"
+                src={BASIC_INFO.photo}
+                alt={`${BASIC_INFO.name} 프로필 사진`}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'top center',
+                  display: 'block',
+                }}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
