@@ -6,6 +6,9 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Chip from '@mui/material/Chip'
 import Skeleton from '@mui/material/Skeleton'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
+import CloseIcon from '@mui/icons-material/Close'
 import { Link } from 'react-router-dom'
 import { alpha } from '@mui/material/styles'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -13,9 +16,19 @@ import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import profileImg from '../assets/profile.jpg'
+import thumbArchive  from '../assets/thumb_archive.png'
+import thumbParis    from '../assets/thumb_paris.png'
+import thumbNatuur   from '../assets/thumb_natuur.png'
+import thumbHospital from '../assets/thumb_hospital.png'
 import ContactSection from '../components/Contact/ContactSection'
-import { supabase } from '../lib/supabase'
 import { usePortfolio, CATEGORY_COLORS } from '../context/PortfolioContext'
+
+const HOME_PROJECTS = [
+  { id: 1, title: '아카이브 커피',    badge: '자체제작', thumbnail: thumbArchive  },
+  { id: 2, title: '파리크라상',       badge: '리디자인', thumbnail: thumbParis    },
+  { id: 3, title: '나뚜루',           badge: '리디자인', thumbnail: thumbNatuur   },
+  { id: 4, title: '울산대학교병원',   badge: '리디자인', thumbnail: thumbHospital },
+]
 
 /* ════════════════════════════════════════
    애니메이션 키프레임
@@ -205,24 +218,10 @@ const Label = ({ children }) => (
    HomePage
 ════════════════════════════════════════ */
 const HomePage = () => {
-  const [projects, setProjects] = useState([])
-  const [loading,  setLoading]  = useState(true)
-  const [projError, setProjError] = useState(false)
   const { homeData } = usePortfolio()
   const { homeContent, topSkills, basicInfo } = homeData
 
   const storySummary = homeContent.find(s => s.id === 'dev-story')?.summary ?? ''
-
-  useEffect(() => {
-    supabase
-      .from('projects').select('*').eq('is_published', true)
-      .order('sort_order', { ascending: true }).limit(3)
-      .then(({ data, error }) => {
-        if (error) { setProjError(true) }
-        else if (data) { setProjects(data) }
-        setLoading(false)
-      })
-  }, [])
 
   return (
     <Box>
@@ -633,16 +632,16 @@ const HomePage = () => {
 
 
       {/* ══════════════════════════════════════
-          4. Projects
+          4. Portfolio
       ══════════════════════════════════════ */}
       <Section id="projects" bg="#FFFFFF">
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
                    mb: { xs: 5, md: 7 }, flexWrap: 'wrap', gap: 3 }}>
           <Box>
-            <Label>Projects</Label>
+            <Label>Portfolio</Label>
             <Typography variant="h2"
               sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, wordBreak: 'keep-all' }}>
-              주요 프로젝트
+              포트폴리오
             </Typography>
             <Box sx={{ width: 40, height: 3, bgcolor: 'primary.main', borderRadius: 1, mt: 1.5 }} />
           </Box>
@@ -650,31 +649,72 @@ const HomePage = () => {
             전체 보기 →
           </Button>
         </Box>
-        {projError ? (
-          <Box sx={{ py: 8, textAlign: 'center', border: '1px dashed #E5E7EB', borderRadius: 3 }} role="alert">
-            <Typography color="text.disabled" sx={{ mb: 1 }}>프로젝트를 불러오지 못했습니다.</Typography>
-            <Button size="small" variant="outlined" onClick={() => { setProjError(false); setLoading(true) }}>
-              다시 시도
-            </Button>
-          </Box>
-        ) : (
-          <Box sx={{ display: 'flex', gap: { xs: 2, md: 3 }, overflowX: 'auto', pb: 1,
-                     '&::-webkit-scrollbar': { height: 4 },
-                     '&::-webkit-scrollbar-thumb': { backgroundColor: '#D1D5DB', borderRadius: 2 } }}>
-            {loading
-              ? [1, 2, 3].map(n => <ProjectSkeleton key={n} />)
-              : projects.length > 0
-                ? projects.map(p => <HomeProjectCard key={p.id} project={p} />)
-                : [1, 2, 3].map(n => (
-                    <Box key={n} sx={{ flex: '1 0 280px', minWidth: 280, minHeight: 200,
-                                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                       borderRadius: 3, border: '1px dashed #E5E7EB' }}>
-                      <Typography variant="body2" color="text.disabled">준비 중입니다</Typography>
-                    </Box>
-                  ))
-            }
-          </Box>
-        )}
+
+        {/* 2열 썸네일 그리드 */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+            gap: { xs: 2, md: 3 },
+          }}
+        >
+          {HOME_PROJECTS.map(p => (
+            <Box
+              key={p.id}
+              component={Link}
+              to="/projects"
+              sx={{
+                display: 'block',
+                position: 'relative',
+                paddingTop: '66%',
+                borderRadius: 3,
+                overflow: 'hidden',
+                border: '1px solid #E5E7EB',
+                textDecoration: 'none',
+                cursor: 'pointer',
+                '&:hover .thumb-overlay': { opacity: 1 },
+                '&:hover img': { transform: 'scale(1.04)' },
+              }}
+            >
+              <Box
+                component="img"
+                src={p.thumbnail}
+                alt={p.title}
+                sx={{
+                  position: 'absolute', inset: 0,
+                  width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: 'top',
+                  transition: 'transform 0.4s ease',
+                }}
+              />
+              {/* 호버 오버레이 */}
+              <Box
+                className="thumb-overlay"
+                sx={{
+                  position: 'absolute', inset: 0,
+                  bgcolor: 'rgba(0,0,0,0.45)',
+                  display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', justifyContent: 'center',
+                  opacity: 0,
+                  transition: 'opacity 0.3s ease',
+                }}
+              >
+                <Box
+                  sx={{
+                    px: 1.4, py: 0.4, borderRadius: 1,
+                    bgcolor: 'rgba(255,122,0,0.85)',
+                    color: '#fff', fontSize: '0.68rem', fontWeight: 700, mb: 1,
+                  }}
+                >
+                  {p.badge}
+                </Box>
+                <Typography sx={{ color: '#fff', fontWeight: 700, fontSize: '1rem' }}>
+                  {p.title}
+                </Typography>
+              </Box>
+            </Box>
+          ))}
+        </Box>
       </Section>
 
 
