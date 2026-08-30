@@ -4,14 +4,8 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
-import Chip from '@mui/material/Chip'
-import Skeleton from '@mui/material/Skeleton'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import CloseIcon from '@mui/icons-material/Close'
 import { Link } from 'react-router-dom'
 import { alpha } from '@mui/material/styles'
-import LaunchIcon from '@mui/icons-material/Launch'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
@@ -99,101 +93,6 @@ const HomeSkillCard = memo(({ skill }) => {
     </Box>
   )
 })
-
-/* ════════════════════════════════════════
-   Projects 카드
-════════════════════════════════════════ */
-const HomeProjectCard = memo(({ project }) => {
-  const [imgError, setImgError] = useState(false)
-  return (
-    <Box sx={{ flex: '1 0 280px', minWidth: 280, borderRadius: 3, border: '1px solid #E5E7EB',
-               bgcolor: '#fff', overflow: 'hidden',
-               transition: 'transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease',
-               willChange: 'transform',
-               '&:hover': {
-                 transform: 'translateY(-5px)',
-                 boxShadow: '0 12px 36px rgba(255,122,0,0.14)', borderColor: '#FF7A00',
-                 '& .thumb-img': { transform: 'scale(1.1)', filter: 'brightness(0.68)' },
-                 '& .thumb-overlay': { bgcolor: 'rgba(0,0,0,0.40)' },
-                 '& .thumb-label': { opacity: 1, transform: 'translateY(0)' },
-               } }}>
-      <Box sx={{ position: 'relative', width: '100%', paddingTop: '56.25%', overflow: 'hidden' }}>
-        {imgError || !project.thumbnail_url ? (
-          <Box sx={{ position: 'absolute', inset: 0,
-                     background: 'linear-gradient(135deg, #FF7A00 0%, #F04438 100%)',
-                     display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography sx={{ color: '#fff', fontWeight: 700, opacity: 0.85, fontSize: '0.95rem', px: 2, textAlign: 'center' }}>
-              {project.title}
-            </Typography>
-          </Box>
-        ) : (
-          <Box component="img" src={project.thumbnail_url} alt={project.title}
-               className="thumb-img"
-               loading="lazy"
-               onError={() => setImgError(true)}
-               sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover',
-                     transition: 'transform 0.4s ease, filter 0.4s ease' }} />
-        )}
-        {/* 호버 오버레이 */}
-        <Box className="thumb-overlay" sx={{
-          position: 'absolute', inset: 0, zIndex: 1,
-          bgcolor: 'rgba(0,0,0,0)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          transition: 'background-color 0.35s ease',
-          pointerEvents: 'none',
-        }}>
-          <Typography className="thumb-label" sx={{
-            color: '#fff', fontWeight: 700, fontSize: '0.85rem',
-            opacity: 0, transform: 'translateY(6px)',
-            transition: 'opacity 0.3s ease, transform 0.3s ease',
-            letterSpacing: '0.06em',
-          }}>
-            자세히 보기 →
-          </Typography>
-        </Box>
-      </Box>
-      <Box sx={{ p: 2.5 }}>
-        <Typography sx={{ fontWeight: 700, fontSize: '1rem', mb: 1, color: '#111827', lineHeight: 1.4 }}>
-          {project.title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary"
-          sx={{ mb: 2, display: '-webkit-box', WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: 1.65 }}>
-          {project.description}
-        </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
-          {project.tech_stack?.slice(0, 3).map(tech => (
-            <Chip key={tech} label={tech} size="small"
-              sx={{ bgcolor: 'rgba(255,122,0,0.08)', color: '#FF7A00',
-                    fontWeight: 600, fontSize: '0.68rem', height: 22, borderRadius: 1 }} />
-          ))}
-        </Box>
-        {project.detail_url && (
-          <Button variant="outlined" size="small" startIcon={<LaunchIcon sx={{ fontSize: 13 }} />}
-            href={project.detail_url} target="_blank" rel="noopener noreferrer"
-            sx={{ fontSize: '0.78rem', py: 0.8 }}>
-            자세히 보기
-          </Button>
-        )}
-      </Box>
-    </Box>
-  )
-})
-
-const ProjectSkeleton = () => (
-  <Box sx={{ flex: '1 0 280px', minWidth: 280, borderRadius: 3, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-    <Skeleton variant="rectangular" sx={{ width: '100%', paddingTop: '56.25%' }} />
-    <Box sx={{ p: 2.5 }}>
-      <Skeleton variant="text" width="70%" height={22} sx={{ mb: 1 }} />
-      <Skeleton variant="text" /><Skeleton variant="text" width="85%" sx={{ mb: 2 }} />
-      <Box sx={{ display: 'flex', gap: 0.5, mb: 2 }}>
-        <Skeleton variant="rounded" width={48} height={22} />
-        <Skeleton variant="rounded" width={40} height={22} />
-      </Box>
-      <Skeleton variant="rounded" width={100} height={30} />
-    </Box>
-  </Box>
-)
 
 /* ════════════════════════════════════════
    공통 섹션 래퍼 / 레이블
@@ -680,6 +579,7 @@ const HomePage = () => {
                 component="img"
                 src={p.thumbnail}
                 alt={p.title}
+                loading="lazy"
                 sx={{
                   position: 'absolute', inset: 0,
                   width: '100%', height: '100%',

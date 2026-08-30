@@ -142,6 +142,7 @@ const ProjectCard = ({ project, onProcess }) => (
         component="img"
         src={project.thumbnail}
         alt={project.title}
+        loading="lazy"
         sx={{
           position: 'absolute', inset: 0,
           width: '100%', height: '100%',
