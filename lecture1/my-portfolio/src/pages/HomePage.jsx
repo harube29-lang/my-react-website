@@ -14,14 +14,21 @@ import thumbArchive  from '../assets/thumb_archive.png'
 import thumbParis    from '../assets/thumb_paris.png'
 import thumbNatuur   from '../assets/thumb_natuur.png'
 import thumbHospital from '../assets/thumb_hospital.png'
+import thumbNetflix  from '../assets/thumb_netflix.jpg'
 import ContactSection from '../components/Contact/ContactSection'
 import { usePortfolio, CATEGORY_COLORS } from '../context/PortfolioContext'
 
+const CATEGORY_COLORS_PROJECT = {
+  'WEB DESIGN':     '#9CA3AF',
+  'AI VIBE CODING': '#C4B5FD',
+}
+
 const HOME_PROJECTS = [
-  { id: 1, title: '아카이브 커피',    badge: '자체제작', thumbnail: thumbArchive  },
-  { id: 2, title: '파리크라상',       badge: '리디자인', thumbnail: thumbParis    },
-  { id: 3, title: '나뚜루',           badge: '리디자인', thumbnail: thumbNatuur   },
-  { id: 4, title: '울산대학교병원',   badge: '리디자인', thumbnail: thumbHospital },
+  { id: 1, title: '아카이브 커피',       category: 'WEB DESIGN',     badge: '자체제작', thumbnail: thumbArchive  },
+  { id: 2, title: '파리크라상',          category: 'WEB DESIGN',     badge: '리디자인', thumbnail: thumbParis    },
+  { id: 3, title: '나뚜루',              category: 'WEB DESIGN',     badge: '리디자인', thumbnail: thumbNatuur   },
+  { id: 4, title: '울산대학교병원',      category: 'WEB DESIGN',     badge: '리디자인', thumbnail: thumbHospital },
+  { id: 5, title: '넷플릭스 스타일 OTT', category: 'AI VIBE CODING', badge: '자체제작', thumbnail: thumbNetflix  },
 ]
 
 /* ════════════════════════════════════════
@@ -34,6 +41,10 @@ const fadeUp = keyframes`
 const fadeIn = keyframes`
   from { opacity: 0; }
   to   { opacity: 1; }
+`
+const fadeInFaint = keyframes`
+  from { opacity: 0;    }
+  to   { opacity: 0.06; }
 `
 const bounceY = keyframes`
   0%, 100% { transform: translateY(0); }
@@ -168,12 +179,11 @@ const HomePage = () => {
               fontSize: { xs: '15vw', sm: '15vw', md: '14.5vw' },
               fontWeight: 900,
               color: '#111827',
-              opacity: 0.06,
               whiteSpace: 'nowrap',
               letterSpacing: '-0.02em',
               lineHeight: 1,
               flexShrink: 0,
-              animation: `${fadeIn} 1.2s ease both`,
+              animation: `${fadeInFaint} 1.2s ease both`,
             }}
           >
             HYE KYOUNG
@@ -587,18 +597,28 @@ const HomePage = () => {
                   transition: 'transform 0.4s ease',
                 }}
               />
-              {/* 호버 오버레이 */}
+              {/* 오버레이 — 모바일(터치)은 항상 노출, sm 이상은 호버 시에만 */}
               <Box
                 className="thumb-overlay"
                 sx={{
                   position: 'absolute', inset: 0,
-                  bgcolor: 'rgba(0,0,0,0.45)',
+                  background: { xs: 'linear-gradient(to top, rgba(0,0,0,0.65), rgba(0,0,0,0.05) 60%)', sm: 'rgba(0,0,0,0.45)' },
                   display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', justifyContent: 'center',
-                  opacity: 0,
+                  alignItems: { xs: 'flex-start', sm: 'center' },
+                  justifyContent: { xs: 'flex-end', sm: 'center' },
+                  p: { xs: 2, sm: 0 },
+                  opacity: { xs: 1, sm: 0 },
                   transition: 'opacity 0.3s ease',
                 }}
               >
+                <Typography
+                  sx={{
+                    color: CATEGORY_COLORS_PROJECT[p.category], fontSize: '0.66rem', fontWeight: 700,
+                    letterSpacing: '0.14em', textTransform: 'uppercase', mb: 0.8,
+                  }}
+                >
+                  {p.category}
+                </Typography>
                 <Box
                   sx={{
                     px: 1.4, py: 0.4, borderRadius: 1,

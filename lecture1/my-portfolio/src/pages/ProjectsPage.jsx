@@ -11,12 +11,21 @@ import thumbArchive  from '../assets/thumb_archive.png'
 import thumbParis    from '../assets/thumb_paris.png'
 import thumbNatuur   from '../assets/thumb_natuur.png'
 import thumbHospital from '../assets/thumb_hospital.png'
+import thumbNetflix  from '../assets/thumb_netflix.jpg'
+
+/* ── 카테고리 스타일 ── */
+const CATEGORY_STYLES = {
+  'WEB DESIGN':     { color: '#6B7280', bg: 'rgba(107,114,128,0.08)' },
+  'AI VIBE CODING': { color: '#7C3AED', bg: 'rgba(124,58,237,0.09)' },
+}
+const CATEGORY_ORDER = ['WEB DESIGN', 'AI VIBE CODING']
 
 /* ── 프로젝트 데이터 ── */
 const PROJECTS = [
   {
     id: 1,
     title: '아카이브 커피',
+    category: 'WEB DESIGN',
     badge: '자체제작',
     description:
       '원두 구매 및 납품 신청, 맞춤 컨설팅 문의 과정을 직관적인 동선으로 구현한 커피 비즈니스 사이트를 자체 제작해봤습니다.',
@@ -27,6 +36,7 @@ const PROJECTS = [
   {
     id: 2,
     title: '파리크라상',
+    category: 'WEB DESIGN',
     badge: '리디자인',
     description:
       '업데이트가 오래되지 않았던 파리크라상 웹사이트를 2026년 트렌드에 맞춰 리디자인했습니다. 브랜드 컬러는 유지하고, 여백과 카드 UI를 재구성하여 보다 깔끔하고 직관적인 사용자 경험을 제공하도록 개선했습니다.',
@@ -37,6 +47,7 @@ const PROJECTS = [
   {
     id: 3,
     title: '나뚜루',
+    category: 'WEB DESIGN',
     badge: '리디자인',
     description:
       '스토어 중심 판매 구조에서 벗어나 브랜드 스토리를 전달하고자 여백과 자연 친화적 감성을 담은 웹사이트를 새롭게 기획했습니다. 기존의 올드한 디자인을 개선하고 따뜻하고 여유로운 레이아웃을 적용해 편안한 사용자 경험을 제공합니다.',
@@ -47,12 +58,24 @@ const PROJECTS = [
   {
     id: 4,
     title: '울산대학교병원',
+    category: 'WEB DESIGN',
     badge: '리디자인',
     description:
       '지역 유일 상급종합병원의 전문성과 첨단 의료 기술을 사용자 중심의 간결하고 정돈된 인터페이스로 재구성한 웹 리디자인 프로젝트입니다. 환자들이 복잡한 절차 없이 빠르게 진료 정보와 예약 시스템을 이용할 수 있도록 UX/UI를 개선했습니다.',
     thumbnail: thumbHospital,
     processUrl: '',
     siteUrl: 'https://www.uuh.ulsan.kr/kr/',
+  },
+  {
+    id: 5,
+    title: '넷플릭스 스타일 OTT',
+    category: 'AI VIBE CODING',
+    badge: '자체제작',
+    description:
+      '넷플릭스를 벤치마킹해 OTT 콘텐츠 소개 랜딩페이지를 직접 기획하고 제작했습니다. 다크 테마 기반의 몰입감 있는 히어로 배너와 카테고리별 콘텐츠 탐색 구조로, 실제 OTT 서비스와 가까운 사용자 경험을 구현하는 데 집중했습니다.',
+    thumbnail: thumbNetflix,
+    processUrl: '',
+    siteUrl: 'https://harube29-lang.github.io/home-ott/',
   },
 ]
 
@@ -87,6 +110,15 @@ const ProcessModal = ({ project, onClose }) => {
         </IconButton>
       </Box>
       <DialogContent sx={{ p: { xs: 3, md: 4 } }}>
+        <Typography
+          sx={{
+            fontSize: '0.68rem', fontWeight: 700,
+            color: CATEGORY_STYLES[project.category]?.color,
+            letterSpacing: '0.14em', textTransform: 'uppercase', mb: 1,
+          }}
+        >
+          {project.category}
+        </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
           <Typography variant="h6" sx={{ fontWeight: 700, color: '#111827' }}>
             {project.title}
@@ -244,6 +276,12 @@ const ProjectCard = ({ project, onProcess }) => (
 const ProjectsPage = () => {
   const [selected, setSelected] = useState(null)
 
+  const groupedProjects = CATEGORY_ORDER.reduce((acc, category) => {
+    const items = PROJECTS.filter(p => p.category === category)
+    if (items.length) acc.push({ category, items })
+    return acc
+  }, [])
+
   return (
     <Box sx={{ maxWidth: 1100, mx: 'auto', px: { xs: 2, sm: 4, md: 6 }, py: { xs: 6, sm: 8, md: 12 } }}>
 
@@ -258,22 +296,49 @@ const ProjectsPage = () => {
         작업물
       </Typography>
       <Box sx={{ width: 48, height: 3, background: 'linear-gradient(90deg, #FF7A00, #F04438)', borderRadius: 1, mb: 2 }} />
-      <Typography variant="body1" color="text.secondary" sx={{ mb: { xs: 5, md: 7 }, wordBreak: 'keep-all' }}>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: { xs: 6, md: 8 }, wordBreak: 'keep-all' }}>
         직접 기획하고 디자인한 작업물들을 소개합니다.
       </Typography>
 
-      {/* 2열 그리드 */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
-          gap: { xs: 3, md: 4 },
-        }}
-      >
-        {PROJECTS.map(project => (
-          <ProjectCard key={project.id} project={project} onProcess={setSelected} />
-        ))}
-      </Box>
+      {/* 카테고리별 섹션 */}
+      {groupedProjects.map(({ category, items }, i) => {
+        const style = CATEGORY_STYLES[category]
+        return (
+          <Box
+            key={category}
+            component="section"
+            aria-label={`${category} 카테고리`}
+            sx={{
+              pt: i > 0 ? { xs: 6, md: 8 } : 0,
+              mt: i > 0 ? { xs: 6, md: 8 } : 0,
+              borderTop: i > 0 ? '1px solid #E5E7EB' : 'none',
+              mb: { xs: 7, md: 9 },
+            }}
+          >
+            {/* 섹션 헤더 */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: { xs: 3, md: 4 } }}>
+              <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: style.color }} aria-hidden="true" />
+              <Typography sx={{ fontSize: { xs: '0.85rem', md: '0.9rem' }, fontWeight: 700, color: style.color, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                {category}
+              </Typography>
+              <Box sx={{ flex: 1, height: '1px', bgcolor: '#F3F4F6' }} />
+            </Box>
+
+            {/* 2열 그리드 */}
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+                gap: { xs: 3, md: 4 },
+              }}
+            >
+              {items.map(project => (
+                <ProjectCard key={project.id} project={project} onProcess={setSelected} />
+              ))}
+            </Box>
+          </Box>
+        )
+      })}
 
       {/* 모달 */}
       <ProcessModal project={selected} onClose={() => setSelected(null)} />

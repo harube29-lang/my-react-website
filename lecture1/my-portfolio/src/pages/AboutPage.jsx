@@ -150,7 +150,7 @@ const SkillBar = memo(({ skill, animated, delay, onLevelChange }) => {
               aria-label={editing ? '레벨 저장' : `${skill.name} 레벨 편집`}
               sx={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: 20, height: 20, border: 'none', borderRadius: '4px',
+                width: { xs: 40, sm: 20 }, height: { xs: 40, sm: 20 }, border: 'none', borderRadius: '4px',
                 bgcolor: editing ? alpha(color, 0.12) : 'transparent',
                 cursor: 'pointer', color: editing ? color : '#D1D5DB',
                 transition: 'all 0.2s', p: 0,
@@ -506,7 +506,7 @@ const AboutPage = () => {
                             aria-label={`${skill.name} 추가`}
                             sx={{
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              width: 28, height: 28, borderRadius: '50%',
+                              width: { xs: 40, sm: 28 }, height: { xs: 40, sm: 28 }, borderRadius: '50%',
                               border: '1px solid #E5E7EB', bgcolor: 'transparent', cursor: 'pointer',
                               color: '#9CA3AF', transition: 'all 0.2s',
                               '&:hover': { borderColor: color, color, bgcolor: alpha(color, 0.06) },
@@ -545,9 +545,9 @@ const AboutPage = () => {
                               onClick={() => removeSkill(skill.id)}
                               aria-label={`${skill.name} 제거`}
                               sx={{
-                                display: 'flex', alignItems: 'center', ml: 0.5,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', ml: 0.5,
                                 border: 'none', bgcolor: 'transparent', cursor: 'pointer',
-                                color: alpha(color, 0.5), p: 0, fontSize: '0.8rem',
+                                color: alpha(color, 0.5), p: { xs: 0.8, sm: 0 }, fontSize: '0.8rem',
                                 '&:hover': { color },
                                 '&:focus-visible': { outline: `2px solid ${color}`, outlineOffset: 2 },
                               }}>
