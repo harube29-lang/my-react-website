@@ -613,6 +613,9 @@ const AboutPage = () => {
               value={tab}
               onChange={handleTabChange}
               textColor="inherit"
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
               aria-label="나의 이야기 섹션 탭"
               sx={{
                 minHeight: 'auto',
