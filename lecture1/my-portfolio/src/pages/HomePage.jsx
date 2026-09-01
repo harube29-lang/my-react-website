@@ -439,7 +439,7 @@ const HomePage = () => {
         {/* 헤더 + 프로필 카드 */}
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' },
                    alignItems: { xs: 'flex-start', md: 'center' }, gap: { xs: 5, md: 10 }, mb: { xs: 7, md: 9 } }}>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Box sx={{ flex: 1, minWidth: 0, order: { xs: 2, md: 1 } }}>
             <Label>About Me</Label>
             <Typography variant="h2"
               sx={{ fontSize: { xs: '1.6rem', sm: '2rem', md: '2.25rem' }, mb: 1.5, wordBreak: 'keep-all' }}>
@@ -484,7 +484,7 @@ const HomePage = () => {
           </Box>
 
           {/* 프로필 카드 */}
-          <Box sx={{ flexShrink: 0, display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' } }}>
+          <Box sx={{ flexShrink: 0, display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, order: { xs: 1, md: 2 } }}>
             <Box sx={{ border: '1px solid #F3F4F6', borderRadius: 3, overflow: 'hidden', width: { xs: 180, md: 220 }, boxShadow: '0 4px 20px rgba(0,0,0,0.07)' }}>
               <Box component="img" src={profileImg} alt={`${basicInfo.name} 프로필`}
                 sx={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', display: 'block' }} />

@@ -306,7 +306,7 @@ const AboutPage = () => {
           }}
         >
           {/* ── 좌측 60% ── */}
-          <Box sx={{ flex: 3, minWidth: 0 }}>
+          <Box sx={{ flex: 3, minWidth: 0, order: { xs: 2, md: 1 } }}>
             <Typography variant="caption"
               sx={{ color: '#FF7A00', fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', fontSize: '0.72rem', display: 'block', mb: 2.5 }}>
               About Me
@@ -370,6 +370,7 @@ const AboutPage = () => {
               alignItems: 'center',
               alignSelf: { xs: 'center', md: 'stretch' },
               minHeight: { xs: 300, md: 400 },
+              order: { xs: 1, md: 2 },
             }}
           >
             {/* 배경 대형 타이포그래피 */}
