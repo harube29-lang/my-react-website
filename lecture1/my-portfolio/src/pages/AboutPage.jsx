@@ -250,6 +250,10 @@ const AboutPage = () => {
 
   const { skills, sections, addSkill, removeSkill, updateSkillLevel } = usePortfolio()
 
+  /* 수상 및 활동은 히어로 영역에 바로 노출 — '이야기' 탭 목록에서는 제외 */
+  const awardsSection = sections.find(s => s.id === 'awards')
+  const storySections = sections.filter(s => s.id !== 'awards')
+
   /* 스크롤 진입 시 프로그레스 바 애니메이션 */
   useEffect(() => {
     const el = skillsRef.current
@@ -347,6 +351,13 @@ const AboutPage = () => {
               <InfoTag icon={SchoolIcon} label={`${BASIC_INFO.education} · ${BASIC_INFO.major}`} />
               <InfoTag icon={WorkOutlineIcon} label={BASIC_INFO.experience} />
             </Box>
+
+            {/* 수상 및 활동 */}
+            {awardsSection && (
+              <Box sx={{ mt: 4 }}>
+                <AwardsList groups={awardsSection.groups} />
+              </Box>
+            )}
           </Box>
 
           {/* ── 우측 40% — 비주얼 영역 ── */}
@@ -629,7 +640,7 @@ const AboutPage = () => {
                 },
               }}
             >
-              {sections.map((s, i) => (
+              {storySections.map((s, i) => (
                 <Tab
                   key={s.id}
                   label={s.title}
@@ -641,19 +652,15 @@ const AboutPage = () => {
             </Tabs>
           </Box>
 
-          {sections.map((s, i) => (
+          {storySections.map((s, i) => (
             <TabPanel key={s.id} value={tab} index={i}>
-              {s.groups ? (
-                <AwardsList groups={s.groups} />
-              ) : (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 720 }}>
-                  {s.content.map((para, pi) => (
-                    <Typography key={pi} sx={{ color: '#374151', lineHeight: 1.9, fontSize: { xs: '0.9rem', md: '0.975rem' }, letterSpacing: '-0.005em', wordBreak: 'keep-all' }}>
-                      <Highlight text={para} />
-                    </Typography>
-                  ))}
-                </Box>
-              )}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 720 }}>
+                {s.content.map((para, pi) => (
+                  <Typography key={pi} sx={{ color: '#374151', lineHeight: 1.9, fontSize: { xs: '0.9rem', md: '0.975rem' }, letterSpacing: '-0.005em', wordBreak: 'keep-all' }}>
+                    <Highlight text={para} />
+                  </Typography>
+                ))}
+              </Box>
             </TabPanel>
           ))}
         </Box>
