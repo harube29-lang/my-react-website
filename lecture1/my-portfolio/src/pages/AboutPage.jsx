@@ -403,8 +403,8 @@ const AboutPage = () => {
               sx={{
                 position: 'relative',
                 zIndex: 1,
-                width: { xs: 260, sm: 320, md: 380 },
-                height: { xs: 320, sm: 400, md: 480 },
+                width: { xs: 221, sm: 272, md: 323 },
+                height: { xs: 272, sm: 340, md: 408 },
                 borderRadius: '16px',
                 overflow: 'hidden',
                 border: '2px solid rgba(255,122,0,0.18)',
