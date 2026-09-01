@@ -65,6 +65,36 @@ const TabPanel = ({ children, value, index }) => (
 )
 
 /* ════════════════════════════════════════
+   수상 및 활동 리스트 (Skills 섹션의 점+라벨 패턴 재사용)
+════════════════════════════════════════ */
+const AwardsList = memo(({ groups }) => (
+  <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 5, md: 6 }, maxWidth: 560 }}>
+    {groups.map((group) => (
+      <Box key={group.label}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 2.5 }}>
+          <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: '#FF7A00' }} aria-hidden="true" />
+          <Typography sx={{ fontSize: '0.72rem', fontWeight: 700, color: '#FF7A00', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            {group.label}
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.75 }}>
+          {group.items.map((item, i) => (
+            <Box key={i} sx={{ display: 'flex', gap: 2, alignItems: 'baseline' }}>
+              <Typography sx={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827', minWidth: 40, fontVariantNumeric: 'tabular-nums' }}>
+                {item.year}
+              </Typography>
+              <Typography sx={{ color: '#374151', fontSize: { xs: '0.88rem', md: '0.95rem' }, lineHeight: 1.7, wordBreak: 'keep-all' }}>
+                {item.text}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+    ))}
+  </Box>
+))
+
+/* ════════════════════════════════════════
    정보 태그
 ════════════════════════════════════════ */
 const InfoTag = memo(({ icon: Icon, label }) => (
@@ -610,13 +640,17 @@ const AboutPage = () => {
 
           {sections.map((s, i) => (
             <TabPanel key={s.id} value={tab} index={i}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 720 }}>
-                {s.content.map((para, pi) => (
-                  <Typography key={pi} sx={{ color: '#374151', lineHeight: 1.9, fontSize: { xs: '0.9rem', md: '0.975rem' }, letterSpacing: '-0.005em', wordBreak: 'keep-all' }}>
-                    <Highlight text={para} />
-                  </Typography>
-                ))}
-              </Box>
+              {s.groups ? (
+                <AwardsList groups={s.groups} />
+              ) : (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 720 }}>
+                  {s.content.map((para, pi) => (
+                    <Typography key={pi} sx={{ color: '#374151', lineHeight: 1.9, fontSize: { xs: '0.9rem', md: '0.975rem' }, letterSpacing: '-0.005em', wordBreak: 'keep-all' }}>
+                      <Highlight text={para} />
+                    </Typography>
+                  ))}
+                </Box>
+              )}
             </TabPanel>
           ))}
         </Box>
