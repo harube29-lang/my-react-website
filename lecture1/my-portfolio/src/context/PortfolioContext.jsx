@@ -4,7 +4,7 @@ import {
   SiVuedotjs, SiTypescript, SiAngular,
   SiNodedotjs, SiPython, SiGit, SiMongodb,
 } from 'react-icons/si'
-import profileImg from '../assets/profile.jpg'
+import profileImg from '../assets/profile.png'
 
 /* ════════════════════════════════════════
    카테고리 색상 (외부에서도 사용)
