@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import NavBar from './components/NavBar/NavBar'
+import ScrollToTop from './components/ScrollToTop'
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import ProjectsPage from './pages/ProjectsPage'
@@ -11,6 +12,7 @@ const App = () => {
   return (
     <PortfolioProvider>
       <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <ScrollToTop />
         <NavBar />
         <Box component="main" sx={{ flex: 1 }}>
           <Routes>

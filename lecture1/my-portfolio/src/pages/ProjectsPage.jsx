@@ -12,6 +12,7 @@ import thumbParis    from '../assets/thumb_paris.png'
 import thumbNatuur   from '../assets/thumb_natuur.png'
 import thumbHospital from '../assets/thumb_hospital.png'
 import thumbNetflix  from '../assets/thumb_netflix.jpg'
+import processArchive from '../assets/process_archive.png'
 
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
@@ -30,6 +31,7 @@ const PROJECTS = [
     description:
       '원두 구매 및 납품 신청, 맞춤 컨설팅 문의 과정을 직관적인 동선으로 구현한 커피 비즈니스 사이트를 자체 제작해봤습니다.',
     thumbnail: thumbArchive,
+    processImage: processArchive,
     processUrl: '',
     siteUrl: '',
   },
@@ -88,55 +90,67 @@ const ProcessModal = ({ project, onClose }) => {
       onClose={onClose}
       maxWidth="md"
       fullWidth
-      PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden' } }}
+      PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden', position: 'relative' } }}
     >
-      <Box sx={{ position: 'relative' }}>
-        <Box
-          component="img"
-          src={project.thumbnail}
-          alt={project.title}
-          sx={{ width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block' }}
-        />
-        <IconButton
-          onClick={onClose}
-          size="small"
-          sx={{
-            position: 'absolute', top: 12, right: 12,
-            bgcolor: 'rgba(0,0,0,0.45)', color: '#fff',
-            '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
-          }}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </Box>
-      <DialogContent sx={{ p: { xs: 3, md: 4 } }}>
-        <Typography
-          sx={{
-            fontSize: '0.68rem', fontWeight: 700,
-            color: CATEGORY_STYLES[project.category]?.color,
-            letterSpacing: '0.14em', textTransform: 'uppercase', mb: 1,
-          }}
-        >
-          {project.category}
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 700, color: '#111827' }}>
-            {project.title}
-          </Typography>
+      <IconButton
+        onClick={onClose}
+        size="small"
+        sx={{
+          position: 'absolute', top: 12, right: 12, zIndex: 1,
+          bgcolor: 'rgba(0,0,0,0.45)', color: '#fff',
+          '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
+        }}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+
+      <DialogContent sx={{ p: 0, maxHeight: '85vh', overflowY: 'auto' }}>
+        {project.processImage ? (
           <Box
-            sx={{
-              px: 1.2, py: 0.3, borderRadius: 1,
-              bgcolor: 'rgba(255,122,0,0.1)',
-              color: 'primary.main',
-              fontSize: '0.72rem', fontWeight: 700,
-            }}
-          >
-            {project.badge}
-          </Box>
-        </Box>
-        <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.9 }}>
-          {project.description}
-        </Typography>
+            component="img"
+            src={project.processImage}
+            alt={`${project.title} 작업과정`}
+            sx={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        ) : (
+          <>
+            <Box
+              component="img"
+              src={project.thumbnail}
+              alt={project.title}
+              sx={{ width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block' }}
+            />
+            <Box sx={{ p: { xs: 3, md: 4 } }}>
+              <Typography
+                sx={{
+                  fontSize: '0.68rem', fontWeight: 700,
+                  color: CATEGORY_STYLES[project.category]?.color,
+                  letterSpacing: '0.14em', textTransform: 'uppercase', mb: 1,
+                }}
+              >
+                {project.category}
+              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: 700, color: '#111827' }}>
+                  {project.title}
+                </Typography>
+                <Box
+                  sx={{
+                    px: 1.2, py: 0.3, borderRadius: 1,
+                    bgcolor: 'rgba(255,122,0,0.1)',
+                    color: 'primary.main',
+                    fontSize: '0.72rem', fontWeight: 700,
+                  }}
+                >
+                  {project.badge}
+                </Box>
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.9 }}>
+                {project.description}
+              </Typography>
+            </Box>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   )
