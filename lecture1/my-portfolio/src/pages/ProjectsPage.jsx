@@ -6,6 +6,8 @@ import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 
 import thumbArchive  from '../assets/thumb_archive.png'
 import thumbParis    from '../assets/thumb_paris.png'
@@ -83,6 +85,8 @@ const PROJECTS = [
 
 /* ── 작업과정 모달 ── */
 const ProcessModal = ({ project, onClose }) => {
+  const theme = useTheme()
+  const fullScreenMobile = useMediaQuery(theme.breakpoints.down('sm'))
   if (!project) return null
   return (
     <Dialog
@@ -90,7 +94,8 @@ const ProcessModal = ({ project, onClose }) => {
       onClose={onClose}
       maxWidth="md"
       fullWidth
-      PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden', position: 'relative', m: { xs: 1, sm: 4 } } }}
+      fullScreen={fullScreenMobile}
+      PaperProps={{ sx: { borderRadius: { xs: 0, sm: 3 }, overflow: 'hidden', position: 'relative' } }}
     >
       <IconButton
         onClick={onClose}
@@ -104,7 +109,7 @@ const ProcessModal = ({ project, onClose }) => {
         <CloseIcon fontSize="small" />
       </IconButton>
 
-      <DialogContent sx={{ p: 0, maxHeight: '85vh', overflowY: 'auto' }}>
+      <DialogContent sx={{ p: 0, maxHeight: { xs: '100%', sm: '85vh' }, overflowY: 'auto' }}>
         {project.processImage ? (
           <Box
             component="img"
@@ -228,10 +233,10 @@ const ProjectCard = ({ project, onProcess }) => (
           lineHeight: 1.75,
           mb: 3,
           flex: 1,
-          display: '-webkit-box',
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
+          display: { xs: 'block', sm: '-webkit-box' },
+          WebkitLineClamp: { sm: 3 },
+          WebkitBoxOrient: { sm: 'vertical' },
+          overflow: { xs: 'visible', sm: 'hidden' },
         }}
       >
         {project.description}
