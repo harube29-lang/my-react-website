@@ -44,7 +44,7 @@ const PROJECTS = [
       '업데이트가 오래되지 않았던 파리크라상 웹사이트를 2026년 트렌드에 맞춰 리디자인했습니다. 브랜드 컬러는 유지하고, 여백과 카드 UI를 재구성하여 보다 깔끔하고 직관적인 사용자 경험을 제공하도록 개선했습니다.',
     thumbnail: thumbParis,
     processUrl: '',
-    siteUrl: 'https://pariscroissantorder.com/?NaPm=ct%3Dmteqtvvw%7Cci%3DER9321ff32%2Da3db%2D11f1%2Db0a7%2D26f8b4717d36%7Ctr%3Dbrnd%7Chk%3D9612168a613296362102bd449b98410415c9c753%7Cnacn%3DdApsB0w7fawmA',
+    siteUrl: 'https://pariscroissantorder.com/?NaPm=ct%3Dmtkg0pl9%7Cci%3DER0068d3d8%2Da6fe%2D11f1%2Db668%2D3eb4e95f5b38%7Ctr%3Dbrnd%7Chk%3Deb7824475665f67825b0dfd295ef3be1d3cdd402%7Cnacn%3DdApsB0w7fawmA',
   },
   {
     id: 3,
@@ -90,7 +90,7 @@ const ProcessModal = ({ project, onClose }) => {
       onClose={onClose}
       maxWidth="md"
       fullWidth
-      PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden', position: 'relative' } }}
+      PaperProps={{ sx: { borderRadius: 3, overflow: 'hidden', position: 'relative', m: { xs: 1, sm: 4 } } }}
     >
       <IconButton
         onClick={onClose}
