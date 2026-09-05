@@ -15,6 +15,7 @@ import thumbNatuur   from '../assets/thumb_natuur.png'
 import thumbHospital from '../assets/thumb_hospital.png'
 import thumbNetflix  from '../assets/thumb_netflix.jpg'
 import processArchive from '../assets/process_archive.png'
+import processParis   from '../assets/process_paris.png'
 
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
@@ -45,6 +46,7 @@ const PROJECTS = [
     description:
       '업데이트가 오래되지 않았던 파리크라상 웹사이트를 2026년 트렌드에 맞춰 리디자인했습니다. 브랜드 컬러는 유지하고, 여백과 카드 UI를 재구성하여 보다 깔끔하고 직관적인 사용자 경험을 제공하도록 개선했습니다.',
     thumbnail: thumbParis,
+    processImage: processParis,
     processUrl: '',
     siteUrl: 'https://pariscroissantorder.com/?NaPm=ct%3Dmtkg0pl9%7Cci%3DER0068d3d8%2Da6fe%2D11f1%2Db668%2D3eb4e95f5b38%7Ctr%3Dbrnd%7Chk%3Deb7824475665f67825b0dfd295ef3be1d3cdd402%7Cnacn%3DdApsB0w7fawmA',
   },
