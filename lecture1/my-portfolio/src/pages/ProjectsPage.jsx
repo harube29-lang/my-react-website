@@ -16,6 +16,7 @@ import thumbHospital from '../assets/thumb_hospital.png'
 import thumbNetflix  from '../assets/thumb_netflix.jpg'
 import processArchive from '../assets/process_archive.png'
 import processParis   from '../assets/process_paris.png'
+import processNatuur  from '../assets/process_natuur.png'
 
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
@@ -58,6 +59,7 @@ const PROJECTS = [
     description:
       '스토어 중심 판매 구조에서 벗어나 브랜드 스토리를 전달하고자 여백과 자연 친화적 감성을 담은 웹사이트를 새롭게 기획했습니다. 기존의 올드한 디자인을 개선하고 따뜻하고 여유로운 레이아웃을 적용해 편안한 사용자 경험을 제공합니다.',
     thumbnail: thumbNatuur,
+    processImage: processNatuur,
     processUrl: '',
     siteUrl: '',
   },
