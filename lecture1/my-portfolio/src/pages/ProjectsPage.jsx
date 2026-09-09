@@ -17,6 +17,7 @@ import thumbNetflix  from '../assets/thumb_netflix.jpg'
 import processArchive from '../assets/process_archive.png'
 import processParis   from '../assets/process_paris.png'
 import processNatuur  from '../assets/process_natuur.png'
+import processHospital from '../assets/process_hospital.png'
 
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
@@ -71,6 +72,7 @@ const PROJECTS = [
     description:
       '지역 유일 상급종합병원의 전문성과 첨단 의료 기술을 사용자 중심의 간결하고 정돈된 인터페이스로 재구성한 웹 리디자인 프로젝트입니다. 환자들이 복잡한 절차 없이 빠르게 진료 정보와 예약 시스템을 이용할 수 있도록 UX/UI를 개선했습니다.',
     thumbnail: thumbHospital,
+    processImage: processHospital,
     processUrl: '',
     siteUrl: 'https://www.uuh.ulsan.kr/kr/',
   },
