@@ -49,13 +49,14 @@ const ContactInfo = () => (
       </Box>
     </Box>
 
-    {/* 인스타그램 */}
+    {/* 인스타그램 — 실제 계정 URL 준비되면 다시 노출 예정 */}
     <Box
       component="a"
       href="https://www.instagram.com/"
       target="_blank"
       rel="noopener noreferrer"
       sx={{
+        display: 'none',
         flex: '0 1 auto',
         display: 'flex',
         alignItems: 'center',

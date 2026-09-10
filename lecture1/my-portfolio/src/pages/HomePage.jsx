@@ -373,8 +373,8 @@ const HomePage = () => {
                 </Button>
               </Box>
 
-              {/* 소셜 아이콘 */}
-              <Box sx={{ display: 'flex', gap: { xs: 1.5, md: 1.2 } }}>
+              {/* 소셜 아이콘 — 실제 프로필 URL 준비되면 다시 노출 예정 */}
+              <Box sx={{ display: 'none', gap: { xs: 1.5, md: 1.2 } }}>
                 <IconButton
                   href="https://github.com/harube29-lang"
                   target="_blank" rel="noopener noreferrer"
