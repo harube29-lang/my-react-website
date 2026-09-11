@@ -1,6 +1,13 @@
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 
 import thumbArchive  from '../assets/thumb_archive.png'
 import thumbParis    from '../assets/thumb_paris.png'
@@ -69,8 +76,75 @@ const PROJECTS = [
   },
 ]
 
+/* ── 작업내용 모달 (기존 사이트가 없는 프로젝트용) ── */
+const DetailModal = ({ project, onClose }) => {
+  const theme = useTheme()
+  const fullScreenMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  if (!project) return null
+  return (
+    <Dialog
+      open={!!project}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      fullScreen={fullScreenMobile}
+      PaperProps={{ sx: { borderRadius: { xs: 0, sm: 3 }, overflow: 'hidden', position: 'relative' } }}
+    >
+      <IconButton
+        onClick={onClose}
+        size="small"
+        sx={{
+          position: 'absolute', top: 12, right: 12, zIndex: 1,
+          bgcolor: 'rgba(0,0,0,0.45)', color: '#fff',
+          '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
+        }}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+
+      <DialogContent sx={{ p: 0, maxHeight: { xs: '100%', sm: '85vh' }, overflowY: 'auto' }}>
+        <Box
+          component="img"
+          src={project.thumbnail}
+          alt={project.title}
+          sx={{ width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block' }}
+        />
+        <Box sx={{ p: { xs: 3, md: 4 } }}>
+          <Typography
+            sx={{
+              fontSize: '0.68rem', fontWeight: 700,
+              color: CATEGORY_STYLES[project.category]?.color,
+              letterSpacing: '0.14em', textTransform: 'uppercase', mb: 1,
+            }}
+          >
+            {project.category}
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: '#111827' }}>
+              {project.title}
+            </Typography>
+            <Box
+              sx={{
+                px: 1.2, py: 0.3, borderRadius: 1,
+                bgcolor: 'rgba(255,122,0,0.1)',
+                color: 'primary.main',
+                fontSize: '0.72rem', fontWeight: 700,
+              }}
+            >
+              {project.badge}
+            </Box>
+          </Box>
+          <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.9 }}>
+            {project.description}
+          </Typography>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 /* ── 프로젝트 카드 ── */
-const ProjectCard = ({ project }) => (
+const ProjectCard = ({ project, onView }) => (
   <Box
     sx={{
       display: 'flex',
@@ -152,28 +226,26 @@ const ProjectCard = ({ project }) => (
 
       {/* 버튼 영역 */}
       <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-        {project.siteUrl && (
-          <Button
-            variant="outlined"
-            size="small"
-            href={project.siteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              borderColor: '#E5E7EB',
-              color: '#6B7280',
-              fontWeight: 600,
-              fontSize: '0.8rem',
-              borderRadius: 2,
-              px: 2.2,
-              py: 0.9,
-              textTransform: 'none',
-              '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
-            }}
-          >
-            작업내용 보기
-          </Button>
-        )}
+        <Button
+          variant="outlined"
+          size="small"
+          {...(project.siteUrl
+            ? { href: project.siteUrl, target: '_blank', rel: 'noopener noreferrer' }
+            : { onClick: () => onView(project) })}
+          sx={{
+            borderColor: '#E5E7EB',
+            color: '#6B7280',
+            fontWeight: 600,
+            fontSize: '0.8rem',
+            borderRadius: 2,
+            px: 2.2,
+            py: 0.9,
+            textTransform: 'none',
+            '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
+          }}
+        >
+          작업내용 보기
+        </Button>
       </Box>
     </Box>
   </Box>
@@ -181,6 +253,8 @@ const ProjectCard = ({ project }) => (
 
 /* ── 메인 페이지 ── */
 const ProjectsPage = () => {
+  const [selected, setSelected] = useState(null)
+
   const groupedProjects = CATEGORY_ORDER.reduce((acc, category) => {
     const items = PROJECTS.filter(p => p.category === category)
     if (items.length) acc.push({ category, items })
@@ -238,12 +312,15 @@ const ProjectsPage = () => {
               }}
             >
               {items.map(project => (
-                <ProjectCard key={project.id} project={project} />
+                <ProjectCard key={project.id} project={project} onView={setSelected} />
               ))}
             </Box>
           </Box>
         )
       })}
+
+      {/* 작업내용 모달 */}
+      <DetailModal project={selected} onClose={() => setSelected(null)} />
 
     </Box>
   )
