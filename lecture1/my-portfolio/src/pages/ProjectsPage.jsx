@@ -15,6 +15,11 @@ import thumbNatuur   from '../assets/thumb_natuur.png'
 import thumbHospital from '../assets/thumb_hospital.png'
 import thumbNetflix  from '../assets/thumb_netflix.jpg'
 
+import detailArchive  from '../assets/detail_archive.png'
+import detailParis    from '../assets/detail_paris.png'
+import detailNatuur   from '../assets/detail_natuur.png'
+import detailHospital from '../assets/detail_hospital.png'
+
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
   'WEB DESIGN':     { color: '#6B7280', bg: 'rgba(107,114,128,0.08)' },
@@ -32,6 +37,7 @@ const PROJECTS = [
     description:
       '원두 구매 및 납품 신청, 맞춤 컨설팅 문의 과정을 직관적인 동선으로 구현한 커피 비즈니스 사이트를 자체 제작해봤습니다.',
     thumbnail: thumbArchive,
+    detailImage: detailArchive,
     siteUrl: '',
   },
   {
@@ -42,7 +48,8 @@ const PROJECTS = [
     description:
       '업데이트가 오래되지 않았던 파리크라상 웹사이트를 2026년 트렌드에 맞춰 리디자인했습니다. 브랜드 컬러는 유지하고, 여백과 카드 UI를 재구성하여 보다 깔끔하고 직관적인 사용자 경험을 제공하도록 개선했습니다.',
     thumbnail: thumbParis,
-    siteUrl: 'https://pariscroissantorder.com/?NaPm=ct%3Dmtkg0pl9%7Cci%3DER0068d3d8%2Da6fe%2D11f1%2Db668%2D3eb4e95f5b38%7Ctr%3Dbrnd%7Chk%3Deb7824475665f67825b0dfd295ef3be1d3cdd402%7Cnacn%3DdApsB0w7fawmA',
+    detailImage: detailParis,
+    siteUrl: 'https://pariscroissantorder.com/?NaPm=ct%3Dmtx5tqve%7Cci%3DER53e2ead2%2Dadfc%2D11f1%2Da9b8%2D6e3ae24fc82e%7Ctr%3Dbrnd%7Chk%3Dca62ee4eb5828d8b1dea8343e805e71e5f25f704%7Cnacn%3DdApsB0w7fawmA',
   },
   {
     id: 3,
@@ -52,6 +59,7 @@ const PROJECTS = [
     description:
       '스토어 중심 판매 구조에서 벗어나 브랜드 스토리를 전달하고자 여백과 자연 친화적 감성을 담은 웹사이트를 새롭게 기획했습니다. 기존의 올드한 디자인을 개선하고 따뜻하고 여유로운 레이아웃을 적용해 편안한 사용자 경험을 제공합니다.',
     thumbnail: thumbNatuur,
+    detailImage: detailNatuur,
     siteUrl: '',
   },
   {
@@ -62,6 +70,7 @@ const PROJECTS = [
     description:
       '지역 유일 상급종합병원의 전문성과 첨단 의료 기술을 사용자 중심의 간결하고 정돈된 인터페이스로 재구성한 웹 리디자인 프로젝트입니다. 환자들이 복잡한 절차 없이 빠르게 진료 정보와 예약 시스템을 이용할 수 있도록 UX/UI를 개선했습니다.',
     thumbnail: thumbHospital,
+    detailImage: detailHospital,
     siteUrl: 'https://www.uuh.ulsan.kr/kr/',
   },
   {
@@ -105,9 +114,13 @@ const DetailModal = ({ project, onClose }) => {
       <DialogContent sx={{ p: 0, maxHeight: { xs: '100%', sm: '85vh' }, overflowY: 'auto' }}>
         <Box
           component="img"
-          src={project.thumbnail}
+          src={project.detailImage || project.thumbnail}
           alt={project.title}
-          sx={{ width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block' }}
+          sx={
+            project.detailImage
+              ? { width: '100%', height: 'auto', display: 'block' }
+              : { width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block' }
+          }
         />
         <Box sx={{ p: { xs: 3, md: 4 } }}>
           <Typography
@@ -229,9 +242,9 @@ const ProjectCard = ({ project, onView }) => (
         <Button
           variant="outlined"
           size="small"
-          {...(project.siteUrl
-            ? { href: project.siteUrl, target: '_blank', rel: 'noopener noreferrer' }
-            : { onClick: () => onView(project) })}
+          {...(project.detailImage
+            ? { onClick: () => onView(project) }
+            : { href: project.siteUrl, target: '_blank', rel: 'noopener noreferrer' })}
           sx={{
             borderColor: '#E5E7EB',
             color: '#6B7280',
@@ -246,6 +259,28 @@ const ProjectCard = ({ project, onView }) => (
         >
           작업내용 보기
         </Button>
+        {project.detailImage && project.siteUrl && (
+          <Button
+            variant="outlined"
+            size="small"
+            href={project.siteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              borderColor: '#E5E7EB',
+              color: '#6B7280',
+              fontWeight: 600,
+              fontSize: '0.8rem',
+              borderRadius: 2,
+              px: 2.2,
+              py: 0.9,
+              textTransform: 'none',
+              '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
+            }}
+          >
+            기존사이트보기
+          </Button>
+        )}
       </Box>
     </Box>
   </Box>
