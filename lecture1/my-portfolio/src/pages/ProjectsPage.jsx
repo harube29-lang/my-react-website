@@ -1,23 +1,12 @@
-import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogContent from '@mui/material/DialogContent'
-import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme } from '@mui/material/styles'
 
 import thumbArchive  from '../assets/thumb_archive.png'
 import thumbParis    from '../assets/thumb_paris.png'
 import thumbNatuur   from '../assets/thumb_natuur.png'
 import thumbHospital from '../assets/thumb_hospital.png'
 import thumbNetflix  from '../assets/thumb_netflix.jpg'
-import processArchive from '../assets/process_archive.png'
-import processParis   from '../assets/process_paris.png'
-import processNatuur  from '../assets/process_natuur.png'
-import processHospital from '../assets/process_hospital.png'
 
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
@@ -36,8 +25,6 @@ const PROJECTS = [
     description:
       '원두 구매 및 납품 신청, 맞춤 컨설팅 문의 과정을 직관적인 동선으로 구현한 커피 비즈니스 사이트를 자체 제작해봤습니다.',
     thumbnail: thumbArchive,
-    processImage: processArchive,
-    processUrl: '',
     siteUrl: '',
   },
   {
@@ -48,8 +35,6 @@ const PROJECTS = [
     description:
       '업데이트가 오래되지 않았던 파리크라상 웹사이트를 2026년 트렌드에 맞춰 리디자인했습니다. 브랜드 컬러는 유지하고, 여백과 카드 UI를 재구성하여 보다 깔끔하고 직관적인 사용자 경험을 제공하도록 개선했습니다.',
     thumbnail: thumbParis,
-    processImage: processParis,
-    processUrl: '',
     siteUrl: 'https://pariscroissantorder.com/?NaPm=ct%3Dmtkg0pl9%7Cci%3DER0068d3d8%2Da6fe%2D11f1%2Db668%2D3eb4e95f5b38%7Ctr%3Dbrnd%7Chk%3Deb7824475665f67825b0dfd295ef3be1d3cdd402%7Cnacn%3DdApsB0w7fawmA',
   },
   {
@@ -60,8 +45,6 @@ const PROJECTS = [
     description:
       '스토어 중심 판매 구조에서 벗어나 브랜드 스토리를 전달하고자 여백과 자연 친화적 감성을 담은 웹사이트를 새롭게 기획했습니다. 기존의 올드한 디자인을 개선하고 따뜻하고 여유로운 레이아웃을 적용해 편안한 사용자 경험을 제공합니다.',
     thumbnail: thumbNatuur,
-    processImage: processNatuur,
-    processUrl: '',
     siteUrl: '',
   },
   {
@@ -72,103 +55,22 @@ const PROJECTS = [
     description:
       '지역 유일 상급종합병원의 전문성과 첨단 의료 기술을 사용자 중심의 간결하고 정돈된 인터페이스로 재구성한 웹 리디자인 프로젝트입니다. 환자들이 복잡한 절차 없이 빠르게 진료 정보와 예약 시스템을 이용할 수 있도록 UX/UI를 개선했습니다.',
     thumbnail: thumbHospital,
-    processImage: processHospital,
-    processUrl: '',
     siteUrl: 'https://www.uuh.ulsan.kr/kr/',
   },
   {
     id: 5,
-    title: '넷플릭스 스타일 OTT',
+    title: '넷플릭스st OTT',
     category: 'AI VIBE CODING',
     badge: '자체제작',
     description:
       '넷플릭스를 벤치마킹해 OTT 콘텐츠 소개 랜딩페이지를 직접 기획하고 제작했습니다. 다크 테마 기반의 몰입감 있는 히어로 배너와 카테고리별 콘텐츠 탐색 구조로, 실제 OTT 서비스와 가까운 사용자 경험을 구현하는 데 집중했습니다.',
     thumbnail: thumbNetflix,
-    processUrl: '',
     siteUrl: 'https://harube29-lang.github.io/home-ott/',
   },
 ]
 
-/* ── 작업과정 모달 ── */
-const ProcessModal = ({ project, onClose }) => {
-  const theme = useTheme()
-  const fullScreenMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  if (!project) return null
-  return (
-    <Dialog
-      open={!!project}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-      fullScreen={fullScreenMobile}
-      PaperProps={{ sx: { borderRadius: { xs: 0, sm: 3 }, overflow: 'hidden', position: 'relative' } }}
-    >
-      <IconButton
-        onClick={onClose}
-        size="small"
-        sx={{
-          position: 'absolute', top: 12, right: 12, zIndex: 1,
-          bgcolor: 'rgba(0,0,0,0.45)', color: '#fff',
-          '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
-        }}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-
-      <DialogContent sx={{ p: 0, maxHeight: { xs: '100%', sm: '85vh' }, overflowY: 'auto' }}>
-        {project.processImage ? (
-          <Box
-            component="img"
-            src={project.processImage}
-            alt={`${project.title} 작업과정`}
-            sx={{ width: '100%', height: 'auto', display: 'block' }}
-          />
-        ) : (
-          <>
-            <Box
-              component="img"
-              src={project.thumbnail}
-              alt={project.title}
-              sx={{ width: '100%', maxHeight: 480, objectFit: 'cover', display: 'block' }}
-            />
-            <Box sx={{ p: { xs: 3, md: 4 } }}>
-              <Typography
-                sx={{
-                  fontSize: '0.68rem', fontWeight: 700,
-                  color: CATEGORY_STYLES[project.category]?.color,
-                  letterSpacing: '0.14em', textTransform: 'uppercase', mb: 1,
-                }}
-              >
-                {project.category}
-              </Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 700, color: '#111827' }}>
-                  {project.title}
-                </Typography>
-                <Box
-                  sx={{
-                    px: 1.2, py: 0.3, borderRadius: 1,
-                    bgcolor: 'rgba(255,122,0,0.1)',
-                    color: 'primary.main',
-                    fontSize: '0.72rem', fontWeight: 700,
-                  }}
-                >
-                  {project.badge}
-                </Box>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.9 }}>
-                {project.description}
-              </Typography>
-            </Box>
-          </>
-        )}
-      </DialogContent>
-    </Dialog>
-  )
-}
-
 /* ── 프로젝트 카드 ── */
-const ProjectCard = ({ project, onProcess }) => (
+const ProjectCard = ({ project }) => (
   <Box
     sx={{
       display: 'flex',
@@ -250,26 +152,6 @@ const ProjectCard = ({ project, onProcess }) => (
 
       {/* 버튼 영역 */}
       <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() => onProcess(project)}
-          sx={{
-            bgcolor: '#111827',
-            color: '#fff',
-            fontWeight: 600,
-            fontSize: '0.8rem',
-            borderRadius: 2,
-            px: 2.2,
-            py: 0.9,
-            textTransform: 'none',
-            boxShadow: 'none',
-            '&:hover': { bgcolor: '#374151', boxShadow: 'none' },
-          }}
-        >
-          작업과정 보기
-        </Button>
-
         {project.siteUrl && (
           <Button
             variant="outlined"
@@ -289,7 +171,7 @@ const ProjectCard = ({ project, onProcess }) => (
               '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
             }}
           >
-            기존 사이트 보기
+            작업내용 보기
           </Button>
         )}
       </Box>
@@ -299,8 +181,6 @@ const ProjectCard = ({ project, onProcess }) => (
 
 /* ── 메인 페이지 ── */
 const ProjectsPage = () => {
-  const [selected, setSelected] = useState(null)
-
   const groupedProjects = CATEGORY_ORDER.reduce((acc, category) => {
     const items = PROJECTS.filter(p => p.category === category)
     if (items.length) acc.push({ category, items })
@@ -358,15 +238,12 @@ const ProjectsPage = () => {
               }}
             >
               {items.map(project => (
-                <ProjectCard key={project.id} project={project} onProcess={setSelected} />
+                <ProjectCard key={project.id} project={project} />
               ))}
             </Box>
           </Box>
         )
       })}
-
-      {/* 모달 */}
-      <ProcessModal project={selected} onClose={() => setSelected(null)} />
 
     </Box>
   )

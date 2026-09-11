@@ -28,7 +28,7 @@ const HOME_PROJECTS = [
   { id: 2, title: '파리크라상',          category: 'WEB DESIGN',     badge: '리디자인', thumbnail: thumbParis    },
   { id: 3, title: '나뚜루',              category: 'WEB DESIGN',     badge: '리디자인', thumbnail: thumbNatuur   },
   { id: 4, title: '울산대학교병원',      category: 'WEB DESIGN',     badge: '리디자인', thumbnail: thumbHospital },
-  { id: 5, title: '넷플릭스 스타일 OTT', category: 'AI VIBE CODING', badge: '자체제작', thumbnail: thumbNetflix  },
+  { id: 5, title: '넷플릭스st OTT', category: 'AI VIBE CODING', badge: '자체제작', thumbnail: thumbNetflix  },
 ]
 
 /* ════════════════════════════════════════
