@@ -20,6 +20,9 @@ import detailParis    from '../assets/detail_paris.png'
 import detailNatuur   from '../assets/detail_natuur.png'
 import detailHospital from '../assets/detail_hospital.png'
 
+import landingArchive     from '../assets/landing_archive.png'
+import detailPageArchive  from '../assets/detailpage_archive.png'
+
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
   'WEB DESIGN':     { color: '#6B7280', bg: 'rgba(107,114,128,0.08)' },
@@ -39,6 +42,10 @@ const PROJECTS = [
     thumbnail: thumbArchive,
     detailImage: detailArchive,
     detailImageSize: [1440, 4000],
+    workImages: [
+      { src: landingArchive, size: [1920, 5825] },
+      { src: detailPageArchive, size: [1920, 5300] },
+    ],
     siteUrl: '',
   },
   {
@@ -162,8 +169,57 @@ const DetailModal = ({ project, onClose }) => {
   )
 }
 
+/* ── 작업물 보기 모달 (랜딩 페이지 → 상세 페이지 순서로 스크롤) ── */
+const WorkImagesModal = ({ project, onClose }) => {
+  const theme = useTheme()
+  const fullScreenMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  if (!project) return null
+  return (
+    <Dialog
+      open={!!project}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      fullScreen={fullScreenMobile}
+      PaperProps={{ sx: { borderRadius: { xs: 0, sm: 3 }, overflow: 'hidden', position: 'relative' } }}
+    >
+      <IconButton
+        onClick={onClose}
+        size="small"
+        sx={{
+          position: 'absolute', top: 12, right: 12, zIndex: 1,
+          bgcolor: 'rgba(0,0,0,0.45)', color: '#fff',
+          '&:hover': { bgcolor: 'rgba(0,0,0,0.65)' },
+        }}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+
+      <DialogContent sx={{ p: 0, maxHeight: { xs: '100%', sm: '85vh' }, overflowY: 'auto' }}>
+        {project.workImages.map(({ src, size }, idx) => (
+          <Box
+            key={idx}
+            component="img"
+            src={src}
+            alt={`${project.title} 작업물 ${idx + 1}`}
+            width={size?.[0]}
+            height={size?.[1]}
+            sx={{
+              width: '100%',
+              height: 'auto',
+              aspectRatio: size ? `${size[0]} / ${size[1]}` : undefined,
+              display: 'block',
+              bgcolor: '#F3F4F6',
+            }}
+          />
+        ))}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 /* ── 프로젝트 카드 ── */
-const ProjectCard = ({ project, onView }) => (
+const ProjectCard = ({ project, onView, onViewWork }) => (
   <Box
     sx={{
       display: 'flex',
@@ -181,6 +237,7 @@ const ProjectCard = ({ project, onView }) => (
   >
     {/* 썸네일 */}
     <Box
+      className="thumb-hover-group"
       sx={{
         position: 'relative',
         width: '100%',
@@ -201,9 +258,43 @@ const ProjectCard = ({ project, onView }) => (
           objectFit: 'cover',
           objectPosition: 'top',
           transition: 'transform 0.4s ease',
-          '&:hover': { transform: 'scale(1.03)' },
+          '.thumb-hover-group:hover &': { transform: 'scale(1.03)' },
         }}
       />
+
+      {/* 작업물 보기 오버레이 (workImages가 있는 프로젝트만) */}
+      {project.workImages && (
+        <Box
+          sx={{
+            position: 'absolute', inset: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            bgcolor: 'rgba(17,24,39,0)',
+            opacity: 0,
+            transition: 'opacity 0.25s ease, background-color 0.25s ease',
+            '.thumb-hover-group:hover &': { opacity: 1, bgcolor: 'rgba(17,24,39,0.45)' },
+          }}
+        >
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => onViewWork(project)}
+            sx={{
+              bgcolor: '#fff',
+              color: '#111827',
+              fontWeight: 700,
+              fontSize: '0.82rem',
+              borderRadius: 2,
+              px: 2.4,
+              py: 0.9,
+              textTransform: 'none',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
+              '&:hover': { bgcolor: '#F3F4F6' },
+            }}
+          >
+            작업물보기
+          </Button>
+        </Box>
+      )}
     </Box>
 
     {/* 텍스트 + 버튼 */}
@@ -295,6 +386,7 @@ const ProjectCard = ({ project, onView }) => (
 /* ── 메인 페이지 ── */
 const ProjectsPage = () => {
   const [selected, setSelected] = useState(null)
+  const [workSelected, setWorkSelected] = useState(null)
 
   const groupedProjects = CATEGORY_ORDER.reduce((acc, category) => {
     const items = PROJECTS.filter(p => p.category === category)
@@ -353,7 +445,7 @@ const ProjectsPage = () => {
               }}
             >
               {items.map(project => (
-                <ProjectCard key={project.id} project={project} onView={setSelected} />
+                <ProjectCard key={project.id} project={project} onView={setSelected} onViewWork={setWorkSelected} />
               ))}
             </Box>
           </Box>
@@ -362,6 +454,9 @@ const ProjectsPage = () => {
 
       {/* 작업내용 모달 */}
       <DetailModal project={selected} onClose={() => setSelected(null)} />
+
+      {/* 작업물 보기 모달 */}
+      <WorkImagesModal project={workSelected} onClose={() => setWorkSelected(null)} />
 
     </Box>
   )
