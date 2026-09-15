@@ -278,40 +278,6 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
           '.thumb-hover-group:hover &': { transform: 'scale(1.03)' },
         }}
       />
-
-      {/* 작업물 보기 오버레이 (workImages가 있는 프로젝트만) */}
-      {project.workImages && (
-        <Box
-          sx={{
-            position: 'absolute', inset: 0,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            bgcolor: 'rgba(17,24,39,0)',
-            opacity: 0,
-            transition: 'opacity 0.25s ease, background-color 0.25s ease',
-            '.thumb-hover-group:hover &': { opacity: 1, bgcolor: 'rgba(17,24,39,0.45)' },
-          }}
-        >
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => onViewWork(project)}
-            sx={{
-              bgcolor: '#fff',
-              color: '#111827',
-              fontWeight: 700,
-              fontSize: '0.82rem',
-              borderRadius: 2,
-              px: 2.4,
-              py: 0.9,
-              textTransform: 'none',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
-              '&:hover': { bgcolor: '#F3F4F6' },
-            }}
-          >
-            작업물보기
-          </Button>
-        </Box>
-      )}
     </Box>
 
     {/* 텍스트 + 버튼 */}
@@ -373,6 +339,26 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
         >
           작업내용 보기
         </Button>
+        {project.workImages && (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => onViewWork(project)}
+            sx={{
+              borderColor: '#E5E7EB',
+              color: '#6B7280',
+              fontWeight: 600,
+              fontSize: '0.8rem',
+              borderRadius: 2,
+              px: 2.2,
+              py: 0.9,
+              textTransform: 'none',
+              '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
+            }}
+          >
+            작업물보기
+          </Button>
+        )}
         {project.detailImage && project.siteUrl && (
           <Button
             variant="outlined"
