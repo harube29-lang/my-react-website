@@ -22,6 +22,8 @@ import detailHospital from '../assets/detail_hospital.png'
 
 import landingArchive     from '../assets/landing_archive.png'
 import detailPageArchive  from '../assets/detailpage_archive.png'
+import landingNatuur      from '../assets/landing_natuur.jpg'
+import detailPageNatuur   from '../assets/detailpage_natuur.jpg'
 
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
@@ -70,6 +72,10 @@ const PROJECTS = [
     thumbnail: thumbNatuur,
     detailImage: detailNatuur,
     detailImageSize: [1440, 4485],
+    workImages: [
+      { src: landingNatuur, size: [1920, 4900] },
+      { src: detailPageNatuur, size: [1920, 4384] },
+    ],
     siteUrl: '',
   },
   {
