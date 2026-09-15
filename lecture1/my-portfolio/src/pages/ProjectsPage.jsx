@@ -25,6 +25,11 @@ import detailPageArchive  from '../assets/detailpage_archive.png'
 import landingNatuur      from '../assets/landing_natuur.jpg'
 import detailPageNatuur   from '../assets/detailpage_natuur.jpg'
 
+import workParisHome      from '../assets/work_paris_home.png'
+import workParisProduct   from '../assets/work_paris_product.png'
+import workParisOrder     from '../assets/work_paris_order.png'
+import workParisCommunity from '../assets/work_paris_community.png'
+
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
   'WEB DESIGN':     { color: '#6B7280', bg: 'rgba(107,114,128,0.08)' },
@@ -60,6 +65,12 @@ const PROJECTS = [
     thumbnail: thumbParis,
     detailImage: detailParis,
     detailImageSize: [1440, 4405],
+    workImages: [
+      { src: workParisHome, size: [1920, 3912] },
+      { src: workParisProduct, size: [1920, 5130] },
+      { src: workParisOrder, size: [1920, 3227] },
+      { src: workParisCommunity, size: [1920, 2965] },
+    ],
     siteUrl: 'https://pariscroissantorder.com/?NaPm=ct%3Dmtx5tqve%7Cci%3DER53e2ead2%2Dadfc%2D11f1%2Da9b8%2D6e3ae24fc82e%7Ctr%3Dbrnd%7Chk%3Dca62ee4eb5828d8b1dea8343e805e71e5f25f704%7Cnacn%3DdApsB0w7fawmA',
   },
   {
