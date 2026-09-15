@@ -22,10 +22,10 @@ export const CATEGORY_COLORS = {
    기본 스킬 (5종)
 ════════════════════════════════════════ */
 const DEFAULT_SKILLS = [
-  { id: 1, Icon: SiHtml5,       name: 'HTML',        level: 70, category: 'Frontend',  desc: '웹 페이지 구조를 정의하는 마크업 언어' },
-  { id: 2, Icon: SiCss,         name: 'CSS',         level: 70, category: 'Frontend',  desc: '시각적 스타일링과 반응형 레이아웃 구현' },
-  { id: 3, Icon: SiJavascript,  name: 'JavaScript',  level: 50, category: 'Frontend',  desc: '동적 인터랙션과 비동기 처리 구현' },
-  { id: 4, Icon: SiReact,       name: 'React',       level: 50, category: 'Framework', desc: '컴포넌트 기반 SPA 개발' },
+  { id: 1, Icon: SiHtml5,       name: 'HTML',        level: 65, category: 'Frontend',  desc: '웹 페이지 구조를 정의하는 마크업 언어' },
+  { id: 2, Icon: SiCss,         name: 'CSS',         level: 65, category: 'Frontend',  desc: '시각적 스타일링과 반응형 레이아웃 구현' },
+  { id: 3, Icon: SiJavascript,  name: 'JavaScript',  level: 35, category: 'Frontend',  desc: '동적 인터랙션과 비동기 처리 구현' },
+  { id: 4, Icon: SiReact,       name: 'React',       level: 40, category: 'Framework', desc: '컴포넌트 기반 SPA 개발' },
   { id: 5, Icon: SiFigma,       name: 'Figma',       level: 75, category: 'Design',    desc: 'UI/UX 디자인 및 프로토타이핑 툴' },
   { id: 6, Icon: DiPhotoshop,   name: 'Photoshop',   level: 70, category: 'Design',    desc: '이미지 보정 및 그래픽 편집 툴' },
   { id: 7, Icon: DiIllustrator, name: 'Illustrator', level: 70, category: 'Design',    desc: '벡터 기반 그래픽 및 아이콘 제작 툴' },
