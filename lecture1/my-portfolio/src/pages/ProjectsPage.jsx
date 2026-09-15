@@ -30,6 +30,8 @@ import workParisProduct   from '../assets/work_paris_product.png'
 import workParisOrder     from '../assets/work_paris_order.png'
 import workParisCommunity from '../assets/work_paris_community.png'
 
+import workHospitalHome   from '../assets/work_hospital_home.png'
+
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
   'WEB DESIGN':     { color: '#6B7280', bg: 'rgba(107,114,128,0.08)' },
@@ -99,6 +101,9 @@ const PROJECTS = [
     thumbnail: thumbHospital,
     detailImage: detailHospital,
     detailImageSize: [1440, 4913],
+    workImages: [
+      { src: workHospitalHome, size: [1920, 5000] },
+    ],
     siteUrl: 'https://www.uuh.ulsan.kr/kr/',
   },
   {
@@ -319,26 +324,6 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
 
       {/* 버튼 영역 */}
       <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-        <Button
-          variant="outlined"
-          size="small"
-          {...(project.detailImage
-            ? { onClick: () => onView(project) }
-            : { href: project.siteUrl, target: '_blank', rel: 'noopener noreferrer' })}
-          sx={{
-            borderColor: '#E5E7EB',
-            color: '#6B7280',
-            fontWeight: 600,
-            fontSize: '0.8rem',
-            borderRadius: 2,
-            px: 2.2,
-            py: 0.9,
-            textTransform: 'none',
-            '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
-          }}
-        >
-          작업내용 보기
-        </Button>
         {project.workImages && (
           <Button
             variant="outlined"
@@ -359,6 +344,26 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
             작업물보기
           </Button>
         )}
+        <Button
+          variant="outlined"
+          size="small"
+          {...(project.detailImage
+            ? { onClick: () => onView(project) }
+            : { href: project.siteUrl, target: '_blank', rel: 'noopener noreferrer' })}
+          sx={{
+            borderColor: '#E5E7EB',
+            color: '#6B7280',
+            fontWeight: 600,
+            fontSize: '0.8rem',
+            borderRadius: 2,
+            px: 2.2,
+            py: 0.9,
+            textTransform: 'none',
+            '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
+          }}
+        >
+          작업내용 보기
+        </Button>
         {project.detailImage && project.siteUrl && (
           <Button
             variant="outlined"
