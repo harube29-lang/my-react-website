@@ -344,30 +344,8 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
         {project.description}
       </Typography>
 
-      {/* 모바일 전용 버튼 — '작업물 보기' 하나만 */}
-      <Box sx={{ display: { xs: 'block', sm: 'none' }, mt: 'auto' }}>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => onViewWork(project)}
-          sx={{
-            borderColor: '#E5E7EB',
-            color: '#6B7280',
-            fontWeight: 600,
-            fontSize: '0.82rem',
-            borderRadius: 2,
-            px: 2.4,
-            py: 0.85,
-            textTransform: 'none',
-            '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
-          }}
-        >
-          작업물 보기
-        </Button>
-      </Box>
-
-      {/* 태블릿/PC 전용 버튼 영역 — 기존 3종 유지 */}
-      <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1.5, flexWrap: 'wrap' }}>
+      {/* 버튼 영역 — 모바일 포함 전 브레이크포인트에서 3종 모두 노출 */}
+      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mt: 'auto' }}>
         {project.workImages && (
           <Button
             variant="outlined"
@@ -406,7 +384,7 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
             '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
           }}
         >
-          작업내용 보기
+          작업과정 보기
         </Button>
         {project.detailImage && project.siteUrl && (
           <Button
