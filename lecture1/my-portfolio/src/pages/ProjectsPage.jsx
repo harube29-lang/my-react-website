@@ -240,7 +240,7 @@ const WorkImagesModal = ({ project, onClose }) => {
   )
 }
 
-/* ── 프로젝트 카드 ── */
+/* ── 프로젝트 카드 (썸네일 · 뱃지 · 제목 · 버튼 3종. 설명문은 모바일에서 숨김) ── */
 const ProjectCard = ({ project, onView, onViewWork }) => (
   <Box
     sx={{
@@ -288,32 +288,45 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
     {/* 텍스트 + 버튼 */}
     <Box sx={{ p: { xs: 2.5, md: 3 }, display: 'flex', flexDirection: 'column', flex: 1 }}>
 
-      {/* 뱃지 + 제목 */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.2 }}>
+      {/* 뱃지 + 제목 (제목은 별도 줄 + keep-all로 한 글자씩 줄바꿈되는 것을 방지) */}
+      <Box sx={{ mb: 1.2 }}>
         <Box
           sx={{
+            display: 'inline-block',
             px: 1.2, py: 0.3, borderRadius: 1,
             bgcolor: 'rgba(255,122,0,0.08)',
             color: 'primary.main',
-            fontSize: '0.68rem', fontWeight: 700, flexShrink: 0,
+            fontSize: '0.68rem', fontWeight: 700,
+            whiteSpace: 'nowrap',
+            mb: 0.8,
           }}
         >
           {project.badge}
         </Box>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, fontSize: '1rem', color: '#111827' }}>
+        <Typography
+          variant="subtitle1"
+          sx={{
+            width: '100%',
+            fontWeight: 700,
+            fontSize: { xs: '0.92rem', sm: '1rem' },
+            color: '#111827',
+            wordBreak: 'keep-all',
+            overflowWrap: 'break-word',
+          }}
+        >
           {project.title}
         </Typography>
       </Box>
 
-      {/* 설명 */}
+      {/* 설명 — 모바일에서는 숨기고 sm 이상에서만 노출 */}
       <Typography
         variant="body2"
         color="text.secondary"
         sx={{
+          display: { xs: 'none', sm: '-webkit-box' },
           lineHeight: 1.75,
           mb: 3,
           flex: 1,
-          display: '-webkit-box',
           WebkitLineClamp: 3,
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
