@@ -344,26 +344,29 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
         {project.description}
       </Typography>
 
-      {/* 버튼 영역 — 모바일 포함 전 브레이크포인트에서 3종 모두 노출 */}
-      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', mt: 'auto' }}>
+      {/* 버튼 영역 — 모바일에서도 한 줄 유지 (줄바꿈 없이 균등 분배, 살짝 축소) */}
+      <Box sx={{ display: 'flex', gap: { xs: 0.8, sm: 1.5 }, flexWrap: { xs: 'nowrap', sm: 'wrap' }, mt: 'auto' }}>
         {project.workImages && (
           <Button
             variant="outlined"
             size="small"
             onClick={() => onViewWork(project)}
             sx={{
+              flex: { xs: '1 1 0', sm: '0 0 auto' },
+              minWidth: 0,
               borderColor: '#E5E7EB',
               color: '#6B7280',
               fontWeight: 600,
-              fontSize: '0.8rem',
+              fontSize: { xs: '0.7rem', sm: '0.8rem' },
               borderRadius: 2,
-              px: 2.2,
-              py: 0.9,
+              px: { xs: 0.8, sm: 2.2 },
+              py: { xs: 0.65, sm: 0.9 },
               textTransform: 'none',
+              whiteSpace: 'nowrap',
               '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
             }}
           >
-            작업물 보기
+            결과물
           </Button>
         )}
         <Button
@@ -373,14 +376,17 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
             ? { onClick: () => onView(project) }
             : { href: project.siteUrl, target: '_blank', rel: 'noopener noreferrer' })}
           sx={{
+            flex: { xs: '1 1 0', sm: '0 0 auto' },
+            minWidth: 0,
             borderColor: '#E5E7EB',
             color: '#6B7280',
             fontWeight: 600,
-            fontSize: '0.8rem',
+            fontSize: { xs: '0.7rem', sm: '0.8rem' },
             borderRadius: 2,
-            px: 2.2,
-            py: 0.9,
+            px: { xs: 0.8, sm: 2.2 },
+            py: { xs: 0.65, sm: 0.9 },
             textTransform: 'none',
+            whiteSpace: 'nowrap',
             '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
           }}
         >
@@ -394,14 +400,17 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
             target="_blank"
             rel="noopener noreferrer"
             sx={{
+              flex: { xs: '1 1 0', sm: '0 0 auto' },
+              minWidth: 0,
               borderColor: '#E5E7EB',
               color: '#6B7280',
               fontWeight: 600,
-              fontSize: '0.8rem',
+              fontSize: { xs: '0.7rem', sm: '0.8rem' },
               borderRadius: 2,
-              px: 2.2,
-              py: 0.9,
+              px: { xs: 0.8, sm: 2.2 },
+              py: { xs: 0.65, sm: 0.9 },
               textTransform: 'none',
+              whiteSpace: 'nowrap',
               '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
             }}
           >
