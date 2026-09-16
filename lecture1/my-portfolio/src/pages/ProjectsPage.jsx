@@ -240,12 +240,16 @@ const WorkImagesModal = ({ project, onClose }) => {
   )
 }
 
-/* ── 프로젝트 카드 (썸네일 · 뱃지 · 제목 · 버튼 3종. 설명문은 모바일에서 숨김) ── */
+/* ── 프로젝트 카드
+   모바일(xs): 이미지 · 뱃지 · 제목 · '작업물 보기' 버튼 하나만 (1열, 이미지를 크게)
+   태블릿/PC(sm↑): 기존 레이아웃 유지 (설명 + 버튼 3종)
+── */
 const ProjectCard = ({ project, onView, onViewWork }) => (
   <Box
     sx={{
       display: 'flex',
       flexDirection: 'column',
+      height: '100%',
       borderRadius: 3,
       overflow: 'hidden',
       border: '1px solid #E5E7EB',
@@ -257,13 +261,13 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
       },
     }}
   >
-    {/* 썸네일 */}
+    {/* 썸네일 — 모바일은 1열로 넓어진 만큼 살짝 낮은 비율로 이미지를 더 크게 보여줌 */}
     <Box
       className="thumb-hover-group"
       sx={{
         position: 'relative',
         width: '100%',
-        paddingTop: '66%',
+        paddingTop: { xs: '58%', sm: '66%' },
         overflow: 'hidden',
         bgcolor: '#F3F4F6',
         flexShrink: 0,
@@ -286,10 +290,10 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
     </Box>
 
     {/* 텍스트 + 버튼 */}
-    <Box sx={{ p: { xs: 2.5, md: 3 }, display: 'flex', flexDirection: 'column', flex: 1 }}>
+    <Box sx={{ p: { xs: 2.2, sm: 2.5, md: 3 }, display: 'flex', flexDirection: 'column', flex: 1 }}>
 
       {/* 뱃지 + 제목 (제목은 별도 줄 + keep-all로 한 글자씩 줄바꿈되는 것을 방지) */}
-      <Box sx={{ mb: 1.2 }}>
+      <Box sx={{ mb: { xs: 1.4, sm: 1.2 } }}>
         <Box
           sx={{
             display: 'inline-block',
@@ -308,10 +312,15 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
           sx={{
             width: '100%',
             fontWeight: 700,
-            fontSize: { xs: '0.92rem', sm: '1rem' },
+            fontSize: '1rem',
             color: '#111827',
+            lineHeight: 1.35,
             wordBreak: 'keep-all',
             overflowWrap: 'break-word',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
           {project.title}
@@ -335,8 +344,30 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
         {project.description}
       </Typography>
 
-      {/* 버튼 영역 */}
-      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+      {/* 모바일 전용 버튼 — '작업물 보기' 하나만 */}
+      <Box sx={{ display: { xs: 'block', sm: 'none' }, mt: 'auto' }}>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={() => onViewWork(project)}
+          sx={{
+            borderColor: '#E5E7EB',
+            color: '#6B7280',
+            fontWeight: 600,
+            fontSize: '0.82rem',
+            borderRadius: 2,
+            px: 2.4,
+            py: 0.85,
+            textTransform: 'none',
+            '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
+          }}
+        >
+          작업물 보기
+        </Button>
+      </Box>
+
+      {/* 태블릿/PC 전용 버튼 영역 — 기존 3종 유지 */}
+      <Box sx={{ display: { xs: 'none', sm: 'flex' }, gap: 1.5, flexWrap: 'wrap' }}>
         {project.workImages && (
           <Button
             variant="outlined"
@@ -354,7 +385,7 @@ const ProjectCard = ({ project, onView, onViewWork }) => (
               '&:hover': { borderColor: '#9CA3AF', color: '#374151', bgcolor: 'transparent' },
             }}
           >
-            작업물보기
+            작업물 보기
           </Button>
         )}
         <Button
@@ -416,7 +447,7 @@ const ProjectsPage = () => {
   }, [])
 
   return (
-    <Box sx={{ maxWidth: 1100, mx: 'auto', px: { xs: 2, sm: 4, md: 6 }, py: { xs: 6, sm: 8, md: 12 } }}>
+    <Box sx={{ maxWidth: 1100, mx: 'auto', px: { xs: 2.5, sm: 4, md: 6 }, py: { xs: 6, sm: 8, md: 12 } }}>
 
       {/* 헤더 */}
       <Typography
@@ -457,12 +488,12 @@ const ProjectsPage = () => {
               <Box sx={{ flex: 1, height: '1px', bgcolor: '#F3F4F6' }} />
             </Box>
 
-            {/* 2열 그리드 (WEB DESIGN은 모바일에서도 2열 유지) */}
+            {/* 모바일 1열 / sm 이상 2열 그리드 */}
             <Box
               sx={{
                 display: 'grid',
-                gridTemplateColumns: category === 'WEB DESIGN' ? 'repeat(2, 1fr)' : { xs: '1fr', sm: 'repeat(2, 1fr)' },
-                gap: { xs: 2, sm: 3, md: 4 },
+                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+                gap: { xs: 2.5, sm: 3, md: 4 },
               }}
             >
               {items.map(project => (
