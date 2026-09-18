@@ -14,11 +14,19 @@ import thumbParis    from '../assets/thumb_paris.png'
 import thumbNatuur   from '../assets/thumb_natuur.png'
 import thumbHospital from '../assets/thumb_hospital.png'
 import thumbNetflix  from '../assets/thumb_netflix.jpg'
+import thumbArvee    from '../assets/thumb_arvee.png'
+
+import workArveeHome        from '../assets/work_arvee_home.png'
+import workArveeDiscover    from '../assets/work_arvee_discover.png'
+import workArveeReservation from '../assets/work_arvee_reservation.png'
+import workArveeCollab      from '../assets/work_arvee_collab.png'
+import workArveeMyInfo      from '../assets/work_arvee_myinfo.png'
 
 import detailArchive  from '../assets/detail_archive.png'
 import detailParis    from '../assets/detail_paris.png'
 import detailNatuur   from '../assets/detail_natuur.png'
 import detailHospital from '../assets/detail_hospital.png'
+import detailArvee    from '../assets/detail_arvee.png'
 
 import landingArchive     from '../assets/landing_archive.png'
 import detailPageArchive  from '../assets/detailpage_archive.png'
@@ -35,9 +43,10 @@ import workHospitalHome   from '../assets/work_hospital_home.png'
 /* ── 카테고리 스타일 ── */
 const CATEGORY_STYLES = {
   'WEB DESIGN':     { color: '#6B7280', bg: 'rgba(107,114,128,0.08)' },
+  'MOBILE DESIGN':  { color: '#0D9488', bg: 'rgba(13,148,136,0.08)' },
   'AI VIBE CODING': { color: '#7C3AED', bg: 'rgba(124,58,237,0.09)' },
 }
-const CATEGORY_ORDER = ['WEB DESIGN', 'AI VIBE CODING']
+const CATEGORY_ORDER = ['WEB DESIGN', 'MOBILE DESIGN', 'AI VIBE CODING']
 
 /* ── 프로젝트 데이터 ── */
 const PROJECTS = [
@@ -116,6 +125,26 @@ const PROJECTS = [
     thumbnail: thumbNetflix,
     siteUrl: 'https://harube29-lang.github.io/home-ott/',
   },
+  {
+    id: 6,
+    title: '아르베 (ARVÉE)',
+    category: 'MOBILE DESIGN',
+    badge: '자체제작',
+    description:
+      '전시·팝업 정보를 한눈에 탐색할 수 있는 모바일 앱 UI를 기획하고 디자인했습니다. 감성적인 이미지 중심의 배너와 카드형 리스트 구성으로, 사용자가 원하는 전시·팝업 정보를 직관적으로 찾을 수 있도록 설계했습니다.',
+    thumbnail: thumbArvee,
+    detailImage: detailArvee,
+    detailImageSize: [845, 4165],
+    workImages: [
+      { src: workArveeHome, size: [360, 2070], label: 'HOME' },
+      { src: workArveeDiscover, size: [360, 1842], label: 'DISCOVER' },
+      { src: workArveeCollab, size: [360, 800], label: 'DETAIL' },
+      { src: workArveeReservation, size: [360, 543], label: 'RESERVATION' },
+      { src: workArveeMyInfo, size: [360, 800], label: 'MY PAGE' },
+    ],
+    galleryLayout: true,
+    siteUrl: '',
+  },
 ]
 
 /* ── 작업내용 모달 (기존 사이트가 없는 프로젝트용) ── */
@@ -191,19 +220,101 @@ const DetailModal = ({ project, onClose }) => {
   )
 }
 
-/* ── 작업물 보기 모달 (랜딩 페이지 → 상세 페이지 순서로 스크롤) ── */
+/* ── 케이스 스터디형 갤러리 (대표 화면 1개 + 서브 화면 2열 그리드) ── */
+const WorkGallery = ({ project }) => {
+  const accent = CATEGORY_STYLES[project.category]?.color || '#111827'
+  const [featured, ...rest] = project.workImages
+
+  return (
+    <Box sx={{ bgcolor: '#FAFAFA', px: { xs: 2.5, sm: 4, md: 5 }, py: { xs: 4, sm: 5, md: 6 } }}>
+      {/* 대표 화면 */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: { xs: 5, sm: 6, md: 7 } }}>
+        <Typography
+          sx={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.16em', color: accent, mb: 1.5 }}
+        >
+          {featured.label}
+        </Typography>
+        <Box
+          sx={{
+            width: '100%',
+            maxWidth: { xs: 220, sm: 280, md: 300 },
+            borderRadius: 4,
+            overflow: 'hidden',
+            border: '1px solid #E5E7EB',
+            boxShadow: '0 20px 45px rgba(0,0,0,0.08)',
+            bgcolor: '#fff',
+          }}
+        >
+          <Box
+            component="img"
+            src={featured.src}
+            alt={`${project.title} ${featured.label}`}
+            sx={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </Box>
+      </Box>
+
+      {/* 서브 화면 2열 그리드 */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
+          gap: { xs: 4, sm: 3.5, md: 4 },
+          maxWidth: 560,
+          mx: 'auto',
+        }}
+      >
+        {rest.map((item, idx) => (
+          <Box key={idx} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Typography
+              sx={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.14em', color: '#9CA3AF', mb: 1 }}
+            >
+              {item.label}
+            </Typography>
+            <Box
+              sx={{
+                width: '100%',
+                maxWidth: 220,
+                aspectRatio: '9 / 17.5',
+                borderRadius: 3,
+                overflow: 'hidden',
+                border: '1px solid #E5E7EB',
+                boxShadow: '0 10px 24px rgba(0,0,0,0.06)',
+                bgcolor: '#fff',
+              }}
+            >
+              <Box
+                component="img"
+                src={item.src}
+                alt={`${project.title} ${item.label}`}
+                sx={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+              />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  )
+}
+
+/* ── 작업물 보기 모달 (랜딩 페이지 → 상세 페이지 순서로 스크롤, 갤러리 레이아웃 프로젝트는 케이스 스터디형) ── */
 const WorkImagesModal = ({ project, onClose }) => {
   const theme = useTheme()
   const fullScreenMobile = useMediaQuery(theme.breakpoints.down('sm'))
   if (!project) return null
+
+  const isGallery = !!project.galleryLayout
+  const maxImgWidth = Math.max(...project.workImages.map(({ size }) => size?.[0] || 0))
+  const isNarrow = !isGallery && maxImgWidth > 0 && maxImgWidth < 600
+
   return (
     <Dialog
       open={!!project}
       onClose={onClose}
-      maxWidth="md"
-      fullWidth
+      maxWidth={isGallery ? 'sm' : isNarrow ? false : 'md'}
+      fullWidth={isGallery || !isNarrow}
       fullScreen={fullScreenMobile}
-      PaperProps={{ sx: { borderRadius: { xs: 0, sm: 3 }, overflow: 'hidden', position: 'relative' } }}
+      PaperProps={{ sx: { borderRadius: { xs: 0, sm: 3 }, overflow: 'hidden', position: 'relative', width: isNarrow ? { xs: '100%', sm: `${maxImgWidth}px` } : undefined } }}
     >
       <IconButton
         onClick={onClose}
@@ -218,23 +329,31 @@ const WorkImagesModal = ({ project, onClose }) => {
       </IconButton>
 
       <DialogContent sx={{ p: 0, maxHeight: { xs: '100%', sm: '85vh' }, overflowY: 'auto' }}>
-        {project.workImages.map(({ src, size }, idx) => (
-          <Box
-            key={idx}
-            component="img"
-            src={src}
-            alt={`${project.title} 작업물 ${idx + 1}`}
-            width={size?.[0]}
-            height={size?.[1]}
-            sx={{
-              width: '100%',
-              height: 'auto',
-              aspectRatio: size ? `${size[0]} / ${size[1]}` : undefined,
-              display: 'block',
-              bgcolor: '#F3F4F6',
-            }}
-          />
-        ))}
+        {isGallery ? (
+          <WorkGallery project={project} />
+        ) : (
+          project.workImages.map(({ src, size }, idx) => (
+            <Box
+              key={idx}
+              sx={{ bgcolor: '#F3F4F6', display: 'flex', justifyContent: 'center' }}
+            >
+              <Box
+                component="img"
+                src={src}
+                alt={`${project.title} 작업물 ${idx + 1}`}
+                width={size?.[0]}
+                height={size?.[1]}
+                sx={{
+                  width: '100%',
+                  maxWidth: size ? `${size[0]}px` : '100%',
+                  height: 'auto',
+                  aspectRatio: size ? `${size[0]} / ${size[1]}` : undefined,
+                  display: 'block',
+                }}
+              />
+            </Box>
+          ))
+        )}
       </DialogContent>
     </Dialog>
   )
