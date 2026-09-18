@@ -16,12 +16,6 @@ import thumbHospital from '../assets/thumb_hospital.png'
 import thumbNetflix  from '../assets/thumb_netflix.jpg'
 import thumbArvee    from '../assets/thumb_arvee.png'
 
-import workArveeHome        from '../assets/work_arvee_home.png'
-import workArveeDiscover    from '../assets/work_arvee_discover.png'
-import workArveeReservation from '../assets/work_arvee_reservation.png'
-import workArveeCollab      from '../assets/work_arvee_collab.png'
-import workArveeMyInfo      from '../assets/work_arvee_myinfo.png'
-
 import detailArchive  from '../assets/detail_archive.png'
 import detailParis    from '../assets/detail_paris.png'
 import detailNatuur   from '../assets/detail_natuur.png'
@@ -135,14 +129,6 @@ const PROJECTS = [
     thumbnail: thumbArvee,
     detailImage: detailArvee,
     detailImageSize: [845, 4165],
-    workImages: [
-      { src: workArveeHome, size: [360, 2070], label: 'HOME' },
-      { src: workArveeDiscover, size: [360, 1842], label: 'DISCOVER' },
-      { src: workArveeCollab, size: [360, 800], label: 'DETAIL' },
-      { src: workArveeReservation, size: [360, 543], label: 'RESERVATION' },
-      { src: workArveeMyInfo, size: [360, 800], label: 'MY PAGE' },
-    ],
-    galleryLayout: true,
     siteUrl: '',
   },
 ]
