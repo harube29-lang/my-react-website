@@ -27,8 +27,8 @@ const DEFAULT_SKILLS = [
   { id: 3, Icon: SiJavascript,  name: 'JavaScript',  level: 35, category: 'Frontend',  desc: '동적 인터랙션과 비동기 처리 구현' },
   { id: 4, Icon: SiReact,       name: 'React',       level: 40, category: 'Framework', desc: '컴포넌트 기반 SPA 개발' },
   { id: 5, Icon: SiFigma,       name: 'Figma',       level: 75, category: 'Design',    desc: 'UI/UX 디자인 및 프로토타이핑 툴' },
-  { id: 6, Icon: DiPhotoshop,   name: 'Photoshop',   level: 70, category: 'Design',    desc: '이미지 보정 및 그래픽 편집 툴' },
-  { id: 7, Icon: DiIllustrator, name: 'Illustrator', level: 70, category: 'Design',    desc: '벡터 기반 그래픽 및 아이콘 제작 툴' },
+  { id: 6, Icon: DiPhotoshop,   name: 'Photoshop',   level: 75, category: 'Design',    desc: '이미지 보정 및 그래픽 편집 툴' },
+  { id: 7, Icon: DiIllustrator, name: 'Illustrator', level: 75, category: 'Design',    desc: '벡터 기반 그래픽 및 아이콘 제작 툴' },
 ]
 
 /* ════════════════════════════════════════
