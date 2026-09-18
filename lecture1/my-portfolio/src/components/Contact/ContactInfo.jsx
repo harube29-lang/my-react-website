@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded'
+import PhoneRoundedIcon from '@mui/icons-material/PhoneRounded'
 import InstagramIcon from '@mui/icons-material/Instagram'
 
 const ContactInfo = () => (
@@ -45,6 +46,49 @@ const ContactInfo = () => (
         </Typography>
         <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: '#111827' }}>
           harube29@naver.com
+        </Typography>
+      </Box>
+    </Box>
+
+    {/* 연락처 */}
+    <Box
+      component="a"
+      href="tel:01044910523"
+      sx={{
+        flex: '1 1 220px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2,
+        bgcolor: '#FFFFFF',
+        border: '1.5px solid #FFD9B3',
+        borderRadius: '16px',
+        px: 3,
+        py: 2.5,
+        color: '#111827',
+        textDecoration: 'none',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-3px)',
+          boxShadow: '0 8px 24px rgba(255,122,0,0.12)',
+          borderColor: '#FF7A00',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          width: 44, height: 44, borderRadius: '12px',
+          bgcolor: '#FFF4EB',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}
+      >
+        <PhoneRoundedIcon sx={{ fontSize: 22, color: '#FF7A00' }} />
+      </Box>
+      <Box>
+        <Typography sx={{ fontSize: '0.68rem', color: '#9CA3AF', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600, mb: 0.3 }}>
+          연락처
+        </Typography>
+        <Typography sx={{ fontWeight: 700, fontSize: '0.95rem', color: '#111827' }}>
+          010-4491-0523
         </Typography>
       </Box>
     </Box>
